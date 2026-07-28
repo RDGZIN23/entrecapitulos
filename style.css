@@ -28,18 +28,25 @@ header {
 }
 
 .banner {
-  padding: 60px 20px;
+  padding: 100px 20px;
   text-align: center;
-  background: linear-gradient(
-    180deg,
-    rgba(168,85,247,0.25),
-    rgba(11,11,15,1)
-  );
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(168,85,247,0.4),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      #1a1027,
+      #0b0b0f
+    );
 }
 
 .banner h1 {
-  font-size: 42px;
-  margin-bottom: 15px;
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .banner p {
@@ -100,4 +107,16 @@ header {
   color: white;
   text-decoration: none;
   font-size: 14px;
+}
+
+.logo {
+  text-shadow: 0 0 15px rgba(168,85,247,0.8);
+}
+
+.btn {
+  box-shadow: 0 0 20px rgba(168,85,247,0.5);
+}
+
+.livro {
+  box-shadow: 0 0 15px rgba(168,85,247,0.15);
 }
