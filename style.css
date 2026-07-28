@@ -120,3 +120,14 @@ header {
 .livro {
   box-shadow: 0 0 15px rgba(168,85,247,0.15);
 }
+.capa {
+  width: 100%;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.livro {
+  max-width: 420px;
+  margin: 30px auto;
+}
