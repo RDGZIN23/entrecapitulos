@@ -61,3 +61,43 @@ header {
 .btn:hover {
   cursor: pointer;
 }
+.biblioteca {
+  padding: 30px 20px;
+}
+
+.biblioteca h2 {
+  margin-bottom: 20px;
+}
+
+.livro {
+  background: #151520;
+  border: 1px solid #2a2a40;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.livro h3 {
+  color: #c084fc;
+  margin-bottom: 10px;
+}
+
+.livro p {
+  margin-bottom: 20px;
+}
+
+.menu {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #111118;
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+  border-top: 1px solid #2a2a40;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
