@@ -2,11 +2,21 @@
 // MENU DO PAINEL
 // ==============================
 
-const usuarioLogado = sessionStorage.getItem("autorLogado");
+import { auth } from "./firebase-config.js";
 
-if (usuarioLogado !== "sim") {
-    window.location.href = "login.html";
-}
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (usuario) => {
+    if (!usuario) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    console.log("Administrador conectado:", usuario.email);
+});
 
 const botoesMenu = document.querySelectorAll(".menu-item");
 const secoes = document.querySelectorAll(".painel-secao");
