@@ -439,18 +439,134 @@ const formCapitulo =
 if (formCapitulo) {
     formCapitulo.addEventListener(
         "submit",
-        (evento) => {
+        async (evento) => {
             evento.preventDefault();
 
-            mostrarMensagem(
-                "Capítulo salvo com sucesso!"
-            );
+            const botaoSalvar =
+                formCapitulo.querySelector(
+                    'button[type="submit"]'
+                );
 
-            formCapitulo.reset();
+            const seletorLivro =
+                document.getElementById(
+                    "livroCapitulo"
+                );
 
-            if (contador) {
-                contador.textContent =
-                    "0 palavras";
+            const livroId =
+                seletorLivro.value;
+
+            const livroTitulo =
+                seletorLivro.options[
+                    seletorLivro.selectedIndex
+                ]?.textContent.trim();
+
+            const numero =
+                Number(
+                    document.getElementById(
+                        "numeroCapitulo"
+                    ).value
+                );
+
+            const titulo =
+                document
+                    .getElementById("tituloCapitulo")
+                    .value
+                    .trim();
+
+            const resumo =
+                document
+                    .getElementById("resumoCapitulo")
+                    .value
+                    .trim();
+
+            const texto =
+                document
+                    .getElementById("textoCapitulo")
+                    .value
+                    .trim();
+
+            const status =
+                document
+                    .getElementById("statusCapitulo")
+                    .value;
+
+            if (
+                !livroId ||
+                !numero ||
+                numero < 1 ||
+                !titulo ||
+                !texto
+            ) {
+                mostrarMensagem(
+                    "Preencha todos os campos obrigatórios.",
+                    "erro"
+                );
+
+                return;
+            }
+
+            if (!auth.currentUser) {
+                mostrarMensagem(
+                    "Sua sessão expirou. Entre novamente.",
+                    "erro"
+                );
+
+                return;
+            }
+
+            botaoSalvar.disabled = true;
+            botaoSalvar.textContent =
+                "Salvando capítulo...";
+
+            try {
+                await addDoc(
+                    collection(db, "capitulos"),
+                    {
+                        livroId,
+                        livroTitulo,
+                        numero,
+                        titulo,
+                        resumo,
+                        texto,
+                        status,
+
+                        criadoPor:
+                            auth.currentUser.uid,
+
+                        criadoEm:
+                            serverTimestamp(),
+
+                        atualizadoEm:
+                            serverTimestamp()
+                    }
+                );
+
+                mostrarMensagem(
+                    "Capítulo salvo no Firebase com sucesso!"
+                );
+
+                formCapitulo.reset();
+
+                if (contador) {
+                    contador.textContent =
+                        "0 palavras";
+                }
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao salvar capítulo:",
+                    erro
+                );
+
+                mostrarMensagem(
+                    "Não foi possível salvar o capítulo.",
+                    "erro"
+                );
+
+            } finally {
+                botaoSalvar.disabled = false;
+                botaoSalvar.textContent =
+                    "Salvar capítulo";
             }
         }
     );
