@@ -207,3 +207,33 @@ header {
     width:100%;
     border-radius:15px;
 }
+.banner-card{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:25px;
+    background:#151520;
+    border-radius:30px;
+    padding:25px;
+}
+
+.banner-capa{
+    width:220px;
+    max-width:100%;
+    border-radius:20px;
+    box-shadow:0 0 25px rgba(168,85,247,.4);
+}
+
+.banner-texto{
+    flex:1;
+}
+
+.banner-texto h3{
+    color:#c084fc;
+    margin:15px 0;
+}
+
+.banner-texto p{
+    line-height:1.7;
+    margin-bottom:25px;
+}
