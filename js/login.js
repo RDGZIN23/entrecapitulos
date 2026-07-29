@@ -1,20 +1,18 @@
 const form = document.getElementById("loginForm");
 
-form.addEventListener("submit", function(e){
+form.addEventListener("submit", function (evento) {
+    evento.preventDefault();
 
-    e.preventDefault();
-
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
 
-    if(email === "admin@entrecapitulos.com" && senha === "123456"){
-
+    if (
+        email === "admin@entrecapitulos.com" &&
+        senha === "123456"
+    ) {
+        sessionStorage.setItem("autorLogado", "sim");
         window.location.href = "painel.html";
-
-    }else{
-
+    } else {
         alert("E-mail ou senha inválidos.");
-
     }
-
 });
