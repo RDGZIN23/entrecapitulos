@@ -1,6 +1,12 @@
 // ==============================
-// MENU DO PAINEL
+// IMPORTAÇÕES DO FIREBASE
 // ==============================
+
+import { auth, db } from "./firebase-config.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
     addDoc,
@@ -11,11 +17,121 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-import {
-    addDoc,
-    collection,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+// ==============================
+// MENSAGENS DO PAINEL
+// ==============================
+
+function mostrarMensagem(mensagem, tipo = "sucesso") {
+    const mensagemPainel =
+        document.getElementById("mensagemPainel");
+
+    if (!mensagemPainel) {
+        alert(mensagem);
+        return;
+    }
+
+    mensagemPainel.textContent = mensagem;
+    mensagemPainel.className = `mensagem-painel ${tipo}`;
+    mensagemPainel.style.display = "block";
+
+    setTimeout(() => {
+        mensagemPainel.style.display = "none";
+    }, 4000);
+}
+
+
+// ==============================
+// CARREGAR LIVROS DO FIREBASE
+// ==============================
+
+async function carregarLivros() {
+    const listaLivros =
+        document.getElementById("listaLivros");
+
+    if (!listaLivros) {
+        return;
+    }
+
+    listaLivros.innerHTML = `
+        <p>Carregando livros...</p>
+    `;
+
+    try {
+        const consulta = query(
+            collection(db, "livros"),
+            orderBy("criadoEm", "desc")
+        );
+
+        const resultado = await getDocs(consulta);
+
+        if (resultado.empty) {
+            listaLivros.innerHTML = `
+                <p>Nenhum livro cadastrado ainda.</p>
+            `;
+            return;
+        }
+
+        listaLivros.innerHTML = "";
+
+        resultado.forEach((documento) => {
+            const livro = documento.data();
+
+            const card = document.createElement("article");
+            card.className = "livro-painel-card";
+
+            card.innerHTML = `
+                <div class="livro-painel-capa">
+                    <img
+                        src="${livro.capa || "images/depois-de-te-odiar.png"}"
+                        alt="Capa de ${livro.titulo}"
+                    >
+                </div>
+
+                <div class="livro-painel-info">
+                    <span class="status-publicado">
+                        ${livro.status || "rascunho"}
+                    </span>
+
+                    <h2>${livro.titulo}</h2>
+
+                    <p>${livro.autor}</p>
+
+                    <small>
+                        ${livro.genero || "Sem gênero definido"}
+                    </small>
+                </div>
+
+                <div class="livro-painel-acoes">
+                    <button
+                        type="button"
+                        class="botao-editar"
+                        data-id="${documento.id}"
+                    >
+                        Editar
+                    </button>
+                </div>
+            `;
+
+            listaLivros.appendChild(card);
+        });
+
+    } catch (erro) {
+        console.error(
+            "Erro ao carregar livros:",
+            erro
+        );
+
+        listaLivros.innerHTML = `
+            <p>Não foi possível carregar os livros.</p>
+        `;
+    }
+}
+
+
+// ==============================
+// VERIFICAR ADMINISTRADOR
+// ==============================
 
 onAuthStateChanged(auth, (usuario) => {
     if (!usuario) {
@@ -23,8 +139,21 @@ onAuthStateChanged(auth, (usuario) => {
         return;
     }
 
-    console.log("Administrador conectado:", usuario.email);
+    console.log(
+        "Administrador conectado:",
+        usuario.email
+    );
+
+    carregarLivros();
 });
+
+
+// ==============================
+// MENU DO PAINEL
+// ==============================
+
+const botoesMenu =
+    document.querySelectorAll(".menu-item");
 
 const botoesMenu = document.querySelectorAll(".menu-item");
 const secoes = document.querySelectorAll(".painel-secao");
