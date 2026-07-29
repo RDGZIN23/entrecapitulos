@@ -1,20 +1,13 @@
 import { auth } from "./firebase-config.js";
 
 import {
-    signInWithEmailAndPassword,
-    onAuthStateChanged
+    signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 const form = document.getElementById("loginForm");
 const botaoEntrar = form.querySelector('button[type="submit"]');
 
-onAuthStateChanged(auth, (usuario) => {
-    if (usuario) {
-        window.location.href = "painel.html";
-    }
-});
-
-form.addEventListener("submit", async (evento) => {
+form.addEventListener("submit", async function (evento) {
     evento.preventDefault();
 
     const email = document
@@ -30,39 +23,18 @@ form.addEventListener("submit", async (evento) => {
     botaoEntrar.textContent = "Entrando...";
 
     try {
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            senha
-        );
+        await signInWithEmailAndPassword(auth, email, senha);
 
         window.location.href = "painel.html";
     } catch (erro) {
-    console.error("Erro completo:", erro);
+        console.error("Erro completo do Firebase:", erro);
 
-    alert(
-        "Erro: " + erro.code +
-        "\n\nMensagem: " + erro.message
-    );
-
-        if (
-            erro.code === "auth/invalid-credential" ||
-            erro.code === "auth/wrong-password" ||
-            erro.code === "auth/user-not-found"
-        ) {
-            mensagem = "E-mail ou senha incorretos.";
-        }
-
-        if (erro.code === "auth/invalid-email") {
-            mensagem = "Digite um endereço de e-mail válido.";
-        }
-
-        if (erro.code === "auth/too-many-requests") {
-            mensagem =
-                "Muitas tentativas. Aguarde alguns minutos e tente novamente.";
-        }
-
-        alert(mensagem);
+        alert(
+            "Erro: " +
+            erro.code +
+            "\n\n" +
+            erro.message
+        );
     } finally {
         botaoEntrar.disabled = false;
         botaoEntrar.textContent = "Entrar";
