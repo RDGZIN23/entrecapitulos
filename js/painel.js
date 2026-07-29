@@ -124,23 +124,85 @@ function mostrarMensagem(texto, tipo = "sucesso") {
 // FORM LIVRO
 // ==============================
 
-const formLivro =
-document.getElementById("formLivro");
+const formLivro = document.getElementById("formLivro");
 
 if (formLivro) {
+    formLivro.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
 
-    formLivro.addEventListener("submit", e => {
-
-        e.preventDefault();
-
-        mostrarMensagem(
-            "Livro salvo com sucesso!"
+        const botaoSalvar = formLivro.querySelector(
+            'button[type="submit"]'
         );
 
-        formLivro.reset();
+        const titulo = document
+            .getElementById("tituloLivro")
+            .value
+            .trim();
 
+        const autor = document
+            .getElementById("autorLivro")
+            .value
+            .trim();
+
+        const sinopse = document
+            .getElementById("sinopseLivro")
+            .value
+            .trim();
+
+        const genero = document
+            .getElementById("generoLivro")
+            .value;
+
+        const status = document
+            .getElementById("statusLivro")
+            .value;
+
+        if (!titulo || !autor || !sinopse || !genero) {
+            mostrarMensagem(
+                "Preencha todos os campos obrigatórios.",
+                "erro"
+            );
+            return;
+        }
+
+        botaoSalvar.disabled = true;
+        botaoSalvar.textContent = "Salvando...";
+
+        try {
+            await addDoc(collection(db, "livros"), {
+                titulo,
+                autor,
+                sinopse,
+                genero,
+                status,
+
+                capa: "images/depois-de-te-odiar.png",
+
+                criadoPor: auth.currentUser.uid,
+                criadoEm: serverTimestamp(),
+                atualizadoEm: serverTimestamp()
+            });
+
+            mostrarMensagem(
+                "Livro salvo no Firebase com sucesso!"
+            );
+
+            formLivro.reset();
+
+            document.getElementById("autorLivro").value =
+                "Rd Sebastião";
+        } catch (erro) {
+            console.error("Erro ao salvar livro:", erro);
+
+            mostrarMensagem(
+                "Não foi possível salvar o livro.",
+                "erro"
+            );
+        } finally {
+            botaoSalvar.disabled = false;
+            botaoSalvar.textContent = "Salvar livro";
+        }
     });
-
 }
 
 // ==============================
