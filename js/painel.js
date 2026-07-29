@@ -155,36 +155,34 @@ onAuthStateChanged(auth, (usuario) => {
 const botoesMenu =
     document.querySelectorAll(".menu-item");
 
-const botoesMenu = document.querySelectorAll(".menu-item");
-const secoes = document.querySelectorAll(".painel-secao");
+const secoes =
+    document.querySelectorAll(".painel-secao");
 
 function abrirSecao(id) {
-
-    secoes.forEach(secao => {
+    secoes.forEach((secao) => {
         secao.classList.remove("ativa");
     });
 
-    botoesMenu.forEach(botao => {
+    botoesMenu.forEach((botao) => {
         botao.classList.remove("ativo");
     });
 
-    document.getElementById(id).classList.add("ativa");
+    const secaoEscolhida =
+        document.getElementById(id);
 
-    document
-        .querySelector(`[data-secao="${id}"]`)
-        .classList.add("ativo");
+    const botaoEscolhido =
+        document.querySelector(
+            `[data-secao="${id}"]`
+        );
 
+    if (secaoEscolhida) {
+        secaoEscolhida.classList.add("ativa");
+    }
+
+    if (botaoEscolhido) {
+        botaoEscolhido.classList.add("ativo");
+    }
 }
-
-botoesMenu.forEach(botao => {
-
-    botao.addEventListener("click", () => {
-
-        abrirSecao(botao.dataset.secao);
-
-    });
-
-});
 
 // ==============================
 // BOTÕES DE AÇÃO RÁPIDA
