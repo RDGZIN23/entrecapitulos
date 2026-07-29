@@ -2,12 +2,14 @@
 // MENU DO PAINEL
 // ==============================
 
-import { auth, db } from "./firebase-config.js";
-
 import {
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    addDoc,
+    collection,
+    getDocs,
+    orderBy,
+    query,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 import {
     addDoc,
