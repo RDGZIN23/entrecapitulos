@@ -2,6 +2,12 @@
 // MENU DO PAINEL
 // ==============================
 
+const usuarioLogado = sessionStorage.getItem("autorLogado");
+
+if (usuarioLogado !== "sim") {
+    window.location.href = "login.html";
+}
+
 const botoesMenu = document.querySelectorAll(".menu-item");
 const secoes = document.querySelectorAll(".painel-secao");
 
