@@ -170,14 +170,21 @@ if (formCapitulo) {
 const sair = document.getElementById("botaoSair");
 
 if (sair) {
-    sair.addEventListener("click", () => {
+    sair.addEventListener("click", async () => {
         const confirmarSaida = confirm(
             "Deseja realmente sair do painel?"
         );
 
-        if (confirmarSaida) {
-            sessionStorage.removeItem("autorLogado");
+        if (!confirmarSaida) {
+            return;
+        }
+
+        try {
+            await signOut(auth);
             window.location.href = "login.html";
+        } catch (erro) {
+            console.error("Erro ao sair:", erro);
+            alert("Não foi possível sair. Tente novamente.");
         }
     });
 }
