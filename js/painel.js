@@ -50,13 +50,22 @@ async function carregarLivros() {
     const listaLivros =
         document.getElementById("listaLivros");
 
-    if (!listaLivros) {
-        return;
+    const seletorLivros =
+        document.getElementById("livroCapitulo");
+
+    if (listaLivros) {
+        listaLivros.innerHTML = `
+            <p>Carregando livros...</p>
+        `;
     }
 
-    listaLivros.innerHTML = `
-        <p>Carregando livros...</p>
-    `;
+    if (seletorLivros) {
+        seletorLivros.innerHTML = `
+            <option value="">
+                Carregando livros...
+            </option>
+        `;
+    }
 
     try {
         const consulta = query(
@@ -67,63 +76,97 @@ async function carregarLivros() {
         const resultado = await getDocs(consulta);
 
         if (resultado.empty) {
-            listaLivros.innerHTML = `
-                <p>Nenhum livro cadastrado ainda.</p>
-            `;
+            if (listaLivros) {
+                listaLivros.innerHTML = `
+                    <p>Nenhum livro cadastrado ainda.</p>
+                `;
+            }
+
+            if (seletorLivros) {
+                seletorLivros.innerHTML = `
+                    <option value="">
+                        Nenhum livro cadastrado
+                    </option>
+                `;
+            }
 
             return;
         }
 
-        listaLivros.innerHTML = "";
+        if (listaLivros) {
+            listaLivros.innerHTML = "";
+        }
+
+        if (seletorLivros) {
+            seletorLivros.innerHTML = `
+                <option value="">
+                    Selecione um livro
+                </option>
+            `;
+        }
 
         resultado.forEach((documento) => {
             const livro = documento.data();
+            const livroId = documento.id;
 
-            const card =
-                document.createElement("article");
+            if (listaLivros) {
+                const card =
+                    document.createElement("article");
 
-            card.className = "livro-painel-card";
+                card.className =
+                    "livro-painel-card";
 
-            card.innerHTML = `
-                <div class="livro-painel-capa">
-                    <img
-                        src="${
-                            livro.capa ||
-                            "images/depois-de-te-odiar.png"
-                        }"
-                        alt="Capa de ${livro.titulo}"
-                    >
-                </div>
+                card.innerHTML = `
+                    <div class="livro-painel-capa">
+                        <img
+                            src="${
+                                livro.capa ||
+                                "images/depois-de-te-odiar.png"
+                            }"
+                            alt="Capa de ${livro.titulo}"
+                        >
+                    </div>
 
-                <div class="livro-painel-info">
-                    <span class="status-publicado">
-                        ${livro.status || "rascunho"}
-                    </span>
+                    <div class="livro-painel-info">
+                        <span class="status-publicado">
+                            ${livro.status || "rascunho"}
+                        </span>
 
-                    <h2>${livro.titulo}</h2>
+                        <h2>${livro.titulo}</h2>
 
-                    <p>${livro.autor}</p>
+                        <p>${livro.autor}</p>
 
-                    <small>
-                        ${
-                            livro.genero ||
-                            "Sem gênero definido"
-                        }
-                    </small>
-                </div>
+                        <small>
+                            ${
+                                livro.genero ||
+                                "Sem gênero definido"
+                            }
+                        </small>
+                    </div>
 
-                <div class="livro-painel-acoes">
-                    <button
-                        type="button"
-                        class="botao-editar"
-                        data-id="${documento.id}"
-                    >
-                        Editar
-                    </button>
-                </div>
-            `;
+                    <div class="livro-painel-acoes">
+                        <button
+                            type="button"
+                            class="botao-editar"
+                            data-id="${livroId}"
+                        >
+                            Editar
+                        </button>
+                    </div>
+                `;
 
-            listaLivros.appendChild(card);
+                listaLivros.appendChild(card);
+            }
+
+            if (seletorLivros) {
+                const opcao =
+                    document.createElement("option");
+
+                opcao.value = livroId;
+                opcao.textContent = livro.titulo;
+
+                seletorLivros.appendChild(opcao);
+            }
         });
 
     } catch (erro) {
@@ -132,11 +175,21 @@ async function carregarLivros() {
             erro
         );
 
-        listaLivros.innerHTML = `
-            <p>
-                Não foi possível carregar os livros.
-            </p>
-        `;
+        if (listaLivros) {
+            listaLivros.innerHTML = `
+                <p>
+                    Não foi possível carregar os livros.
+                </p>
+            `;
+        }
+
+        if (seletorLivros) {
+            seletorLivros.innerHTML = `
+                <option value="">
+                    Erro ao carregar livros
+                </option>
+            `;
+        }
     }
 }
 
