@@ -157,20 +157,17 @@ if (formCapitulo) {
 // BOTÃO SAIR
 // ==============================
 
-const sair =
-document.getElementById("botaoSair");
+const sair = document.getElementById("botaoSair");
 
 if (sair) {
-
     sair.addEventListener("click", () => {
+        const confirmarSaida = confirm(
+            "Deseja realmente sair do painel?"
+        );
 
-        if (confirm("Deseja realmente sair?")) {
-
-            window.location.href =
-            "index.html";
-
+        if (confirmarSaida) {
+            sessionStorage.removeItem("autorLogado");
+            window.location.href = "login.html";
         }
-
     });
-
 }
