@@ -673,3 +673,22 @@ body.painel-body {
         max-width: none;
     }
 } 
+.botao-autor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 12px;
+    background: rgba(139, 92, 246, 0.12);
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.botao-autor:hover {
+    background: #8b5cf6;
+    border-color: #8b5cf6;
+    transform: translateY(-2px);
+}
