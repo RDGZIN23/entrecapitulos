@@ -38,9 +38,12 @@ form.addEventListener("submit", async (evento) => {
 
         window.location.href = "painel.html";
     } catch (erro) {
-        console.error("Erro no login:", erro);
+    console.error("Erro completo:", erro);
 
-        let mensagem = "Não foi possível entrar.";
+    alert(
+        "Erro: " + erro.code +
+        "\n\nMensagem: " + erro.message
+    );
 
         if (
             erro.code === "auth/invalid-credential" ||
