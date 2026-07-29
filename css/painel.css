@@ -1,1 +1,675 @@
- 
+/* =========================
+   PAINEL ADMINISTRATIVO
+========================= */
+
+:root {
+    --painel-fundo: #0f172a;
+    --painel-fundo-secundario: #111827;
+    --painel-card: #1e293b;
+    --painel-card-claro: #273449;
+    --painel-roxo: #8b5cf6;
+    --painel-roxo-claro: #a78bfa;
+    --painel-texto: #f8fafc;
+    --painel-texto-suave: #cbd5e1;
+    --painel-borda: rgba(255, 255, 255, 0.08);
+    --painel-verde: #22c55e;
+    --painel-vermelho: #ef4444;
+    --painel-sombra: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body.painel-body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(139, 92, 246, 0.14),
+            transparent 35%
+        ),
+        var(--painel-fundo);
+    color: var(--painel-texto);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.painel-header {
+    min-height: 74px;
+    padding: 14px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: rgba(15, 23, 42, 0.94);
+    border-bottom: 1px solid var(--painel-borda);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(16px);
+}
+
+.painel-logo {
+    color: var(--painel-texto);
+    font-size: 1.35rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.painel-header-acoes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* =========================
+   ESTRUTURA PRINCIPAL
+========================= */
+
+.painel-layout {
+    min-height: calc(100vh - 74px);
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+}
+
+.painel-menu {
+    padding: 25px 18px;
+    background: rgba(17, 24, 39, 0.92);
+    border-right: 1px solid var(--painel-borda);
+}
+
+.painel-conteudo {
+    width: 100%;
+    max-width: 1400px;
+    padding: 40px;
+}
+
+/* =========================
+   PERFIL
+========================= */
+
+.painel-perfil {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px;
+    margin-bottom: 28px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.painel-avatar {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        var(--painel-roxo),
+        #6d28d9
+    );
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.painel-perfil strong,
+.painel-perfil span {
+    display: block;
+}
+
+.painel-perfil strong {
+    margin-bottom: 3px;
+}
+
+.painel-perfil span {
+    color: var(--painel-texto-suave);
+    font-size: 0.82rem;
+}
+
+/* =========================
+   NAVEGAÇÃO
+========================= */
+
+.painel-navegacao {
+    display: grid;
+    gap: 8px;
+}
+
+.menu-item {
+    width: 100%;
+    padding: 14px 15px;
+    border: 0;
+    border-radius: 13px;
+    background: transparent;
+    color: var(--painel-texto-suave);
+    text-align: left;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.menu-item:hover,
+.menu-item.ativo {
+    color: white;
+    background: rgba(139, 92, 246, 0.18);
+}
+
+.menu-item.ativo {
+    box-shadow: inset 3px 0 0 var(--painel-roxo);
+}
+
+/* =========================
+   SEÇÕES
+========================= */
+
+.painel-secao {
+    display: none;
+    animation: aparecer 0.25s ease;
+}
+
+.painel-secao.ativa {
+    display: block;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.secao-cabecalho {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.secao-cabecalho h1 {
+    margin: 7px 0 8px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+}
+
+.secao-cabecalho p {
+    margin: 0;
+    color: var(--painel-texto-suave);
+    line-height: 1.6;
+}
+
+.secao-etiqueta {
+    color: var(--painel-roxo-claro);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.botao-principal,
+.botao-secundario,
+.botao-sair,
+.botao-editar {
+    min-height: 44px;
+    padding: 11px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.botao-principal {
+    border: 1px solid transparent;
+    background: linear-gradient(
+        135deg,
+        var(--painel-roxo),
+        #7c3aed
+    );
+    color: white;
+}
+
+.botao-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(139, 92, 246, 0.3);
+}
+
+.botao-secundario,
+.botao-editar {
+    border: 1px solid var(--painel-borda);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--painel-texto);
+}
+
+.botao-secundario:hover,
+.botao-editar:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.botao-sair {
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+}
+
+.botao-sair:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+/* =========================
+   ESTATÍSTICAS
+========================= */
+
+.painel-estatisticas {
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.estatistica-card {
+    min-height: 130px;
+    padding: 23px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 20px;
+    background: linear-gradient(
+        145deg,
+        rgba(30, 41, 59, 0.96),
+        rgba(30, 41, 59, 0.7)
+    );
+    box-shadow: var(--painel-sombra);
+}
+
+.estatistica-icone {
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: rgba(139, 92, 246, 0.16);
+    font-size: 1.6rem;
+}
+
+.estatistica-card strong,
+.estatistica-card span {
+    display: block;
+}
+
+.estatistica-card strong {
+    margin-bottom: 4px;
+    font-size: 2rem;
+}
+
+.estatistica-card div span {
+    color: var(--painel-texto-suave);
+    font-size: 0.9rem;
+}
+
+/* =========================
+   BLOCOS E AÇÕES RÁPIDAS
+========================= */
+
+.painel-bloco {
+    padding: 25px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 20px;
+    background: var(--painel-card);
+}
+
+.bloco-titulo {
+    margin-bottom: 20px;
+}
+
+.bloco-titulo h2 {
+    margin: 0 0 6px;
+}
+
+.bloco-titulo p {
+    margin: 0;
+    color: var(--painel-texto-suave);
+}
+
+.acoes-rapidas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.acao-card {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 17px;
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--painel-texto);
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.acao-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(139, 92, 246, 0.45);
+    background: rgba(139, 92, 246, 0.09);
+}
+
+.acao-card > span {
+    font-size: 2rem;
+}
+
+.acao-card strong,
+.acao-card small {
+    display: block;
+}
+
+.acao-card strong {
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.acao-card small {
+    color: var(--painel-texto-suave);
+}
+
+/* =========================
+   LISTA DE LIVROS
+========================= */
+
+.lista-livros-painel {
+    display: grid;
+    gap: 18px;
+}
+
+.livro-painel-card {
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 20px;
+    background: var(--painel-card);
+}
+
+.livro-painel-capa {
+    width: 90px;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--painel-card-claro);
+}
+
+.livro-painel-capa img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.livro-painel-info h2 {
+    margin: 8px 0 6px;
+}
+
+.livro-painel-info p {
+    margin: 0 0 8px;
+    color: var(--painel-texto-suave);
+}
+
+.livro-painel-info small {
+    color: var(--painel-texto-suave);
+}
+
+.status-publicado {
+    display: inline-flex;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.13);
+    color: #86efac;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.livro-painel-acoes {
+    display: flex;
+    gap: 9px;
+}
+
+/* =========================
+   FORMULÁRIOS
+========================= */
+
+.painel-formulario {
+    padding: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 22px;
+    background: var(--painel-card);
+    box-shadow: var(--painel-sombra);
+}
+
+.campo-formulario {
+    display: grid;
+    gap: 9px;
+}
+
+.campo-largo {
+    grid-column: 1 / -1;
+}
+
+.campo-formulario label {
+    color: var(--painel-texto);
+    font-size: 0.9rem;
+    font-weight: 800;
+}
+
+.campo-formulario input,
+.campo-formulario textarea,
+.campo-formulario select {
+    width: 100%;
+    padding: 14px 15px;
+    border: 1px solid var(--painel-borda);
+    border-radius: 13px;
+    outline: none;
+    background: rgba(15, 23, 42, 0.72);
+    color: var(--painel-texto);
+    font: inherit;
+    transition: 0.2s ease;
+}
+
+.campo-formulario input:focus,
+.campo-formulario textarea:focus,
+.campo-formulario select:focus {
+    border-color: var(--painel-roxo);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.campo-formulario textarea {
+    resize: vertical;
+    line-height: 1.65;
+}
+
+.campo-formulario input::placeholder,
+.campo-formulario textarea::placeholder {
+    color: #64748b;
+}
+
+.campo-formulario small,
+.contador-texto {
+    color: var(--painel-texto-suave);
+    font-size: 0.78rem;
+}
+
+.contador-texto {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.formulario-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* =========================
+   MENSAGEM FLUTUANTE
+========================= */
+
+.mensagem-painel {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    max-width: 360px;
+    padding: 15px 18px;
+    border-radius: 13px;
+    background: #1e293b;
+    color: white;
+    box-shadow: var(--painel-sombra);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: 0.25s ease;
+    z-index: 200;
+}
+
+.mensagem-painel.visivel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.mensagem-painel.sucesso {
+    border-left: 4px solid var(--painel-verde);
+}
+
+.mensagem-painel.erro {
+    border-left: 4px solid var(--painel-vermelho);
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 950px) {
+    .painel-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .painel-menu {
+        padding: 12px 16px;
+        border-right: 0;
+        border-bottom: 1px solid var(--painel-borda);
+    }
+
+    .painel-perfil {
+        display: none;
+    }
+
+    .painel-navegacao {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .menu-item {
+        width: auto;
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    .painel-conteudo {
+        padding: 28px 20px;
+    }
+}
+
+@media (max-width: 720px) {
+    .painel-header {
+        padding: 13px 16px;
+    }
+
+    .painel-logo {
+        font-size: 1rem;
+    }
+
+    .painel-header-acoes .botao-secundario {
+        display: none;
+    }
+
+    .secao-cabecalho {
+        display: grid;
+    }
+
+    .painel-estatisticas {
+        grid-template-columns: 1fr;
+    }
+
+    .acoes-rapidas {
+        grid-template-columns: 1fr;
+    }
+
+    .painel-formulario {
+        padding: 20px;
+        grid-template-columns: 1fr;
+    }
+
+    .campo-largo {
+        grid-column: auto;
+    }
+
+    .livro-painel-card {
+        grid-template-columns: 75px minmax(0, 1fr);
+    }
+
+    .livro-painel-capa {
+        width: 75px;
+    }
+
+    .livro-painel-acoes {
+        grid-column: 1 / -1;
+    }
+
+    .formulario-acoes {
+        flex-direction: column-reverse;
+    }
+
+    .formulario-acoes button {
+        width: 100%;
+    }
+
+    .mensagem-painel {
+        right: 15px;
+        bottom: 15px;
+        left: 15px;
+        max-width: none;
+    }
+} 
