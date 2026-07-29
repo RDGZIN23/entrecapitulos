@@ -5,7 +5,8 @@
 import { auth, db } from "./firebase-config.js";
 
 import {
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
@@ -22,27 +23,27 @@ import {
 // MENSAGENS DO PAINEL
 // ==============================
 
-function mostrarMensagem(mensagem, tipo = "sucesso") {
-    const mensagemPainel =
+function mostrarMensagem(texto, tipo = "sucesso") {
+    const mensagem =
         document.getElementById("mensagemPainel");
 
-    if (!mensagemPainel) {
-        alert(mensagem);
+    if (!mensagem) {
+        alert(texto);
         return;
     }
 
-    mensagemPainel.textContent = mensagem;
-    mensagemPainel.className = `mensagem-painel ${tipo}`;
-    mensagemPainel.style.display = "block";
+    mensagem.textContent = texto;
+    mensagem.className =
+        `mensagem-painel visivel ${tipo}`;
 
     setTimeout(() => {
-        mensagemPainel.style.display = "none";
+        mensagem.className = "mensagem-painel";
     }, 4000);
 }
 
 
 // ==============================
-// CARREGAR LIVROS DO FIREBASE
+// CARREGAR LIVROS
 // ==============================
 
 async function carregarLivros() {
@@ -69,6 +70,7 @@ async function carregarLivros() {
             listaLivros.innerHTML = `
                 <p>Nenhum livro cadastrado ainda.</p>
             `;
+
             return;
         }
 
@@ -77,13 +79,18 @@ async function carregarLivros() {
         resultado.forEach((documento) => {
             const livro = documento.data();
 
-            const card = document.createElement("article");
+            const card =
+                document.createElement("article");
+
             card.className = "livro-painel-card";
 
             card.innerHTML = `
                 <div class="livro-painel-capa">
                     <img
-                        src="${livro.capa || "images/depois-de-te-odiar.png"}"
+                        src="${
+                            livro.capa ||
+                            "images/depois-de-te-odiar.png"
+                        }"
                         alt="Capa de ${livro.titulo}"
                     >
                 </div>
@@ -98,7 +105,10 @@ async function carregarLivros() {
                     <p>${livro.autor}</p>
 
                     <small>
-                        ${livro.genero || "Sem gênero definido"}
+                        ${
+                            livro.genero ||
+                            "Sem gênero definido"
+                        }
                     </small>
                 </div>
 
@@ -123,29 +133,12 @@ async function carregarLivros() {
         );
 
         listaLivros.innerHTML = `
-            <p>Não foi possível carregar os livros.</p>
+            <p>
+                Não foi possível carregar os livros.
+            </p>
         `;
     }
 }
-
-
-// ==============================
-// VERIFICAR ADMINISTRADOR
-// ==============================
-
-onAuthStateChanged(auth, (usuario) => {
-    if (!usuario) {
-        window.location.href = "login.html";
-        return;
-    }
-
-    console.log(
-        "Administrador conectado:",
-        usuario.email
-    );
-
-    carregarLivros();
-});
 
 
 // ==============================
@@ -184,204 +177,269 @@ function abrirSecao(id) {
     }
 }
 
-// ==============================
-// BOTÕES DE AÇÃO RÁPIDA
-// ==============================
 
-document.querySelectorAll("[data-abrir-secao]").forEach(botao => {
+// Ativar botões do menu lateral
 
+botoesMenu.forEach((botao) => {
     botao.addEventListener("click", () => {
+        abrirSecao(botao.dataset.secao);
+    });
+});
 
-        abrirSecao(botao.dataset.abrirSecao);
 
+// Ativar botões de ações rápidas
+
+document
+    .querySelectorAll("[data-abrir-secao]")
+    .forEach((botao) => {
+        botao.addEventListener("click", () => {
+            abrirSecao(
+                botao.dataset.abrirSecao
+            );
+        });
     });
 
+
+// ==============================
+// VERIFICAR LOGIN
+// ==============================
+
+onAuthStateChanged(auth, (usuario) => {
+    if (!usuario) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    console.log(
+        "Administrador conectado:",
+        usuario.email
+    );
+
+    carregarLivros();
 });
+
 
 // ==============================
 // CONTADOR DE PALAVRAS
 // ==============================
 
 const textoCapitulo =
-document.getElementById("textoCapitulo");
+    document.getElementById("textoCapitulo");
 
 const contador =
-document.getElementById("contadorPalavras");
+    document.getElementById("contadorPalavras");
 
-if (textoCapitulo) {
-
+if (textoCapitulo && contador) {
     textoCapitulo.addEventListener("input", () => {
+        const texto =
+            textoCapitulo.value.trim();
 
-        const quantidade =
-            textoCapitulo.value
-            .trim()
-            .split(/\s+/)
-            .filter(p => p.length > 0)
-            .length;
+        const quantidade = texto
+            ? texto.split(/\s+/).length
+            : 0;
 
         contador.textContent =
-            quantidade + " palavras";
-
+            `${quantidade} palavras`;
     });
-
 }
 
-// ==============================
-// MENSAGEM
-// ==============================
-
-const mensagem =
-document.getElementById("mensagemPainel");
-
-function mostrarMensagem(texto, tipo = "sucesso") {
-
-    mensagem.textContent = texto;
-
-    mensagem.className =
-        "mensagem-painel visivel " + tipo;
-
-    setTimeout(() => {
-
-        mensagem.className =
-            "mensagem-painel";
-
-    }, 3000);
-
-}
 
 // ==============================
-// FORM LIVRO
+// FORMULÁRIO DE LIVRO
 // ==============================
 
-const formLivro = document.getElementById("formLivro");
+const formLivro =
+    document.getElementById("formLivro");
 
 if (formLivro) {
-    formLivro.addEventListener("submit", async (evento) => {
-        evento.preventDefault();
+    formLivro.addEventListener(
+        "submit",
+        async (evento) => {
+            evento.preventDefault();
 
-        const botaoSalvar = formLivro.querySelector(
-            'button[type="submit"]'
-        );
+            const botaoSalvar =
+                formLivro.querySelector(
+                    'button[type="submit"]'
+                );
 
-        const titulo = document
-            .getElementById("tituloLivro")
-            .value
-            .trim();
+            const titulo =
+                document
+                    .getElementById("tituloLivro")
+                    .value
+                    .trim();
 
-        const autor = document
-            .getElementById("autorLivro")
-            .value
-            .trim();
+            const autor =
+                document
+                    .getElementById("autorLivro")
+                    .value
+                    .trim();
 
-        const sinopse = document
-            .getElementById("sinopseLivro")
-            .value
-            .trim();
+            const sinopse =
+                document
+                    .getElementById("sinopseLivro")
+                    .value
+                    .trim();
 
-        const genero = document
-            .getElementById("generoLivro")
-            .value;
+            const genero =
+                document
+                    .getElementById("generoLivro")
+                    .value;
 
-        const status = document
-            .getElementById("statusLivro")
-            .value;
+            const status =
+                document
+                    .getElementById("statusLivro")
+                    .value;
 
-        if (!titulo || !autor || !sinopse || !genero) {
-            mostrarMensagem(
-                "Preencha todos os campos obrigatórios.",
-                "erro"
-            );
-            return;
+            if (
+                !titulo ||
+                !autor ||
+                !sinopse ||
+                !genero
+            ) {
+                mostrarMensagem(
+                    "Preencha todos os campos obrigatórios.",
+                    "erro"
+                );
+
+                return;
+            }
+
+            if (!auth.currentUser) {
+                mostrarMensagem(
+                    "Você precisa entrar novamente.",
+                    "erro"
+                );
+
+                return;
+            }
+
+            botaoSalvar.disabled = true;
+            botaoSalvar.textContent =
+                "Salvando...";
+
+            try {
+                await addDoc(
+                    collection(db, "livros"),
+                    {
+                        titulo,
+                        autor,
+                        sinopse,
+                        genero,
+                        status,
+
+                        capa:
+                            "images/depois-de-te-odiar.png",
+
+                        criadoPor:
+                            auth.currentUser.uid,
+
+                        criadoEm:
+                            serverTimestamp(),
+
+                        atualizadoEm:
+                            serverTimestamp()
+                    }
+                );
+
+                mostrarMensagem(
+                    "Livro salvo no Firebase com sucesso!"
+                );
+
+                await carregarLivros();
+
+                formLivro.reset();
+
+                document
+                    .getElementById("autorLivro")
+                    .value = "Rd Sebastião";
+
+                abrirSecao("livros");
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao salvar livro:",
+                    erro
+                );
+
+                mostrarMensagem(
+                    "Não foi possível salvar o livro.",
+                    "erro"
+                );
+
+            } finally {
+                botaoSalvar.disabled = false;
+                botaoSalvar.textContent =
+                    "Salvar livro";
+            }
         }
-
-        botaoSalvar.disabled = true;
-        botaoSalvar.textContent = "Salvando...";
-
-        try {
-            await addDoc(collection(db, "livros"), {
-                titulo,
-                autor,
-                sinopse,
-                genero,
-                status,
-
-                capa: "images/depois-de-te-odiar.png",
-
-                criadoPor: auth.currentUser.uid,
-                criadoEm: serverTimestamp(),
-                atualizadoEm: serverTimestamp()
-            });
-
-            mostrarMensagem(
-                "Livro salvo no Firebase com sucesso!"
-            );
-
-            formLivro.reset();
-
-            document.getElementById("autorLivro").value =
-                "Rd Sebastião";
-        } catch (erro) {
-            console.error("Erro ao salvar livro:", erro);
-
-            mostrarMensagem(
-                "Não foi possível salvar o livro.",
-                "erro"
-            );
-        } finally {
-            botaoSalvar.disabled = false;
-            botaoSalvar.textContent = "Salvar livro";
-        }
-    });
+    );
 }
 
+
 // ==============================
-// FORM CAPÍTULO
+// FORMULÁRIO DE CAPÍTULO
 // ==============================
 
 const formCapitulo =
-document.getElementById("formCapitulo");
+    document.getElementById("formCapitulo");
 
 if (formCapitulo) {
+    formCapitulo.addEventListener(
+        "submit",
+        (evento) => {
+            evento.preventDefault();
 
-    formCapitulo.addEventListener("submit", e => {
+            mostrarMensagem(
+                "Capítulo salvo com sucesso!"
+            );
 
-        e.preventDefault();
+            formCapitulo.reset();
 
-        mostrarMensagem(
-            "Capítulo salvo com sucesso!"
-        );
-
-        formCapitulo.reset();
-
-        contador.textContent =
-            "0 palavras";
-
-    });
-
+            if (contador) {
+                contador.textContent =
+                    "0 palavras";
+            }
+        }
+    );
 }
+
 
 // ==============================
 // BOTÃO SAIR
 // ==============================
 
-const sair = document.getElementById("botaoSair");
+const botaoSair =
+    document.getElementById("botaoSair");
 
-if (sair) {
-    sair.addEventListener("click", async () => {
-        const confirmarSaida = confirm(
-            "Deseja realmente sair do painel?"
-        );
+if (botaoSair) {
+    botaoSair.addEventListener(
+        "click",
+        async () => {
+            const confirmarSaida = confirm(
+                "Deseja realmente sair do painel?"
+            );
 
-        if (!confirmarSaida) {
-            return;
+            if (!confirmarSaida) {
+                return;
+            }
+
+            try {
+                await signOut(auth);
+
+                window.location.href =
+                    "login.html";
+
+            } catch (erro) {
+                console.error(
+                    "Erro ao sair:",
+                    erro
+                );
+
+                mostrarMensagem(
+                    "Não foi possível sair. Tente novamente.",
+                    "erro"
+                );
+            }
         }
-
-        try {
-            await signOut(auth);
-            window.location.href = "login.html";
-        } catch (erro) {
-            console.error("Erro ao sair:", erro);
-            alert("Não foi possível sair. Tente novamente.");
-        }
-    });
+    );
 }
