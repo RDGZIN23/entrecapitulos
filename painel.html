@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Painel Administrativo | Entre Capítulos</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/painel.css">
+</head>
+
+<body class="painel-body">
+
+    <header class="painel-header">
+        <a href="index.html" class="painel-logo">
+            ❤️📖 Entre Capítulos
+        </a>
+
+        <div class="painel-header-acoes">
+            <a href="index.html" class="botao-secundario">
+                Ver site
+            </a>
+
+            <button id="botaoSair" class="botao-sair" type="button">
+                Sair
+            </button>
+        </div>
+    </header>
+
+    <div class="painel-layout">
+
+        <aside class="painel-menu">
+
+            <div class="painel-perfil">
+                <div class="painel-avatar">
+                    RS
+                </div>
+
+                <div>
+                    <strong>Rd Sebastião</strong>
+                    <span>Administrador</span>
+                </div>
+            </div>
+
+            <nav class="painel-navegacao">
+                <button
+                    class="menu-item ativo"
+                    type="button"
+                    data-secao="visaoGeral"
+                >
+                    🏠 Visão geral
+                </button>
+
+                <button
+                    class="menu-item"
+                    type="button"
+                    data-secao="livros"
+                >
+                    📚 Meus livros
+                </button>
+
+                <button
+                    class="menu-item"
+                    type="button"
+                    data-secao="novoLivro"
+                >
+                    ➕ Adicionar livro
+                </button>
+
+                <button
+                    class="menu-item"
+                    type="button"
+                    data-secao="novoCapitulo"
+                >
+                    📝 Adicionar capítulo
+                </button>
+            </nav>
+
+        </aside>
+
+        <main class="painel-conteudo">
+
+            <!-- VISÃO GERAL -->
+            <section
+                id="visaoGeral"
+                class="painel-secao ativa"
+            >
+                <div class="secao-cabecalho">
+                    <div>
+                        <span class="secao-etiqueta">
+                            Painel administrativo
+                        </span>
+
+                        <h1>Olá, Rd Sebastião</h1>
+
+                        <p>
+                            Gerencie seus livros e capítulos do
+                            Entre Capítulos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="painel-estatisticas">
+
+                    <article class="estatistica-card">
+                        <span class="estatistica-icone">📚</span>
+
+                        <div>
+                            <strong id="totalLivros">1</strong>
+                            <span>Livro publicado</span>
+                        </div>
+                    </article>
+
+                    <article class="estatistica-card">
+                        <span class="estatistica-icone">📄</span>
+
+                        <div>
+                            <strong id="totalCapitulos">2</strong>
+                            <span>Capítulos publicados</span>
+                        </div>
+                    </article>
+
+                    <article class="estatistica-card">
+                        <span class="estatistica-icone">✍️</span>
+
+                        <div>
+                            <strong id="totalRascunhos">0</strong>
+                            <span>Rascunhos</span>
+                        </div>
+                    </article>
+
+                </div>
+
+                <section class="painel-bloco">
+                    <div class="bloco-titulo">
+                        <div>
+                            <h2>Ações rápidas</h2>
+                            <p>
+                                Escolha o que deseja adicionar ao site.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="acoes-rapidas">
+
+                        <button
+                            class="acao-card"
+                            type="button"
+                            data-abrir-secao="novoLivro"
+                        >
+                            <span>📕</span>
+
+                            <div>
+                                <strong>Novo livro</strong>
+                                <small>
+                                    Cadastre uma nova história.
+                                </small>
+                            </div>
+                        </button>
+
+                        <button
+                            class="acao-card"
+                            type="button"
+                            data-abrir-secao="novoCapitulo"
+                        >
+                            <span>📝</span>
+
+                            <div>
+                                <strong>Novo capítulo</strong>
+                                <small>
+                                    Continue um livro publicado.
+                                </small>
+                            </div>
+                        </button>
+
+                    </div>
+                </section>
+            </section>
+
+            <!-- MEUS LIVROS -->
+            <section
+                id="livros"
+                class="painel-secao"
+            >
+                <div class="secao-cabecalho">
+                    <div>
+                        <span class="secao-etiqueta">
+                            Biblioteca
+                        </span>
+
+                        <h1>Meus livros</h1>
+
+                        <p>
+                            Veja e gerencie os livros cadastrados.
+                        </p>
+                    </div>
+
+                    <button
+                        class="botao-principal"
+                        type="button"
+                        data-abrir-secao="novoLivro"
+                    >
+                        + Novo livro
+                    </button>
+                </div>
+
+                <div id="listaLivros" class="lista-livros-painel">
+
+                    <article class="livro-painel-card">
+
+                        <div class="livro-painel-capa">
+                            <img
+                                src="images/depois-de-te-odiar.png"
+                                alt="Capa do livro Depois de Te Odiar"
+                            >
+                        </div>
+
+                        <div class="livro-painel-info">
+                            <span class="status-publicado">
+                                Publicado
+                            </span>
+
+                            <h2>Depois de Te Odiar</h2>
+
+                            <p>Rd Sebastião</p>
+
+                            <small>
+                                2 capítulos publicados
+                            </small>
+                        </div>
+
+                        <div class="livro-painel-acoes">
+                            <a
+                                href="livro.html"
+                                class="botao-secundario"
+                            >
+                                Visualizar
+                            </a>
+
+                            <button
+                                type="button"
+                                class="botao-editar"
+                            >
+                                Editar
+                            </button>
+                        </div>
+
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- ADICIONAR LIVRO -->
+            <section
+                id="novoLivro"
+                class="painel-secao"
+            >
+                <div class="secao-cabecalho">
+                    <div>
+                        <span class="secao-etiqueta">
+                            Nova publicação
+                        </span>
+
+                        <h1>Adicionar livro</h1>
+
+                        <p>
+                            Preencha as informações principais da obra.
+                        </p>
+                    </div>
+                </div>
+
+                <form id="formLivro" class="painel-formulario">
+
+                    <div class="campo-formulario">
+                        <label for="tituloLivro">
+                            Título do livro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="tituloLivro"
+                            name="tituloLivro"
+                            placeholder="Ex.: Depois de Te Odiar"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="autorLivro">
+                            Nome do autor
+                        </label>
+
+                        <input
+                            type="text"
+                            id="autorLivro"
+                            name="autorLivro"
+                            value="Rd Sebastião"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-formulario campo-largo">
+                        <label for="sinopseLivro">
+                            Sinopse
+                        </label>
+
+                        <textarea
+                            id="sinopseLivro"
+                            name="sinopseLivro"
+                            rows="7"
+                            placeholder="Escreva a sinopse do livro..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="generoLivro">
+                            Gênero
+                        </label>
+
+                        <select
+                            id="generoLivro"
+                            name="generoLivro"
+                            required
+                        >
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            <option value="Romance">
+                                Romance
+                            </option>
+
+                            <option value="Drama">
+                                Drama
+                            </option>
+
+                            <option value="Fantasia">
+                                Fantasia
+                            </option>
+
+                            <option value="Aventura">
+                                Aventura
+                            </option>
+
+                            <option value="Suspense">
+                                Suspense
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="statusLivro">
+                            Status
+                        </label>
+
+                        <select
+                            id="statusLivro"
+                            name="statusLivro"
+                            required
+                        >
+                            <option value="rascunho">
+                                Rascunho
+                            </option>
+
+                            <option value="publicado">
+                                Publicado
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario campo-largo">
+                        <label for="capaLivro">
+                            Capa do livro
+                        </label>
+
+                        <input
+                            type="file"
+                            id="capaLivro"
+                            name="capaLivro"
+                            accept="image/png, image/jpeg, image/webp"
+                        >
+
+                        <small>
+                            Formatos aceitos: PNG, JPG ou WEBP.
+                        </small>
+                    </div>
+
+                    <div class="formulario-acoes campo-largo">
+                        <button
+                            type="reset"
+                            class="botao-secundario"
+                        >
+                            Limpar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="botao-principal"
+                        >
+                            Salvar livro
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- ADICIONAR CAPÍTULO -->
+            <section
+                id="novoCapitulo"
+                class="painel-secao"
+            >
+                <div class="secao-cabecalho">
+                    <div>
+                        <span class="secao-etiqueta">
+                            Continuar história
+                        </span>
+
+                        <h1>Adicionar capítulo</h1>
+
+                        <p>
+                            Escreva e publique um novo capítulo.
+                        </p>
+                    </div>
+                </div>
+
+                <form id="formCapitulo" class="painel-formulario">
+
+                    <div class="campo-formulario">
+                        <label for="livroCapitulo">
+                            Escolha o livro
+                        </label>
+
+                        <select
+                            id="livroCapitulo"
+                            name="livroCapitulo"
+                            required
+                        >
+                            <option value="">
+                                Selecione um livro
+                            </option>
+
+                            <option value="depois-de-te-odiar">
+                                Depois de Te Odiar
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="numeroCapitulo">
+                            Número do capítulo
+                        </label>
+
+                        <input
+                            type="number"
+                            id="numeroCapitulo"
+                            name="numeroCapitulo"
+                            min="1"
+                            placeholder="Ex.: 3"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-formulario campo-largo">
+                        <label for="tituloCapitulo">
+                            Título do capítulo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="tituloCapitulo"
+                            name="tituloCapitulo"
+                            placeholder="Ex.: O Primeiro Desafio"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo-formulario campo-largo">
+                        <label for="resumoCapitulo">
+                            Pequena descrição
+                        </label>
+
+                        <input
+                            type="text"
+                            id="resumoCapitulo"
+                            name="resumoCapitulo"
+                            placeholder="Uma frase curta sobre o capítulo"
+                        >
+                    </div>
+
+                    <div class="campo-formulario campo-largo">
+                        <label for="textoCapitulo">
+                            Texto completo do capítulo
+                        </label>
+
+                        <textarea
+                            id="textoCapitulo"
+                            name="textoCapitulo"
+                            rows="22"
+                            placeholder="Cole ou escreva o capítulo completo aqui..."
+                            required
+                        ></textarea>
+
+                        <div class="contador-texto">
+                            <span id="contadorPalavras">
+                                0 palavras
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="statusCapitulo">
+                            Status
+                        </label>
+
+                        <select
+                            id="statusCapitulo"
+                            name="statusCapitulo"
+                            required
+                        >
+                            <option value="rascunho">
+                                Salvar como rascunho
+                            </option>
+
+                            <option value="publicado">
+                                Publicar capítulo
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="formulario-acoes campo-largo">
+                        <button
+                            type="reset"
+                            class="botao-secundario"
+                        >
+                            Limpar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="botao-principal"
+                        >
+                            Salvar capítulo
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+        </main>
+
+    </div>
+
+    <div id="mensagemPainel" class="mensagem-painel"></div>
+
+    <script src="js/painel.js"></script>
+</body>
+</html>
