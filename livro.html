@@ -10,10 +10,10 @@
 
   <meta
     name="description"
-    content="Leia Depois de Te Odiar, de Rd Sebastião, no Entre Capítulos."
+    content="Leia livros e capítulos no Entre Capítulos."
   >
 
-  <title>Depois de Te Odiar | Entre Capítulos</title>
+  <title>Livro | Entre Capítulos</title>
 
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -39,21 +39,27 @@
       <div class="capa-livro-container">
         <img
           src="images/depois-de-te-odiar.png"
-          alt="Capa do livro Depois de Te Odiar"
+          alt="Capa do livro"
           class="capa-livro"
+          id="capaLivro"
         >
       </div>
 
       <div class="informacoes-livro">
 
-        <span class="categoria-livro">
-          Romance
+        <span class="categoria-livro" id="generoLivro">
+          Carregando gênero...
         </span>
 
-        <h1>Depois de Te Odiar</h1>
+        <h1 id="tituloLivro">
+          Carregando livro...
+        </h1>
 
         <p class="autor-livro">
-          Escrito por <strong>Rd Sebastião</strong>
+          Escrito por
+          <strong id="autorLivro">
+            Carregando...
+          </strong>
         </p>
 
         <div class="avaliacao-livro">
@@ -62,26 +68,23 @@
         </div>
 
         <p class="frase-livro">
-          Eles cresceram se odiando. Mas o destino tinha outros planos.
+          Onde cada página ganha vida.
         </p>
 
-        <p class="sinopse-livro">
-          Megan Calloway sempre encontrou nos livros um lugar seguro.
-          Atlas Donovan, melhor amigo de seu irmão, parecia ser exatamente
-          o tipo de pessoa que ela gostaria de manter distante.
-
-          Desde a infância, os dois transformaram cada encontro em uma
-          disputa. Entre provocações, desafios e sentimentos que nenhum
-          deles sabia explicar, aquela rivalidade começou lentamente a
-          se transformar.
-
-          Agora, conforme crescem e passam a enxergar um ao outro de uma
-          maneira diferente, Megan e Atlas descobrirão que algumas
-          histórias de amor podem começar justamente onde o ódio termina.
+        <p
+          id="sinopseLivro"
+          class="sinopse-livro"
+        >
+          Carregando sinopse...
         </p>
 
         <div class="botoes-livro">
-          <a href="capitulo1.html" class="botao-principal">
+
+          <a
+            href="#"
+            class="botao-principal"
+            id="botaoComecarLeitura"
+          >
             Começar a ler
           </a>
 
@@ -92,6 +95,7 @@
           >
             ♡ Adicionar aos favoritos
           </button>
+
         </div>
 
       </div>
@@ -101,6 +105,7 @@
     <section class="secao-capitulos">
 
       <div class="cabecalho-capitulos">
+
         <div>
           <span class="titulo-pequeno">
             História em andamento
@@ -109,97 +114,20 @@
           <h2>Capítulos publicados</h2>
         </div>
 
-        <span class="quantidade-capitulos">
-          7 capítulos
+        <span
+          id="quantidadeCapitulos"
+          class="quantidade-capitulos"
+        >
+          0 capítulos
         </span>
+
       </div>
 
-      <div class="lista-capitulos">
-
-        <a href="capitulo1.html" class="cartao-capitulo">
-          <div class="numero-capitulo">01</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 1</span>
-            <h3>A Menina dos Livros</h3>
-            <p>O primeiro encontro entre Megan e Atlas.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
-        <a href="capitulo2.html" class="cartao-capitulo">
-          <div class="numero-capitulo">02</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 2</span>
-            <h3>O Garoto que Odiava Livros</h3>
-<p>Atlas recebe seu primeiro livro e uma aposta muda a relação entre os dois.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
-        <a href="capitulo3.html" class="cartao-capitulo">
-          <div class="numero-capitulo">03</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 3</span>
-            <h3>O Livro Esquecido</h3>
-            <p>Megan descobre um segredo inesperado de Atlas.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
-        <a href="capitulo4.html" class="cartao-capitulo">
-          <div class="numero-capitulo">04</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 4</span>
-            <h3>A Aposta</h3>
-            <p>Uma aposta muda a relação entre os dois.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
-        <a href="capitulo5.html" class="cartao-capitulo">
-          <div class="numero-capitulo">05</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 5</span>
-            <h3>Primeiras Páginas</h3>
-            <p>Um presente faz Megan enxergar Atlas de outro jeito.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
-        <a href="capitulo6.html" class="cartao-capitulo">
-          <div class="numero-capitulo">06</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 6</span>
-            <h3>Um Lugar Só Deles</h3>
-            <p>Os três descobrem um lugar escondido em Central Park.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
-        <a href="capitulo7.html" class="cartao-capitulo">
-          <div class="numero-capitulo">07</div>
-
-          <div class="dados-capitulo">
-            <span>Capítulo 7</span>
-            <h3>Sonhos Escritos à Mão</h3>
-            <p>Atlas descobre o sonho secreto de Megan.</p>
-          </div>
-
-          <div class="seta-capitulo">›</div>
-        </a>
-
+      <div
+        id="listaCapitulos"
+        class="lista-capitulos"
+      >
+        <p>Carregando capítulos...</p>
       </div>
 
     </section>
@@ -211,7 +139,10 @@
       </div>
 
       <div class="informacoes-autor">
-        <span class="titulo-pequeno">Sobre o autor</span>
+
+        <span class="titulo-pequeno">
+          Sobre o autor
+        </span>
 
         <h2>Rd Sebastião</h2>
 
@@ -220,6 +151,7 @@
           histórias emocionantes e personagens que deixam marcas no
           coração dos leitores.
         </p>
+
       </div>
 
     </section>
@@ -231,38 +163,10 @@
     <small>Onde cada página ganha vida.</small>
   </footer>
 
-  <script>
-    const botaoFavorito = document.getElementById("botaoFavorito");
-
-    const livroFavorito =
-      localStorage.getItem("depoisDeTeOdiarFavorito") === "true";
-
-    function atualizarBotaoFavorito(favorito) {
-      if (favorito) {
-        botaoFavorito.textContent = "♥ Livro favoritado";
-        botaoFavorito.classList.add("favoritado");
-      } else {
-        botaoFavorito.textContent = "♡ Adicionar aos favoritos";
-        botaoFavorito.classList.remove("favoritado");
-      }
-    }
-
-    atualizarBotaoFavorito(livroFavorito);
-
-    botaoFavorito.addEventListener("click", function () {
-      const favoritoAtual =
-        localStorage.getItem("depoisDeTeOdiarFavorito") === "true";
-
-      const novoEstado = !favoritoAtual;
-
-      localStorage.setItem(
-        "depoisDeTeOdiarFavorito",
-        String(novoEstado)
-      );
-
-      atualizarBotaoFavorito(novoEstado);
-    });
-  </script>
+  <script
+    type="module"
+    src="js/livro.js"
+  ></script>
 
 </body>
 </html>
