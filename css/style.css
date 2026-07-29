@@ -237,3 +237,36 @@ header {
     line-height:1.7;
     margin-bottom:25px;
 }
+.pagina-livro{
+
+max-width:800px;
+
+margin:auto;
+
+padding:40px 20px;
+
+text-align:center;
+
+}
+
+.capa-grande{
+
+width:280px;
+
+border-radius:25px;
+
+box-shadow:0 0 35px rgba(168,85,247,.5);
+
+margin-bottom:30px;
+
+}
+
+.pagina-livro p{
+
+font-size:18px;
+
+line-height:1.8;
+
+margin:30px 0;
+
+}
