@@ -145,14 +145,21 @@ async function carregarLivros() {
                     </div>
 
                     <div class="livro-painel-acoes">
-                        <button
-                            type="button"
-                            class="botao-editar"
-                            data-id="${livroId}"
-                        >
-                            Editar
-                        </button>
-                    </div>
+    <a
+        href="livro.html?id=${livroId}"
+        class="botao-secundario"
+    >
+        Visualizar
+    </a>
+
+    <button
+        type="button"
+        class="botao-editar"
+        data-id="${livroId}"
+    >
+        Editar
+    </button>
+</div>
                 `;
 
                 listaLivros.appendChild(card);
