@@ -53,8 +53,19 @@ const totalCapitulos =
 const totalLivros =
   document.getElementById("totalLivros");
 
+const listaFavoritos =
+  document.getElementById("listaFavoritos");
+
 const areaContinueLendo =
   document.getElementById("areaContinueLendo");
+
+
+// ========================================
+// CONFIGURAÇÕES
+// ========================================
+
+const capaPadrao =
+  "images/depois-de-te-odiar.png";
 
 
 // ========================================
@@ -152,12 +163,103 @@ function carregarEstatisticasLocais() {
 
 
 // ========================================
+// CRIAR CARTÃO DE FAVORITO
+// ========================================
+
+function criarCartaoFavorito(favorito) {
+  const cartao =
+    document.createElement("article");
+
+  cartao.className =
+    "cartao-favorito";
+
+  const imagem =
+    document.createElement("img");
+
+  imagem.className =
+    "capa-favorito";
+
+  imagem.src =
+    favorito.capa ||
+    capaPadrao;
+
+  imagem.alt =
+    `Capa do livro ${
+      favorito.titulo ||
+      "favorito"
+    }`;
+
+  imagem.loading =
+    "lazy";
+
+  imagem.addEventListener(
+    "error",
+    () => {
+      imagem.src =
+        capaPadrao;
+    }
+  );
+
+  const conteudo =
+    document.createElement("div");
+
+  conteudo.className =
+    "conteudo-favorito";
+
+  const titulo =
+    document.createElement("h3");
+
+  titulo.textContent =
+    favorito.titulo ||
+    "Livro sem título";
+
+  const autor =
+    document.createElement("p");
+
+  autor.textContent =
+    favorito.autor ||
+    "Autor não informado";
+
+  const botao =
+    document.createElement("a");
+
+  botao.className =
+    "botao-abrir-favorito";
+
+  botao.href =
+    favorito.livroId
+      ? `livro.html?id=${favorito.livroId}`
+      : "index.html#biblioteca";
+
+  botao.textContent =
+    "📖 Abrir livro";
+
+  conteudo.append(
+    titulo,
+    autor,
+    botao
+  );
+
+  cartao.append(
+    imagem,
+    conteudo
+  );
+
+  return cartao;
+}
+
+
+// ========================================
 // FAVORITOS DO FIREBASE
 // ========================================
 
 async function carregarFavoritos(
   usuarioId
 ) {
+  if (!usuarioId) {
+    return;
+  }
+
   try {
     const consultaFavoritos =
       query(
@@ -179,6 +281,56 @@ async function carregarFavoritos(
         String(resultadoFavoritos.size);
     }
 
+    if (!listaFavoritos) {
+      return;
+    }
+
+    listaFavoritos.innerHTML = "";
+
+    if (resultadoFavoritos.empty) {
+      const mensagem =
+        document.createElement("div");
+
+      mensagem.className =
+        "cartao-vazio";
+
+      mensagem.textContent =
+        "Você ainda não adicionou nenhum livro aos favoritos.";
+
+      listaFavoritos.appendChild(
+        mensagem
+      );
+
+      return;
+    }
+
+    const favoritos = [];
+
+    resultadoFavoritos.forEach(
+      (documentoFavorito) => {
+        favoritos.push({
+          id: documentoFavorito.id,
+          ...documentoFavorito.data()
+        });
+      }
+    );
+
+    favoritos.sort((a, b) => {
+      const dataA =
+        a.criadoEm?.seconds || 0;
+
+      const dataB =
+        b.criadoEm?.seconds || 0;
+
+      return dataB - dataA;
+    });
+
+    favoritos.forEach((favorito) => {
+      listaFavoritos.appendChild(
+        criarCartaoFavorito(favorito)
+      );
+    });
+
   } catch (erro) {
     console.error(
       "Erro ao carregar favoritos:",
@@ -188,6 +340,23 @@ async function carregarFavoritos(
     if (totalFavoritos) {
       totalFavoritos.textContent =
         "0";
+    }
+
+    if (listaFavoritos) {
+      listaFavoritos.innerHTML = "";
+
+      const mensagem =
+        document.createElement("div");
+
+      mensagem.className =
+        "cartao-vazio";
+
+      mensagem.textContent =
+        "Não foi possível carregar seus favoritos.";
+
+      listaFavoritos.appendChild(
+        mensagem
+      );
     }
   }
 }
@@ -395,6 +564,7 @@ if (botaoSair) {
     "click",
     async () => {
       botaoSair.disabled = true;
+
       botaoSair.textContent =
         "Saindo...";
 
@@ -411,6 +581,7 @@ if (botaoSair) {
         );
 
         botaoSair.disabled = false;
+
         botaoSair.textContent =
           "Sair";
 
