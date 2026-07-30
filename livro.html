@@ -10,17 +10,631 @@
 
   <meta
     name="description"
-    content="Leia livros e capítulos no Entre Capítulos."
+    content="Conheça os livros e leia capítulos no Entre Capítulos."
   >
 
   <title>Livro | Entre Capítulos</title>
 
   <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(124, 77, 255, 0.18),
+          transparent 34%
+        ),
+        #0c0c12;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topo-site {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(12, 12, 18, 0.95);
+      backdrop-filter: blur(14px);
+    }
+
+    .logo-site {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #d2c0ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .logo-icone {
+      font-size: 20px;
+    }
+
+    .menu-site {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .menu-site a {
+      padding: 9px 12px;
+      border-radius: 9px;
+      color: #b9b9c5;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .menu-site a:hover,
+    .menu-site a.menu-ativo {
+      background: rgba(124, 77, 255, 0.14);
+      color: #cfbdff;
+    }
+
+    main {
+      width: min(100% - 30px, 1100px);
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+    .detalhes-livro {
+      display: grid;
+      grid-template-columns: minmax(220px, 310px) 1fr;
+      gap: 42px;
+      align-items: start;
+    }
+
+    .capa-livro-container {
+      position: sticky;
+      top: 100px;
+    }
+
+    .capa-livro {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      display: block;
+      object-fit: cover;
+      border-radius: 20px;
+      background: #1a1a23;
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.42),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .informacoes-livro {
+      min-width: 0;
+      padding-top: 4px;
+    }
+
+    .linha-selos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .selo-livro {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 6px 11px;
+      border: 1px solid rgba(124, 77, 255, 0.3);
+      border-radius: 999px;
+      background: rgba(124, 77, 255, 0.13);
+      color: #d1c0ff;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .selo-destaque {
+      border-color: rgba(255, 183, 77, 0.3);
+      background: rgba(255, 183, 77, 0.11);
+      color: #ffd18a;
+    }
+
+    .categoria-livro {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #b99aff;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .informacoes-livro h1 {
+      margin: 0 0 12px;
+      font-size: clamp(34px, 6vw, 56px);
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .autor-livro {
+      margin: 0 0 20px;
+      color: #b8b8c3;
+      line-height: 1.5;
+    }
+
+    .autor-livro strong {
+      color: #ffffff;
+    }
+
+    .avaliacao-livro {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .estrelas-avaliacao {
+      color: #ffc95c;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .texto-avaliacao {
+      color: #aaaab5;
+      font-size: 14px;
+    }
+
+    .frase-livro {
+      margin: 0 0 18px;
+      color: #d4c7f4;
+      font-size: 18px;
+      font-style: italic;
+    }
+
+    .sinopse-livro {
+      margin: 0;
+      color: #c3c3cc;
+      font-size: 16px;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .painel-progresso {
+      margin-top: 25px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .cabecalho-progresso {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 11px;
+    }
+
+    .cabecalho-progresso strong {
+      font-size: 15px;
+    }
+
+    .cabecalho-progresso span {
+      color: #c8b4ff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .barra-progresso-livro {
+      width: 100%;
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .progresso-livro-preenchido {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(
+        90deg,
+        #7448ff,
+        #ae63ff
+      );
+      transition: width 0.5s ease;
+    }
+
+    .descricao-progresso {
+      margin: 11px 0 0;
+      color: #aaaab5;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .botoes-livro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .botao-principal,
+    .botao-secundario {
+      min-height: 49px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .botao-principal {
+      border: none;
+      background: linear-gradient(
+        135deg,
+        #7145ff,
+        #9a54ff
+      );
+      color: #ffffff;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(124, 77, 255, 0.24);
+    }
+
+    .botao-principal:hover,
+    .botao-secundario:hover {
+      transform: translateY(-2px);
+    }
+
+    .botao-secundario {
+      border: 1px solid rgba(124, 77, 255, 0.34);
+      background: rgba(124, 77, 255, 0.1);
+      color: #d4c3ff;
+    }
+
+    .botao-secundario.favoritado {
+      border-color: rgba(255, 89, 132, 0.45);
+      background: rgba(255, 89, 132, 0.13);
+      color: #ff9fbb;
+    }
+
+    .secao-capitulos,
+    .secao-avaliacoes,
+    .secao-comentarios,
+    .sobre-autor {
+      margin-top: 58px;
+      padding: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .cabecalho-capitulos,
+    .cabecalho-secao-profissional {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 21px;
+    }
+
+    .titulo-pequeno {
+      display: block;
+      margin-bottom: 7px;
+      color: #a889ef;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .cabecalho-capitulos h2,
+    .cabecalho-secao-profissional h2,
+    .informacoes-autor h2 {
+      margin: 0;
+    }
+
+    .quantidade-capitulos {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(124, 77, 255, 0.13);
+      color: #cab5ff;
+      font-size: 13px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .lista-capitulos {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cartao-capitulo {
+      display: grid;
+      grid-template-columns: 58px 1fr 22px;
+      gap: 14px;
+      align-items: center;
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.035);
+      color: inherit;
+      text-decoration: none;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .cartao-capitulo:hover {
+      transform: translateY(-2px);
+      border-color: rgba(124, 77, 255, 0.4);
+      background: rgba(124, 77, 255, 0.07);
+    }
+
+    .cartao-capitulo.capitulo-lido {
+      border-color: rgba(100, 218, 155, 0.25);
+    }
+
+    .numero-capitulo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 13px;
+      background: rgba(124, 77, 255, 0.13);
+      color: #cdbbff;
+      font-weight: bold;
+    }
+
+    .dados-capitulo {
+      min-width: 0;
+    }
+
+    .dados-capitulo span {
+      color: #9f8bc9;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .dados-capitulo h3 {
+      margin: 5px 0;
+      font-size: 17px;
+      overflow-wrap: anywhere;
+    }
+
+    .dados-capitulo p {
+      margin: 0;
+      display: -webkit-box;
+      overflow: hidden;
+      color: #aaaab5;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .seta-capitulo {
+      color: #a98ee8;
+      font-size: 26px;
+    }
+
+    .resumo-avaliacoes {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .nota-principal {
+      text-align: center;
+    }
+
+    .nota-principal strong {
+      display: block;
+      font-size: 45px;
+    }
+
+    .nota-principal span {
+      color: #ffc95c;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .nota-principal small {
+      display: block;
+      margin-top: 8px;
+      color: #9999a5;
+    }
+
+    .mensagem-avaliacao,
+    .mensagem-comentario {
+      padding: 20px;
+      border: 1px dashed rgba(255, 255, 255, 0.13);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+      color: #aaaab5;
+      line-height: 1.6;
+    }
+
+    .sobre-autor {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .avatar-autor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 84px;
+      height: 84px;
+      border: 1px solid rgba(124, 77, 255, 0.3);
+      border-radius: 50%;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(124, 77, 255, 0.3),
+          rgba(178, 93, 255, 0.16)
+        );
+      color: #ffffff;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .informacoes-autor p {
+      margin: 10px 0 0;
+      color: #b5b5bf;
+      line-height: 1.7;
+    }
+
+    .rodape-site {
+      padding: 30px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      color: #aaaab5;
+      text-align: center;
+    }
+
+    .rodape-site p {
+      margin: 0 0 7px;
+      color: #cbb7ff;
+      font-weight: bold;
+    }
+
+    .mensagem-status {
+      margin: 0;
+      color: #aaaab5;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 760px) {
+      .topo-site {
+        padding: 14px;
+      }
+
+      .menu-site a {
+        padding: 8px;
+        font-size: 13px;
+      }
+
+      main {
+        width: min(100% - 24px, 1100px);
+        padding-top: 25px;
+      }
+
+      .detalhes-livro {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .capa-livro-container {
+        position: static;
+        width: min(100%, 280px);
+        margin: 0 auto;
+      }
+
+      .informacoes-livro {
+        text-align: center;
+      }
+
+      .linha-selos,
+      .avaliacao-livro,
+      .botoes-livro {
+        justify-content: center;
+      }
+
+      .sinopse-livro {
+        text-align: left;
+      }
+
+      .painel-progresso {
+        text-align: left;
+      }
+
+      .botao-principal,
+      .botao-secundario {
+        width: 100%;
+      }
+
+      .secao-capitulos,
+      .secao-avaliacoes,
+      .secao-comentarios,
+      .sobre-autor {
+        margin-top: 34px;
+        padding: 19px;
+      }
+
+      .cabecalho-capitulos,
+      .cabecalho-secao-profissional {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .resumo-avaliacoes {
+        grid-template-columns: 1fr;
+      }
+
+      .sobre-autor {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .avatar-autor {
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 470px) {
+      .logo-site span:last-child {
+        display: none;
+      }
+
+      .cartao-capitulo {
+        grid-template-columns: 47px 1fr 15px;
+        gap: 10px;
+        padding: 13px;
+      }
+
+      .numero-capitulo {
+        width: 44px;
+        height: 44px;
+        font-size: 14px;
+      }
+
+      .dados-capitulo h3 {
+        font-size: 15px;
+      }
+
+      .dados-capitulo p {
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
   <header class="topo-site">
+
     <a href="index.html" class="logo-site">
       <span class="logo-icone">❤️📖</span>
       <span>Entre Capítulos</span>
@@ -28,8 +642,10 @@
 
     <nav class="menu-site">
       <a href="index.html">Início</a>
-      <a href="livro.html" class="menu-ativo">Livro</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="perfil.html">Perfil</a>
     </nav>
+
   </header>
 
   <main>
@@ -37,17 +653,47 @@
     <section class="detalhes-livro">
 
       <div class="capa-livro-container">
+
         <img
           src="images/depois-de-te-odiar.png"
           alt="Capa do livro"
           class="capa-livro"
           id="capaLivro"
         >
+
       </div>
 
       <div class="informacoes-livro">
 
-        <span class="categoria-livro" id="generoLivro">
+        <div class="linha-selos">
+
+          <span
+            class="selo-livro selo-destaque"
+            id="seloStatusLivro"
+          >
+            ✨ Em destaque
+          </span>
+
+          <span
+            class="selo-livro"
+            id="seloGeneroLivro"
+          >
+            📚 Carregando
+          </span>
+
+          <span
+            class="selo-livro"
+            id="seloQuantidadeLivro"
+          >
+            📖 0 capítulos
+          </span>
+
+        </div>
+
+        <span
+          class="categoria-livro"
+          id="generoLivro"
+        >
           Carregando gênero...
         </span>
 
@@ -63,8 +709,21 @@
         </p>
 
         <div class="avaliacao-livro">
-          <span>★★★★★</span>
-          <small>Uma história em andamento</small>
+
+          <span
+            class="estrelas-avaliacao"
+            id="estrelasLivro"
+          >
+            ☆☆☆☆☆
+          </span>
+
+          <span
+            class="texto-avaliacao"
+            id="textoAvaliacaoLivro"
+          >
+            Ainda sem avaliações
+          </span>
+
         </div>
 
         <p class="frase-livro">
@@ -78,6 +737,39 @@
           Carregando sinopse...
         </p>
 
+        <div
+          class="painel-progresso"
+          id="painelProgresso"
+        >
+
+          <div class="cabecalho-progresso">
+
+            <strong>Seu progresso de leitura</strong>
+
+            <span id="porcentagemProgresso">
+              0%
+            </span>
+
+          </div>
+
+          <div class="barra-progresso-livro">
+
+            <div
+              class="progresso-livro-preenchido"
+              id="barraProgressoLivro"
+            ></div>
+
+          </div>
+
+          <p
+            class="descricao-progresso"
+            id="descricaoProgresso"
+          >
+            Você ainda não começou este livro.
+          </p>
+
+        </div>
+
         <div class="botoes-livro">
 
           <a
@@ -85,7 +777,7 @@
             class="botao-principal"
             id="botaoComecarLeitura"
           >
-            Começar a ler
+            Carregando capítulos...
           </a>
 
           <button
@@ -107,11 +799,13 @@
       <div class="cabecalho-capitulos">
 
         <div>
+
           <span class="titulo-pequeno">
             História em andamento
           </span>
 
           <h2>Capítulos publicados</h2>
+
         </div>
 
         <span
@@ -127,7 +821,81 @@
         id="listaCapitulos"
         class="lista-capitulos"
       >
-        <p>Carregando capítulos...</p>
+        <p class="mensagem-status">
+          Carregando capítulos...
+        </p>
+      </div>
+
+    </section>
+
+    <section class="secao-avaliacoes">
+
+      <div class="cabecalho-secao-profissional">
+
+        <div>
+
+          <span class="titulo-pequeno">
+            Opinião dos leitores
+          </span>
+
+          <h2>Avaliações</h2>
+
+        </div>
+
+      </div>
+
+      <div class="resumo-avaliacoes">
+
+        <div class="nota-principal">
+
+          <strong id="mediaAvaliacoes">
+            0,0
+          </strong>
+
+          <span id="estrelasMedia">
+            ☆☆☆☆☆
+          </span>
+
+          <small id="totalAvaliacoes">
+            Nenhuma avaliação
+          </small>
+
+        </div>
+
+        <div class="mensagem-avaliacao">
+
+          O sistema de avaliações está sendo preparado.
+          Em breve, leitores poderão dar estrelas e compartilhar
+          suas opiniões sobre esta história.
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="secao-comentarios">
+
+      <div class="cabecalho-secao-profissional">
+
+        <div>
+
+          <span class="titulo-pequeno">
+            Comunidade
+          </span>
+
+          <h2>Comentários dos leitores</h2>
+
+        </div>
+
+      </div>
+
+      <div class="mensagem-comentario">
+
+        Ainda não há comentários publicados neste livro.
+        Esta área ficará pronta para receber mensagens dos leitores
+        em uma próxima atualização.
+
       </div>
 
     </section>
@@ -144,7 +912,9 @@
           Sobre o autor
         </span>
 
-        <h2>Rd Sebastião</h2>
+        <h2 id="nomeAutorSecao">
+          Rd Sebastião
+        </h2>
 
         <p>
           Autor e criador do Entre Capítulos. Apaixonado por romances,
