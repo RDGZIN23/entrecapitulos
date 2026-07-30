@@ -225,9 +225,16 @@
       line-height: 1.4;
     }
 
+    .botoes-favorito {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
     .botao-abrir-favorito {
-      display: block;
-      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 10px 14px;
       border-radius: 10px;
       background: rgba(124, 77, 255, 0.18);
@@ -236,10 +243,45 @@
       text-decoration: none;
       font-size: 14px;
       font-weight: bold;
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
     }
 
     .botao-abrir-favorito:hover {
       background: rgba(124, 77, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .botao-remover-favorito {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 91, 123, 0.35);
+      border-radius: 10px;
+      background: rgba(255, 70, 110, 0.1);
+      color: #ff91aa;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .botao-remover-favorito:hover {
+      background: rgba(255, 70, 110, 0.18);
+      border-color: rgba(255, 91, 123, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .botao-remover-favorito:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .acoes-perfil {
@@ -335,7 +377,7 @@
       }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 400px) {
       .cartao-favorito {
         grid-template-columns: 90px 1fr;
       }
@@ -348,8 +390,15 @@
         padding: 13px;
       }
 
-      .botao-abrir-favorito {
-        padding: 9px 11px;
+      .botoes-favorito {
+        flex-direction: column;
+      }
+
+      .botao-abrir-favorito,
+      .botao-remover-favorito {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 9px 10px;
         font-size: 13px;
       }
     }
@@ -422,6 +471,7 @@
         <div class="grade-estatisticas">
 
           <div class="cartao-estatistica">
+
             <span
               class="numero-estatistica"
               id="totalFavoritos"
@@ -432,9 +482,11 @@
             <span class="rotulo-estatistica">
               Livros favoritos
             </span>
+
           </div>
 
           <div class="cartao-estatistica">
+
             <span
               class="numero-estatistica"
               id="totalCapitulos"
@@ -445,9 +497,11 @@
             <span class="rotulo-estatistica">
               Capítulos lidos
             </span>
+
           </div>
 
           <div class="cartao-estatistica">
+
             <span
               class="numero-estatistica"
               id="totalLivros"
@@ -458,6 +512,7 @@
             <span class="rotulo-estatistica">
               Livros iniciados
             </span>
+
           </div>
 
         </div>
