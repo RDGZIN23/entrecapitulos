@@ -62,10 +62,15 @@
       cursor: pointer;
     }
 
+    .botao-sair:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .pagina-perfil {
       width: min(100% - 30px, 950px);
       margin: 0 auto;
-      padding: 35px 0 100px;
+      padding: 35px 0 110px;
     }
 
     .cartao-perfil {
@@ -165,6 +170,70 @@
       line-height: 1.6;
     }
 
+    .lista-favoritos {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(155px, 1fr)
+      );
+      gap: 16px;
+    }
+
+    .cartao-favorito {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.04);
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .cartao-favorito:hover {
+      transform: translateY(-3px);
+      border-color: rgba(124, 77, 255, 0.5);
+    }
+
+    .capa-favorito {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      display: block;
+      object-fit: cover;
+      background: #181821;
+    }
+
+    .conteudo-favorito {
+      padding: 15px;
+    }
+
+    .conteudo-favorito h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .conteudo-favorito p {
+      margin: 0 0 14px;
+      color: #b9b9c4;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .botao-abrir-favorito {
+      display: block;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(124, 77, 255, 0.18);
+      color: #cebaff;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .botao-abrir-favorito:hover {
+      background: rgba(124, 77, 255, 0.28);
+    }
+
     .acoes-perfil {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -255,6 +324,17 @@
 
       .informacoes-perfil h1 {
         font-size: 26px;
+      }
+
+      .lista-favoritos {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 380px) {
+      .lista-favoritos {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -368,6 +448,24 @@
 
       </section>
 
+      <section
+        class="secao-perfil"
+        id="secaoFavoritos"
+      >
+
+        <h2>Meus favoritos</h2>
+
+        <div
+          id="listaFavoritos"
+          class="lista-favoritos"
+        >
+          <div class="cartao-vazio">
+            Carregando seus livros favoritos...
+          </div>
+        </div>
+
+      </section>
+
       <section class="secao-perfil">
 
         <h2>Continuar lendo</h2>
@@ -419,7 +517,7 @@
       📚<br>Biblioteca
     </a>
 
-    <a href="#">
+    <a href="#secaoFavoritos">
       ❤️<br>Favoritos
     </a>
 
