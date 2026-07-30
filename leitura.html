@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Leia capítulos no Entre Capítulos."
+  >
+
+  <title>Leitura | Entre Capítulos</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      background: #0d0d12;
+      color: #f5f5f5;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topo-leitura {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 14px 18px;
+      background: rgba(13, 13, 18, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .voltar-leitura {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .logo-leitura {
+      font-size: 14px;
+      color: #c7a7ff;
+      white-space: nowrap;
+    }
+
+    .pagina-leitura {
+      width: min(100% - 32px, 850px);
+      margin: 0 auto;
+      padding: 42px 0 80px;
+    }
+
+    .cabecalho-leitura {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .nome-livro-leitura {
+      display: block;
+      margin-bottom: 14px;
+      color: #b58cff;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .numero-capitulo-leitura {
+      margin: 0 0 12px;
+      color: #bdbdbd;
+      font-size: 15px;
+    }
+
+    .titulo-capitulo-leitura {
+      margin: 0;
+      font-size: clamp(30px, 7vw, 48px);
+      line-height: 1.15;
+    }
+
+    .linha-leitura {
+      width: 70px;
+      height: 3px;
+      margin: 28px auto 0;
+      border-radius: 999px;
+      background: #8b5cf6;
+    }
+
+    .texto-capitulo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.9;
+      color: #eeeeee;
+    }
+
+    .texto-capitulo p {
+      margin: 0 0 1.4em;
+    }
+
+    .mensagem-leitura {
+      padding: 30px 20px;
+      text-align: center;
+      color: #cfcfcf;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .navegacao-capitulos {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 55px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .botao-navegacao {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 12px 16px;
+      border: 1px solid rgba(139, 92, 246, 0.55);
+      border-radius: 12px;
+      background: rgba(139, 92, 246, 0.12);
+      color: #ffffff;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .botao-navegacao:hover {
+      background: rgba(139, 92, 246, 0.24);
+    }
+
+    .botao-desativado {
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .rodape-leitura {
+      padding: 25px 20px;
+      text-align: center;
+      color: #999999;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    @media (max-width: 600px) {
+      .pagina-leitura {
+        width: min(100% - 28px, 850px);
+        padding-top: 32px;
+      }
+
+      .texto-capitulo {
+        font-size: 18px;
+        line-height: 1.85;
+      }
+
+      .navegacao-capitulos {
+        flex-direction: column;
+      }
+
+      .logo-leitura {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topo-leitura">
+
+    <a
+      href="javascript:history.back()"
+      class="voltar-leitura"
+    >
+      ← Voltar
+    </a>
+
+    <span class="logo-leitura">
+      ❤️📖 Entre Capítulos
+    </span>
+
+  </header>
+
+  <main class="pagina-leitura">
+
+    <section class="cabecalho-leitura">
+
+      <span
+        id="nomeLivro"
+        class="nome-livro-leitura"
+      >
+        Carregando livro...
+      </span>
+
+      <p
+        id="numeroCapitulo"
+        class="numero-capitulo-leitura"
+      >
+        Carregando capítulo...
+      </p>
+
+      <h1
+        id="tituloCapitulo"
+        class="titulo-capitulo-leitura"
+      >
+        Aguarde...
+      </h1>
+
+      <div class="linha-leitura"></div>
+
+    </section>
+
+    <article
+      id="textoCapitulo"
+      class="texto-capitulo"
+    >
+      <div class="mensagem-leitura">
+        Carregando texto do capítulo...
+      </div>
+    </article>
+
+    <nav class="navegacao-capitulos">
+
+      <a
+        href="#"
+        id="capituloAnterior"
+        class="botao-navegacao botao-desativado"
+      >
+        ← Capítulo anterior
+      </a>
+
+      <a
+        href="#"
+        id="proximoCapitulo"
+        class="botao-navegacao botao-desativado"
+      >
+        Próximo capítulo →
+      </a>
+
+    </nav>
+
+  </main>
+
+  <footer class="rodape-leitura">
+    <p>❤️📖 Entre Capítulos</p>
+    <small>Onde cada página ganha vida.</small>
+  </footer>
+
+  <script
+    type="module"
+    src="js/leitura.js"
+  ></script>
+
+</body>
+</html>
