@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Biblioteca de livros do Entre Capítulos."
+  >
+
+  <title>Biblioteca | Entre Capítulos</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(124, 77, 255, 0.18),
+          transparent 32%
+        ),
+        #0c0c12;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topo-biblioteca {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 16px 18px;
+      background: rgba(12, 12, 18, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-biblioteca {
+      color: #c7a7ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .botao-perfil {
+      padding: 10px 14px;
+      border: 1px solid rgba(124, 77, 255, 0.35);
+      border-radius: 11px;
+      background: rgba(124, 77, 255, 0.12);
+      color: #d1beff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .pagina-biblioteca {
+      width: min(100% - 30px, 1050px);
+      margin: 0 auto;
+      padding: 30px 0 115px;
+    }
+
+    .cabecalho-biblioteca {
+      margin-bottom: 30px;
+    }
+
+    .cabecalho-biblioteca h1 {
+      margin: 0 0 9px;
+      font-size: clamp(30px, 7vw, 46px);
+    }
+
+    .cabecalho-biblioteca p {
+      margin: 0;
+      color: #b9b9c4;
+      line-height: 1.6;
+    }
+
+    .campo-pesquisa {
+      position: relative;
+      margin-top: 22px;
+    }
+
+    .campo-pesquisa input {
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 48px 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 15px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    .campo-pesquisa input:focus {
+      border-color: rgba(124, 77, 255, 0.7);
+      box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.12);
+    }
+
+    .campo-pesquisa input::placeholder {
+      color: #83838e;
+    }
+
+    .icone-pesquisa {
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      color: #a999c8;
+      pointer-events: none;
+    }
+
+    .secao-biblioteca {
+      margin-top: 34px;
+    }
+
+    .cabecalho-secao {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .cabecalho-secao h2 {
+      margin: 0;
+      font-size: 23px;
+    }
+
+    .contador-secao {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(124, 77, 255, 0.14);
+      color: #cbb5ff;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .lista-horizontal {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(145px, 180px);
+      gap: 15px;
+      overflow-x: auto;
+      padding: 3px 2px 12px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+
+    .lista-horizontal::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .lista-horizontal::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: rgba(124, 77, 255, 0.35);
+    }
+
+    .grade-livros {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fill, minmax(150px, 1fr));
+      gap: 17px;
+    }
+
+    .cartao-livro {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.04);
+      scroll-snap-align: start;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .cartao-livro:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124, 77, 255, 0.5);
+    }
+
+    .capa-livro {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      display: block;
+      object-fit: cover;
+      background: #191922;
+    }
+
+    .conteudo-livro {
+      padding: 14px;
+    }
+
+    .conteudo-livro h3 {
+      margin: 0 0 7px;
+      display: -webkit-box;
+      overflow: hidden;
+      font-size: 16px;
+      line-height: 1.35;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .autor-livro {
+      margin: 0 0 13px;
+      color: #aaaab5;
+      font-size: 13px;
+    }
+
+    .botao-livro {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: rgba(124, 77, 255, 0.18);
+      color: #d3c2ff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .botao-livro:hover {
+      background: rgba(124, 77, 255, 0.28);
+    }
+
+    .cartao-continuar {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      min-width: min(330px, 88vw);
+      min-height: 138px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.04);
+      scroll-snap-align: start;
+    }
+
+    .capa-continuar {
+      width: 90px;
+      height: 100%;
+      min-height: 138px;
+      object-fit: cover;
+      background: #191922;
+    }
+
+    .conteudo-continuar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      padding: 15px;
+    }
+
+    .conteudo-continuar h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+    }
+
+    .conteudo-continuar p {
+      margin: 0 0 13px;
+      color: #aaaab5;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .barra-progresso {
+      width: 100%;
+      height: 6px;
+      overflow: hidden;
+      margin-bottom: 13px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .progresso-preenchido {
+      width: 20%;
+      height: 100%;
+      border-radius: inherit;
+      background:
+        linear-gradient(
+          90deg,
+          #7c4dff,
+          #b168ff
+        );
+    }
+
+    .mensagem-vazia {
+      grid-column: 1 / -1;
+      width: 100%;
+      padding: 24px;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #aaaab5;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .menu-biblioteca {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 8px;
+      background: rgba(12, 12, 18, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+    }
+
+    .menu-biblioteca a {
+      padding: 8px 4px;
+      color: #b7b7c1;
+      text-align: center;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .menu-biblioteca a.ativo {
+      color: #c7a7ff;
+      font-weight: bold;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 480px) {
+      .pagina-biblioteca {
+        width: min(100% - 24px, 1050px);
+      }
+
+      .grade-livros {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+        gap: 13px;
+      }
+
+      .conteudo-livro {
+        padding: 12px;
+      }
+
+      .conteudo-livro h3 {
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .grade-livros {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topo-biblioteca">
+
+    <a
+      href="index.html"
+      class="logo-biblioteca"
+    >
+      💜 Entre Capítulos
+    </a>
+
+    <a
+      href="perfil.html"
+      class="botao-perfil"
+    >
+      👤 Perfil
+    </a>
+
+  </header>
+
+  <main class="pagina-biblioteca">
+
+    <section class="cabecalho-biblioteca">
+
+      <h1>Biblioteca</h1>
+
+      <p>
+        Encontre suas próximas histórias e continue de onde parou.
+      </p>
+
+      <div class="campo-pesquisa">
+
+        <input
+          type="search"
+          id="campoPesquisa"
+          placeholder="Pesquisar por título ou autor..."
+          autocomplete="off"
+        >
+
+        <span class="icone-pesquisa">
+          🔎
+        </span>
+
+      </div>
+
+    </section>
+
+    <section
+      class="secao-biblioteca"
+      id="secaoContinuar"
+    >
+
+      <div class="cabecalho-secao">
+
+        <h2>📖 Continuar lendo</h2>
+
+        <span
+          class="contador-secao"
+          id="contadorContinuar"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        class="lista-horizontal"
+        id="listaContinuar"
+      >
+        <div class="mensagem-vazia">
+          Carregando seu progresso...
+        </div>
+      </div>
+
+    </section>
+
+    <section
+      class="secao-biblioteca"
+      id="secaoFavoritos"
+    >
+
+      <div class="cabecalho-secao">
+
+        <h2>❤️ Favoritos</h2>
+
+        <span
+          class="contador-secao"
+          id="contadorFavoritos"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        class="lista-horizontal"
+        id="listaFavoritosBiblioteca"
+      >
+        <div class="mensagem-vazia">
+          Carregando seus favoritos...
+        </div>
+      </div>
+
+    </section>
+
+    <section
+      class="secao-biblioteca"
+      id="secaoLancamentos"
+    >
+
+      <div class="cabecalho-secao">
+
+        <h2>🆕 Lançamentos</h2>
+
+        <span
+          class="contador-secao"
+          id="contadorLancamentos"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        class="lista-horizontal"
+        id="listaLancamentos"
+      >
+        <div class="mensagem-vazia">
+          Carregando lançamentos...
+        </div>
+      </div>
+
+    </section>
+
+    <section
+      class="secao-biblioteca"
+      id="secaoTodos"
+    >
+
+      <div class="cabecalho-secao">
+
+        <h2>📚 Todos os livros</h2>
+
+        <span
+          class="contador-secao"
+          id="contadorLivros"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        class="grade-livros"
+        id="gradeLivros"
+      >
+        <div class="mensagem-vazia">
+          Carregando a biblioteca...
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <nav class="menu-biblioteca">
+
+    <a href="index.html">
+      🏠<br>Início
+    </a>
+
+    <a
+      href="biblioteca.html"
+      class="ativo"
+    >
+      📚<br>Biblioteca
+    </a>
+
+    <a href="perfil.html#secaoFavoritos">
+      ❤️<br>Favoritos
+    </a>
+
+    <a href="perfil.html">
+      👤<br>Perfil
+    </a>
+
+  </nav>
+
+  <script
+    type="module"
+    src="js/biblioteca.js"
+  ></script>
+
+</body>
+</html>
