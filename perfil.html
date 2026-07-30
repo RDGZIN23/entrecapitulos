@@ -18,6 +18,10 @@
   <link rel="stylesheet" href="css/style.css">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -135,7 +139,8 @@
 
     .grade-estatisticas {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -145,6 +150,12 @@
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.04);
       text-align: center;
+    }
+
+    .icone-estatistica {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 27px;
     }
 
     .numero-estatistica {
@@ -158,6 +169,142 @@
     .rotulo-estatistica {
       color: #b8b8c2;
       font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .painel-progresso {
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(124, 77, 255, 0.1),
+          rgba(255, 255, 255, 0.035)
+        );
+    }
+
+    .cabecalho-progresso {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 14px;
+    }
+
+    .cabecalho-progresso strong {
+      font-size: 16px;
+    }
+
+    .nivel-leitor {
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(124, 77, 255, 0.18);
+      color: #d2c1ff;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .barra-nivel {
+      width: 100%;
+      height: 11px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .barra-nivel-preenchida {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background:
+        linear-gradient(
+          90deg,
+          #7c4dff,
+          #b56cff
+        );
+      transition: width 0.6s ease;
+    }
+
+    .texto-nivel {
+      margin: 14px 0 0;
+      color: #b9b9c4;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .grade-conquistas {
+      display: grid;
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .cartao-conquista {
+      position: relative;
+      padding: 22px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.035);
+      text-align: center;
+      opacity: 0.45;
+      filter: grayscale(0.7);
+      transition:
+        opacity 0.25s ease,
+        filter 0.25s ease,
+        transform 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    .cartao-conquista.desbloqueada {
+      opacity: 1;
+      filter: none;
+      border-color: rgba(124, 77, 255, 0.38);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(124, 77, 255, 0.14),
+          rgba(255, 255, 255, 0.04)
+        );
+    }
+
+    .cartao-conquista.desbloqueada:hover {
+      transform: translateY(-3px);
+    }
+
+    .icone-conquista {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 38px;
+    }
+
+    .cartao-conquista h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+    }
+
+    .cartao-conquista p {
+      margin: 0;
+      color: #aaaab5;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .estado-conquista {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: #aaaab5;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .cartao-conquista.desbloqueada
+    .estado-conquista {
+      background: rgba(104, 220, 161, 0.13);
+      color: #8ce6b7;
     }
 
     .cartao-vazio {
@@ -231,21 +378,26 @@
       gap: 9px;
     }
 
-    .botao-abrir-favorito {
+    .botao-abrir-favorito,
+    .botao-remover-favorito {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       padding: 10px 14px;
       border-radius: 10px;
-      background: rgba(124, 77, 255, 0.18);
-      color: #cebaff;
-      text-align: center;
-      text-decoration: none;
+      font-family: inherit;
       font-size: 14px;
       font-weight: bold;
       transition:
         background 0.2s ease,
         transform 0.2s ease;
+    }
+
+    .botao-abrir-favorito {
+      background: rgba(124, 77, 255, 0.18);
+      color: #cebaff;
+      text-align: center;
+      text-decoration: none;
     }
 
     .botao-abrir-favorito:hover {
@@ -254,22 +406,10 @@
     }
 
     .botao-remover-favorito {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 14px;
       border: 1px solid rgba(255, 91, 123, 0.35);
-      border-radius: 10px;
       background: rgba(255, 70, 110, 0.1);
       color: #ff91aa;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: bold;
       cursor: pointer;
-      transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
     }
 
     .botao-remover-favorito:hover {
@@ -354,6 +494,17 @@
       display: none !important;
     }
 
+    @media (max-width: 760px) {
+      .grade-estatisticas {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .grade-conquistas {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 650px) {
       .cartao-perfil {
         grid-template-columns: 1fr;
@@ -362,10 +513,6 @@
 
       .avatar-perfil {
         margin: 0 auto;
-      }
-
-      .grade-estatisticas {
-        grid-template-columns: 1fr;
       }
 
       .acoes-perfil {
@@ -378,6 +525,19 @@
     }
 
     @media (max-width: 400px) {
+      .pagina-perfil {
+        width: min(100% - 22px, 950px);
+      }
+
+      .grade-estatisticas {
+        grid-template-columns: 1fr;
+      }
+
+      .cabecalho-progresso {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
       .cartao-favorito {
         grid-template-columns: 90px 1fr;
       }
@@ -397,7 +557,6 @@
       .botao-abrir-favorito,
       .botao-remover-favorito {
         width: 100%;
-        box-sizing: border-box;
         padding: 9px 10px;
         font-size: 13px;
       }
@@ -472,6 +631,10 @@
 
           <div class="cartao-estatistica">
 
+            <span class="icone-estatistica">
+              ❤️
+            </span>
+
             <span
               class="numero-estatistica"
               id="totalFavoritos"
@@ -486,6 +649,10 @@
           </div>
 
           <div class="cartao-estatistica">
+
+            <span class="icone-estatistica">
+              📖
+            </span>
 
             <span
               class="numero-estatistica"
@@ -502,6 +669,10 @@
 
           <div class="cartao-estatistica">
 
+            <span class="icone-estatistica">
+              📚
+            </span>
+
             <span
               class="numero-estatistica"
               id="totalLivros"
@@ -515,6 +686,150 @@
 
           </div>
 
+          <div class="cartao-estatistica">
+
+            <span class="icone-estatistica">
+              🏆
+            </span>
+
+            <span
+              class="numero-estatistica"
+              id="totalConcluidos"
+            >
+              0
+            </span>
+
+            <span class="rotulo-estatistica">
+              Livros concluídos
+            </span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="secao-perfil">
+
+        <h2>Seu progresso</h2>
+
+        <div class="painel-progresso">
+
+          <div class="cabecalho-progresso">
+
+            <strong>Nível de leitura</strong>
+
+            <span
+              class="nivel-leitor"
+              id="nivelLeitor"
+            >
+              Iniciante
+            </span>
+
+          </div>
+
+          <div class="barra-nivel">
+
+            <div
+              class="barra-nivel-preenchida"
+              id="barraNivel"
+            ></div>
+
+          </div>
+
+          <p
+            class="texto-nivel"
+            id="textoNivel"
+          >
+            Continue lendo para subir de nível.
+          </p>
+
+        </div>
+
+      </section>
+
+      <section class="secao-perfil">
+
+        <h2>Conquistas</h2>
+
+        <div class="grade-conquistas">
+
+          <article
+            class="cartao-conquista"
+            id="conquistaPrimeiroCapitulo"
+          >
+
+            <span class="icone-conquista">
+              📖
+            </span>
+
+            <h3>Primeiro capítulo</h3>
+
+            <p>
+              Leia seu primeiro capítulo.
+            </p>
+
+            <span class="estado-conquista">
+              Bloqueada
+            </span>
+
+          </article>
+
+          <article
+            class="cartao-conquista"
+            id="conquistaPrimeiroFavorito"
+          >
+
+            <span class="icone-conquista">
+              ❤️
+            </span>
+
+            <h3>Primeiro favorito</h3>
+
+            <p>
+              Adicione um livro aos favoritos.
+            </p>
+
+            <span class="estado-conquista">
+              Bloqueada
+            </span>
+
+          </article>
+
+          <article
+            class="cartao-conquista"
+            id="conquistaLeitorDedicado"
+          >
+
+            <span class="icone-conquista">
+              🏆
+            </span>
+
+            <h3>Leitor dedicado</h3>
+
+            <p>
+              Leia pelo menos 10 capítulos.
+            </p>
+
+            <span class="estado-conquista">
+              Bloqueada
+            </span>
+
+          </article>
+
+        </div>
+
+      </section>
+
+      <section class="secao-perfil">
+
+        <h2>Continuar lendo</h2>
+
+        <div
+          class="cartao-vazio"
+          id="areaContinueLendo"
+        >
+          Você ainda não começou nenhuma leitura.
         </div>
 
       </section>
@@ -539,25 +854,12 @@
 
       <section class="secao-perfil">
 
-        <h2>Continuar lendo</h2>
-
-        <div
-          class="cartao-vazio"
-          id="areaContinueLendo"
-        >
-          Você ainda não começou nenhuma leitura.
-        </div>
-
-      </section>
-
-      <section class="secao-perfil">
-
         <h2>Acesso rápido</h2>
 
         <div class="acoes-perfil">
 
           <a
-            href="index.html#biblioteca"
+            href="biblioteca.html"
             class="acao-perfil"
           >
             📚 Explorar biblioteca
@@ -584,7 +886,7 @@
       🏠<br>Início
     </a>
 
-    <a href="index.html#biblioteca">
+    <a href="biblioteca.html">
       📚<br>Biblioteca
     </a>
 
