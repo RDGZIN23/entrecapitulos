@@ -140,6 +140,28 @@ function mostrarErro(mensagem) {
 }
 
 
+function mostrarMensagemFavoritosVazios() {
+  if (!listaFavoritos) {
+    return;
+  }
+
+  listaFavoritos.innerHTML = "";
+
+  const mensagem =
+    document.createElement("div");
+
+  mensagem.className =
+    "cartao-vazio";
+
+  mensagem.textContent =
+    "Você ainda não adicionou nenhum livro aos favoritos.";
+
+  listaFavoritos.appendChild(
+    mensagem
+  );
+}
+
+
 // ========================================
 // ESTATÍSTICAS LOCAIS
 // ========================================
@@ -159,6 +181,97 @@ function carregarEstatisticasLocais() {
   if (totalLivros) {
     totalLivros.textContent =
       String(livrosIniciados.length);
+  }
+}
+
+
+// ========================================
+// REMOVER FAVORITO
+// ========================================
+
+async function removerFavorito(
+  favorito,
+  cartao,
+  botaoRemover
+) {
+  if (!favorito.id) {
+    alert(
+      "Não foi possível identificar este favorito."
+    );
+
+    return;
+  }
+
+  const confirmar =
+    window.confirm(
+      `Remover "${
+        favorito.titulo ||
+        "este livro"
+      }" dos favoritos?`
+    );
+
+  if (!confirmar) {
+    return;
+  }
+
+  botaoRemover.disabled =
+    true;
+
+  botaoRemover.textContent =
+    "Removendo...";
+
+  try {
+    await deleteDoc(
+      doc(
+        db,
+        "favoritos",
+        favorito.id
+      )
+    );
+
+    cartao.remove();
+
+    const quantidadeAtual =
+      Number(
+        totalFavoritos?.textContent ||
+        0
+      );
+
+    const novaQuantidade =
+      Math.max(
+        0,
+        quantidadeAtual - 1
+      );
+
+    if (totalFavoritos) {
+      totalFavoritos.textContent =
+        String(novaQuantidade);
+    }
+
+    const cartoesRestantes =
+      listaFavoritos?.querySelectorAll(
+        ".cartao-favorito"
+      ).length || 0;
+
+    if (cartoesRestantes === 0) {
+      mostrarMensagemFavoritosVazios();
+    }
+
+  } catch (erro) {
+    console.error(
+      "Erro ao remover favorito:",
+      erro
+    );
+
+    botaoRemover.disabled =
+      false;
+
+    botaoRemover.textContent =
+      "♥ Remover";
+
+    alert(
+      "Não foi possível remover o livro dos favoritos."
+    );
   }
 }
 
@@ -221,24 +334,66 @@ function criarCartaoFavorito(favorito) {
     favorito.autor ||
     "Autor não informado";
 
-  const botao =
+  const areaBotoes =
+    document.createElement("div");
+
+  areaBotoes.className =
+    "botoes-favorito";
+
+  const botaoAbrir =
     document.createElement("a");
 
-  botao.className =
+  botaoAbrir.className =
     "botao-abrir-favorito";
 
-  botao.href =
+  botaoAbrir.href =
     favorito.livroId
       ? `livro.html?id=${favorito.livroId}`
       : "index.html#biblioteca";
 
-  botao.textContent =
+  botaoAbrir.textContent =
     "📖 Abrir livro";
+
+  const botaoRemover =
+    document.createElement("button");
+
+  botaoRemover.type =
+    "button";
+
+  botaoRemover.className =
+    "botao-remover-favorito";
+
+  botaoRemover.textContent =
+    "♥ Remover";
+
+  botaoRemover.setAttribute(
+    "aria-label",
+    `Remover ${
+      favorito.titulo ||
+      "livro"
+    } dos favoritos`
+  );
+
+  botaoRemover.addEventListener(
+    "click",
+    () => {
+      removerFavorito(
+        favorito,
+        cartao,
+        botaoRemover
+      );
+    }
+  );
+
+  areaBotoes.append(
+    botaoAbrir,
+    botaoRemover
+  );
 
   conteudo.append(
     titulo,
     autor,
-    botao
+    areaBotoes
   );
 
   cartao.append(
@@ -289,19 +444,7 @@ async function carregarFavoritos(
     listaFavoritos.innerHTML = "";
 
     if (resultadoFavoritos.empty) {
-      const mensagem =
-        document.createElement("div");
-
-      mensagem.className =
-        "cartao-vazio";
-
-      mensagem.textContent =
-        "Você ainda não adicionou nenhum livro aos favoritos.";
-
-      listaFavoritos.appendChild(
-        mensagem
-      );
-
+      mostrarMensagemFavoritosVazios();
       return;
     }
 
@@ -564,7 +707,8 @@ if (botaoSair) {
   botaoSair.addEventListener(
     "click",
     async () => {
-      botaoSair.disabled = true;
+      botaoSair.disabled =
+        true;
 
       botaoSair.textContent =
         "Saindo...";
@@ -581,7 +725,8 @@ if (botaoSair) {
           erro
         );
 
-        botaoSair.disabled = false;
+        botaoSair.disabled =
+          false;
 
         botaoSair.textContent =
           "Sair";
