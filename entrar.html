@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Entre ou crie sua conta de leitor no Entre Capítulos."
+  >
+
+  <title>Entrar | Entre Capítulos</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(126, 87, 194, 0.22),
+          transparent 38%
+        ),
+        #0c0c12;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .pagina-autenticacao {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 30px 18px;
+      box-sizing: border-box;
+    }
+
+    .cartao-autenticacao {
+      width: min(100%, 430px);
+      padding: 30px 24px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      background: rgba(20, 20, 30, 0.95);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .logo-autenticacao {
+      margin-bottom: 8px;
+      text-align: center;
+      color: #c9a7ff;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .cartao-autenticacao h1 {
+      margin: 18px 0 8px;
+      text-align: center;
+      font-size: 30px;
+    }
+
+    .subtitulo-autenticacao {
+      margin: 0 0 26px;
+      text-align: center;
+      color: #b9b9c4;
+      line-height: 1.6;
+    }
+
+    .abas-autenticacao {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 5px;
+      margin-bottom: 24px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .aba-autenticacao {
+      min-height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: #c5c5cf;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .aba-autenticacao.ativa {
+      background: #7c4dff;
+      color: #ffffff;
+    }
+
+    .formulario-autenticacao {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grupo-campo {
+      display: grid;
+      gap: 7px;
+    }
+
+    .grupo-campo label {
+      color: #e4e4ea;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .grupo-campo input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 14px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 12px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+      font-size: 16px;
+    }
+
+    .grupo-campo input:focus {
+      border-color: #8f67ff;
+      box-shadow: 0 0 0 3px rgba(143, 103, 255, 0.14);
+    }
+
+    .botao-autenticacao {
+      min-height: 50px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7c4dff, #9d6cff);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .botao-autenticacao:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+
+    .mensagem-autenticacao {
+      min-height: 22px;
+      margin: 4px 0 0;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .mensagem-autenticacao.erro {
+      color: #ff9a9a;
+    }
+
+    .mensagem-autenticacao.sucesso {
+      color: #8ef0b5;
+    }
+
+    .voltar-inicio {
+      display: block;
+      width: fit-content;
+      margin: 24px auto 0;
+      color: #c9a7ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .texto-rodape {
+      margin: 22px 0 0;
+      text-align: center;
+      color: #83838f;
+      font-size: 13px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="pagina-autenticacao">
+
+    <section class="cartao-autenticacao">
+
+      <div class="logo-autenticacao">
+        💜 ENTRE CAPÍTULOS
+      </div>
+
+      <h1 id="tituloFormulario">
+        Entrar
+      </h1>
+
+      <p
+        class="subtitulo-autenticacao"
+        id="subtituloFormulario"
+      >
+        Acesse sua conta e continue suas histórias.
+      </p>
+
+      <div class="abas-autenticacao">
+
+        <button
+          type="button"
+          class="aba-autenticacao ativa"
+          id="abaEntrar"
+        >
+          Entrar
+        </button>
+
+        <button
+          type="button"
+          class="aba-autenticacao"
+          id="abaCadastrar"
+        >
+          Criar conta
+        </button>
+
+      </div>
+
+      <form
+        class="formulario-autenticacao"
+        id="formularioEntrar"
+      >
+
+        <div class="grupo-campo">
+
+          <label for="emailEntrar">
+            E-mail
+          </label>
+
+          <input
+            type="email"
+            id="emailEntrar"
+            placeholder="seuemail@exemplo.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+        <div class="grupo-campo">
+
+          <label for="senhaEntrar">
+            Senha
+          </label>
+
+          <input
+            type="password"
+            id="senhaEntrar"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+        <button
+          type="submit"
+          class="botao-autenticacao"
+          id="botaoEntrar"
+        >
+          Entrar na conta
+        </button>
+
+      </form>
+
+      <form
+        class="formulario-autenticacao"
+        id="formularioCadastrar"
+        hidden
+      >
+
+        <div class="grupo-campo">
+
+          <label for="nomeCadastrar">
+            Seu nome
+          </label>
+
+          <input
+            type="text"
+            id="nomeCadastrar"
+            placeholder="Como você quer ser chamado?"
+            autocomplete="name"
+            minlength="2"
+            required
+          >
+
+        </div>
+
+        <div class="grupo-campo">
+
+          <label for="emailCadastrar">
+            E-mail
+          </label>
+
+          <input
+            type="email"
+            id="emailCadastrar"
+            placeholder="seuemail@exemplo.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+        <div class="grupo-campo">
+
+          <label for="senhaCadastrar">
+            Senha
+          </label>
+
+          <input
+            type="password"
+            id="senhaCadastrar"
+            placeholder="Crie uma senha com 6 ou mais caracteres"
+            autocomplete="new-password"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+        <div class="grupo-campo">
+
+          <label for="confirmarSenha">
+            Confirmar senha
+          </label>
+
+          <input
+            type="password"
+            id="confirmarSenha"
+            placeholder="Digite a senha novamente"
+            autocomplete="new-password"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+        <button
+          type="submit"
+          class="botao-autenticacao"
+          id="botaoCadastrar"
+        >
+          Criar minha conta
+        </button>
+
+      </form>
+
+      <p
+        class="mensagem-autenticacao"
+        id="mensagemAutenticacao"
+        aria-live="polite"
+      ></p>
+
+      <a
+        href="index.html"
+        class="voltar-inicio"
+      >
+        ← Voltar para o início
+      </a>
+
+      <p class="texto-rodape">
+        Onde cada página ganha vida.
+      </p>
+
+    </section>
+
+  </main>
+
+  <script
+    type="module"
+    src="js/entrar.js"
+  ></script>
+
+</body>
+</html>
