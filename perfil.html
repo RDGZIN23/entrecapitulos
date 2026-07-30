@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Perfil do leitor no Entre Capítulos."
+  >
+
+  <title>Meu perfil | Entre Capítulos</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(124, 77, 255, 0.2),
+          transparent 35%
+        ),
+        #0c0c12;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topo-perfil {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 16px 18px;
+      background: rgba(12, 12, 18, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo-perfil {
+      color: #c7a7ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .botao-sair {
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .pagina-perfil {
+      width: min(100% - 30px, 950px);
+      margin: 0 auto;
+      padding: 35px 0 100px;
+    }
+
+    .cartao-perfil {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 22px;
+      padding: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      background: rgba(23, 23, 34, 0.95);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+    }
+
+    .avatar-perfil {
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        linear-gradient(
+          135deg,
+          #7c4dff,
+          #b56cff
+        );
+      color: #ffffff;
+      font-size: 34px;
+      font-weight: bold;
+    }
+
+    .informacoes-perfil h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    .informacoes-perfil p {
+      margin: 0;
+      color: #b9b9c4;
+      line-height: 1.6;
+    }
+
+    .etiqueta-leitor {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(124, 77, 255, 0.16);
+      color: #cbb4ff;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .secao-perfil {
+      margin-top: 32px;
+    }
+
+    .secao-perfil h2 {
+      margin: 0 0 16px;
+      font-size: 23px;
+    }
+
+    .grade-estatisticas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .cartao-estatistica {
+      padding: 20px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      text-align: center;
+    }
+
+    .numero-estatistica {
+      display: block;
+      margin-bottom: 7px;
+      color: #c7a7ff;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .rotulo-estatistica {
+      color: #b8b8c2;
+      font-size: 14px;
+    }
+
+    .cartao-vazio {
+      padding: 24px;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #b9b9c4;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .acoes-perfil {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .acao-perfil {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 12px 16px;
+      border-radius: 13px;
+      background:
+        linear-gradient(
+          135deg,
+          #7c4dff,
+          #9b6cff
+        );
+      color: #ffffff;
+      text-decoration: none;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .acao-secundaria {
+      border: 1px solid rgba(124, 77, 255, 0.45);
+      background: rgba(124, 77, 255, 0.11);
+    }
+
+    .mensagem-perfil {
+      padding: 30px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #c5c5ce;
+      text-align: center;
+    }
+
+    .menu-perfil {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 30;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 8px;
+      background: rgba(12, 12, 18, 0.97);
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+    }
+
+    .menu-perfil a {
+      padding: 8px 4px;
+      color: #b7b7c1;
+      text-align: center;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .menu-perfil a.ativo {
+      color: #c7a7ff;
+      font-weight: bold;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 650px) {
+      .cartao-perfil {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .avatar-perfil {
+        margin: 0 auto;
+      }
+
+      .grade-estatisticas {
+        grid-template-columns: 1fr;
+      }
+
+      .acoes-perfil {
+        grid-template-columns: 1fr;
+      }
+
+      .informacoes-perfil h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topo-perfil">
+
+    <a
+      href="index.html"
+      class="logo-perfil"
+    >
+      💜 Entre Capítulos
+    </a>
+
+    <button
+      type="button"
+      class="botao-sair"
+      id="botaoSair"
+    >
+      Sair
+    </button>
+
+  </header>
+
+  <main class="pagina-perfil">
+
+    <div
+      class="mensagem-perfil"
+      id="mensagemCarregando"
+    >
+      Carregando seu perfil...
+    </div>
+
+    <div id="conteudoPerfil" hidden>
+
+      <section class="cartao-perfil">
+
+        <div
+          class="avatar-perfil"
+          id="avatarPerfil"
+        >
+          L
+        </div>
+
+        <div class="informacoes-perfil">
+
+          <h1 id="nomePerfil">
+            Leitor
+          </h1>
+
+          <p id="emailPerfil">
+            Carregando e-mail...
+          </p>
+
+          <span class="etiqueta-leitor">
+            📖 Leitor do Entre Capítulos
+          </span>
+
+        </div>
+
+      </section>
+
+      <section class="secao-perfil">
+
+        <h2>Suas estatísticas</h2>
+
+        <div class="grade-estatisticas">
+
+          <div class="cartao-estatistica">
+            <span
+              class="numero-estatistica"
+              id="totalFavoritos"
+            >
+              0
+            </span>
+
+            <span class="rotulo-estatistica">
+              Livros favoritos
+            </span>
+          </div>
+
+          <div class="cartao-estatistica">
+            <span
+              class="numero-estatistica"
+              id="totalCapitulos"
+            >
+              0
+            </span>
+
+            <span class="rotulo-estatistica">
+              Capítulos lidos
+            </span>
+          </div>
+
+          <div class="cartao-estatistica">
+            <span
+              class="numero-estatistica"
+              id="totalLivros"
+            >
+              0
+            </span>
+
+            <span class="rotulo-estatistica">
+              Livros iniciados
+            </span>
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="secao-perfil">
+
+        <h2>Continuar lendo</h2>
+
+        <div
+          class="cartao-vazio"
+          id="areaContinueLendo"
+        >
+          Você ainda não começou nenhuma leitura.
+        </div>
+
+      </section>
+
+      <section class="secao-perfil">
+
+        <h2>Acesso rápido</h2>
+
+        <div class="acoes-perfil">
+
+          <a
+            href="index.html#biblioteca"
+            class="acao-perfil"
+          >
+            📚 Explorar biblioteca
+          </a>
+
+          <a
+            href="index.html"
+            class="acao-perfil acao-secundaria"
+          >
+            🏠 Voltar ao início
+          </a>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <nav class="menu-perfil">
+
+    <a href="index.html">
+      🏠<br>Início
+    </a>
+
+    <a href="index.html#biblioteca">
+      📚<br>Biblioteca
+    </a>
+
+    <a href="#">
+      ❤️<br>Favoritos
+    </a>
+
+    <a
+      href="perfil.html"
+      class="ativo"
+    >
+      👤<br>Perfil
+    </a>
+
+  </nav>
+
+  <script
+    type="module"
+    src="js/perfil.js"
+  ></script>
+
+</body>
+</html>
