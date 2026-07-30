@@ -5,6 +5,11 @@
 import { db } from "./firebase-config.js";
 
 import {
+  alternarFavorito,
+  verificarFavorito
+} from "./favoritos.js";
+
+import {
   collection,
   doc,
   getDoc,
