@@ -2,120 +2,227 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Leia romances e histórias no Entre Capítulos."
+  >
+
   <title>Entre Capítulos</title>
+
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
   <header>
-  <div class="logo">💜 ENTRE CAPÍTULOS</div>
-  <p class="slogan">Onde cada página ganha vida.</p>
-</header>
+    <div class="logo">
+      💜 ENTRE CAPÍTULOS
+    </div>
 
-<section class="banner">
+    <p class="slogan">
+      Onde cada página ganha vida.
+    </p>
+  </header>
 
-  <div class="banner-card">
 
-    <img
-      src="images/depois-de-te-odiar.png"
-      alt="Depois de Te Odiar"
-      class="banner-capa">
+  <!-- LIVRO PRINCIPAL -->
 
-    <div class="banner-texto">
+  <section class="banner">
 
-      <span class="categoria">
-        Romance • Drama • Young Adult
-      </span>
+    <div
+      class="banner-card"
+      id="bannerPrincipal"
+    >
 
-      <h1>Depois de Te Odiar</h1>
+      <img
+        src="images/depois-de-te-odiar.png"
+        alt="Capa do livro em destaque"
+        class="banner-capa"
+        id="bannerCapa"
+      >
 
-      <h3>Megan Calloway ❤️ Atlas Donovan</h3>
+      <div class="banner-texto">
 
-      <p>
-        "Eles cresceram se odiando.
-        Mas o destino tinha outros planos."
-      </p>
+        <span
+          class="categoria"
+          id="bannerGenero"
+        >
+          Carregando...
+        </span>
 
-      <a href="livro.html" class="btn">
+        <h1 id="bannerTitulo">
+          Carregando livro...
+        </h1>
 
-📖 Ler Agora
+        <h3 id="bannerAutor">
+          Aguarde...
+        </h3>
 
-</a>
+        <p id="bannerSinopse">
+          Buscando os livros publicados no Entre Capítulos.
+        </p>
+
+        <a
+          href="#"
+          class="btn"
+          id="bannerBotao"
+        >
+          📖 Ler agora
+        </a>
+
+      </div>
 
     </div>
 
-  </div>
+  </section>
 
-</section>
 
-<section class="pesquisa">
-    <input type="text" placeholder="🔍 Buscar livros...">
-</section>
+  <!-- PESQUISA -->
 
-<section class="continue">
-    <h2>Continue Lendo</h2>
+  <section class="pesquisa">
+
+    <input
+      type="search"
+      id="campoPesquisa"
+      placeholder="🔍 Buscar por título, autor ou gênero..."
+      autocomplete="off"
+    >
+
+  </section>
+
+
+  <!-- CONTINUAR LENDO -->
+
+  <section
+    class="continue"
+    id="secaoContinueLendo"
+    hidden
+  >
+
+    <h2>Continue lendo</h2>
 
     <div class="livro-horizontal">
-        <img src="images/depois-de-te-odiar.png" alt="Depois de Te Odiar">
 
-        <div>
-            <h3>Depois de Te Odiar</h3>
-            <p>Capítulo 1 • A Menina dos Livros</p>
+      <img
+        src="images/depois-de-te-odiar.png"
+        alt="Capa do último livro lido"
+        id="continueCapa"
+      >
 
-            <button class="btn">
-                Continuar
-            </button>
-        </div>
+      <div>
+
+        <h3 id="continueTitulo">
+          Livro
+        </h3>
+
+        <p id="continueCapitulo">
+          Continue de onde parou
+        </p>
+
+        <a
+          href="#"
+          class="btn"
+          id="continueBotao"
+        >
+          Continuar
+        </a>
+
+      </div>
+
     </div>
-</section>
 
-<section class="destaque">
-    <h2>🔥 Em Destaque</h2>
+  </section>
 
-    <div class="cards">
 
-        <div class="card">
-            <img src="images/depois-de-te-odiar.png">
-            <h3>Depois de Te Odiar</h3>
-        </div>
+  <!-- DESTAQUE -->
 
+  <section class="destaque">
+
+    <h2>🔥 Em destaque</h2>
+
+    <div
+      class="cards"
+      id="livrosDestaque"
+    >
+      <p>Carregando destaques...</p>
     </div>
 
-</section>
+  </section>
 
-<section class="biblioteca">
 
-  <h2>📚 Biblioteca</h2>
+  <!-- BIBLIOTECA -->
 
-  <div class="livro">
+  <section
+    class="biblioteca"
+    id="biblioteca"
+  >
 
-  <img src="images/depois-de-te-odiar.png"
-       alt="Depois de Te Odiar"
-       class="capa">
+    <h2>📚 Biblioteca</h2>
 
-  <h3>❤️ Depois de Te Odiar</h3>
+    <p
+      id="quantidadeLivros"
+      class="quantidade-livros"
+    >
+      Carregando livros...
+    </p>
 
-  <p>
-    Megan Calloway e Atlas Donovan cresceram se odiando.
-    Mas algumas histórias de amor começam exatamente assim.
-  </p>
+    <div
+      class="cards"
+      id="listaLivros"
+    >
+      <p>Buscando livros no Firebase...</p>
+    </div>
 
-  <button class="btn">
-    📖 Ler Agora
-  </button>
+    <p
+      id="mensagemSemLivros"
+      hidden
+    >
+      Nenhum livro encontrado.
+    </p>
 
-</div>
+  </section>
 
-</section>
 
-<nav class="menu">
-  <a href="#">🏠 Início</a>
-  <a href="#">📚 Biblioteca</a>
-  <a href="#">❤️ Favoritos</a>
-  <a href="#">👤 Perfil</a>
-  <a href="login.html" class="botao-autor">Área do Autor</a>
-</nav>
+  <!-- MENU INFERIOR -->
+
+  <nav class="menu">
+
+    <a href="index.html">
+      🏠 Início
+    </a>
+
+    <a href="#biblioteca">
+      📚 Biblioteca
+    </a>
+
+    <a href="#">
+      ❤️ Favoritos
+    </a>
+
+    <a href="#">
+      👤 Perfil
+    </a>
+
+    <a
+      href="login.html"
+      class="botao-autor"
+    >
+      Área do Autor
+    </a>
+
+  </nav>
+
+
+  <script
+    type="module"
+    src="js/index.js"
+  ></script>
 
 </body>
 </html>
