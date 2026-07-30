@@ -115,6 +115,11 @@ function mostrarErro(mensagem) {
     botaoComecarLeitura.style.opacity =
       "0.6";
   }
+
+  if (botaoFavorito) {
+    botaoFavorito.disabled = true;
+    botaoFavorito.style.opacity = "0.6";
+  }
 }
 
 
@@ -149,19 +154,30 @@ async function carregarLivro() {
     const livro =
       resultadoLivro.data();
 
+    const titulo =
+      livro.titulo || "Livro sem título";
+
+    const autor =
+      livro.autor || "Autor desconhecido";
+
+    const capa =
+      livro.capa ||
+      "images/depois-de-te-odiar.png";
+
     if (tituloLivro) {
       tituloLivro.textContent =
-        livro.titulo || "Livro sem título";
+        titulo;
     }
 
     if (autorLivro) {
       autorLivro.textContent =
-        livro.autor || "Autor desconhecido";
+        autor;
     }
 
     if (generoLivro) {
       generoLivro.textContent =
-        livro.genero || "Gênero não definido";
+        livro.genero ||
+        "Gênero não definido";
     }
 
     if (sinopseLivro) {
@@ -172,22 +188,19 @@ async function carregarLivro() {
 
     if (capaLivro) {
       capaLivro.src =
-        livro.capa ||
-        "images/depois-de-te-odiar.png";
+        capa;
 
       capaLivro.alt =
-        `Capa do livro ${
-          livro.titulo || ""
-        }`;
+        `Capa do livro ${titulo}`;
     }
 
     document.title =
-      `${
-        livro.titulo || "Livro"
-      } | Entre Capítulos`;
+      `${titulo} | Entre Capítulos`;
 
-    configurarFavorito(
-      livro.titulo || "Livro"
+    await configurarFavorito(
+      titulo,
+      autor,
+      capa
     );
 
     await carregarCapitulos();
@@ -243,13 +256,10 @@ async function carregarCapitulos() {
 
       if (botaoComecarLeitura) {
         botaoComecarLeitura.href = "#";
-
         botaoComecarLeitura.style.pointerEvents =
           "none";
-
         botaoComecarLeitura.style.opacity =
           "0.6";
-
         botaoComecarLeitura.textContent =
           "Nenhum capítulo disponível";
       }
@@ -372,10 +382,8 @@ async function carregarCapitulos() {
 
     if (botaoComecarLeitura) {
       botaoComecarLeitura.href = "#";
-
       botaoComecarLeitura.style.pointerEvents =
         "none";
-
       botaoComecarLeitura.style.opacity =
         "0.6";
     }
@@ -387,19 +395,18 @@ async function carregarCapitulos() {
 // SISTEMA DE FAVORITOS
 // ==============================
 
-function configurarFavorito(titulo) {
+async function configurarFavorito(
+  titulo,
+  autor,
+  capa
+) {
   if (!botaoFavorito || !livroId) {
     return;
   }
 
-  const chaveFavorito =
-    `livroFavorito_${livroId}`;
-
-  function atualizarBotao() {
+  async function atualizarBotao() {
     const favorito =
-      localStorage.getItem(
-        chaveFavorito
-      ) === "true";
+      await verificarFavorito(livroId);
 
     if (favorito) {
       botaoFavorito.textContent =
@@ -408,7 +415,6 @@ function configurarFavorito(titulo) {
       botaoFavorito.classList.add(
         "favoritado"
       );
-
     } else {
       botaoFavorito.textContent =
         "♡ Adicionar aos favoritos";
@@ -419,30 +425,49 @@ function configurarFavorito(titulo) {
     }
   }
 
-  atualizarBotao();
+  botaoFavorito.disabled = true;
+  botaoFavorito.textContent =
+    "Verificando favorito...";
+
+  await atualizarBotao();
+
+  botaoFavorito.disabled = false;
 
   botaoFavorito.addEventListener(
     "click",
-    () => {
-      const favoritoAtual =
-        localStorage.getItem(
-          chaveFavorito
-        ) === "true";
+    async () => {
+      botaoFavorito.disabled = true;
+      botaoFavorito.textContent =
+        "Salvando...";
 
-      const novoEstado =
-        !favoritoAtual;
+      try {
+        const resultado =
+          await alternarFavorito({
+            livroId,
+            titulo,
+            autor,
+            capa
+          });
 
-      localStorage.setItem(
-        chaveFavorito,
-        String(novoEstado)
-      );
+        if (!resultado.redirecionado) {
+          await atualizarBotao();
+        }
 
-      localStorage.setItem(
-        `${chaveFavorito}_titulo`,
-        titulo
-      );
+      } catch (erro) {
+        console.error(
+          "Erro ao favoritar livro:",
+          erro
+        );
 
-      atualizarBotao();
+        alert(
+          "Não foi possível atualizar o favorito."
+        );
+
+        await atualizarBotao();
+
+      } finally {
+        botaoFavorito.disabled = false;
+      }
     }
   );
 }
