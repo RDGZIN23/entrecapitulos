@@ -116,16 +116,6 @@ function mostrarTexto(texto = "") {
     return;
   }
 
-  /*
-    Cada linha em branco separa um parágrafo.
-
-    Exemplo:
-
-    Primeiro parágrafo.
-
-    Segundo parágrafo.
-  */
-
   const paragrafos =
     textoLimpo.split(/\n\s*\n/);
 
@@ -180,6 +170,161 @@ function desativarBotao(botao) {
 
 
 // ========================================
+// LER LISTAS SALVAS
+// ========================================
+
+function lerListaLocal(chave) {
+  try {
+    const valorSalvo =
+      localStorage.getItem(chave);
+
+    if (!valorSalvo) {
+      return [];
+    }
+
+    const lista =
+      JSON.parse(valorSalvo);
+
+    return Array.isArray(lista)
+      ? lista
+      : [];
+
+  } catch (erro) {
+    console.error(
+      `Erro ao ler ${chave}:`,
+      erro
+    );
+
+    return [];
+  }
+}
+
+
+// ========================================
+// SALVAR PROGRESSO DE LEITURA
+// ========================================
+
+function salvarProgressoLeitura({
+  livroId,
+  livroTitulo,
+  capituloId,
+  capituloNumero,
+  capituloTitulo
+}) {
+  try {
+    if (!livroId || !capituloId) {
+      return;
+    }
+
+    const progresso = {
+      livroId,
+      livroTitulo:
+        livroTitulo || "Livro",
+      capituloId,
+      numero:
+        capituloNumero || 0,
+      capituloTitulo:
+        capituloTitulo || "Capítulo",
+      atualizadoEm:
+        new Date().toISOString()
+    };
+
+    /*
+      Salva o último capítulo aberto.
+      O perfil usa este item para mostrar
+      a área "Continuar lendo".
+    */
+
+    localStorage.setItem(
+      "ultimoCapituloLido",
+      JSON.stringify(progresso)
+    );
+
+
+    /*
+      Registra os capítulos lidos.
+    */
+
+    const capitulosLidos =
+      lerListaLocal("capitulosLidos");
+
+    const capituloJaExiste =
+      capitulosLidos.some(
+        (item) => {
+          if (typeof item === "string") {
+            return item === capituloId;
+          }
+
+          return item.capituloId === capituloId;
+        }
+      );
+
+    if (!capituloJaExiste) {
+      capitulosLidos.push({
+        capituloId,
+        livroId,
+        numero:
+          capituloNumero || 0,
+        titulo:
+          capituloTitulo || "Capítulo",
+        lidoEm:
+          new Date().toISOString()
+      });
+
+      localStorage.setItem(
+        "capitulosLidos",
+        JSON.stringify(capitulosLidos)
+      );
+    }
+
+
+    /*
+      Registra os livros iniciados.
+    */
+
+    const livrosIniciados =
+      lerListaLocal("livrosIniciados");
+
+    const livroJaExiste =
+      livrosIniciados.some(
+        (item) => {
+          if (typeof item === "string") {
+            return item === livroId;
+          }
+
+          return item.livroId === livroId;
+        }
+      );
+
+    if (!livroJaExiste) {
+      livrosIniciados.push({
+        livroId,
+        titulo:
+          livroTitulo || "Livro",
+        iniciadoEm:
+          new Date().toISOString()
+      });
+
+      localStorage.setItem(
+        "livrosIniciados",
+        JSON.stringify(livrosIniciados)
+      );
+    }
+
+    console.log(
+      "Progresso de leitura salvo."
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao salvar progresso:",
+      erro
+    );
+  }
+}
+
+
+// ========================================
 // CARREGAR CAPÍTULOS DO MESMO LIVRO
 // ========================================
 
@@ -205,11 +350,6 @@ async function carregarNavegacao(
         ...documento.data()
       });
     });
-
-    /*
-      A organização é feita aqui no JavaScript.
-      Assim evitamos exigir outro índice no Firebase.
-    */
 
     capitulos.sort((a, b) => {
       const numeroA =
@@ -292,10 +432,8 @@ async function carregarNomeLivro(
   livroId,
   tituloSalvo
 ) {
-  /*
-    Primeiro usamos o nome que já foi
-    salvo junto ao capítulo.
-  */
+  let tituloFinal =
+    tituloSalvo || "Livro";
 
   if (tituloSalvo && nomeLivro) {
     nomeLivro.textContent =
@@ -303,7 +441,7 @@ async function carregarNomeLivro(
   }
 
   if (!livroId) {
-    return;
+    return tituloFinal;
   }
 
   try {
@@ -314,24 +452,31 @@ async function carregarNomeLivro(
       await getDoc(referenciaLivro);
 
     if (!resultadoLivro.exists()) {
-      return;
+      return tituloFinal;
     }
 
     const livro =
       resultadoLivro.data();
 
+    tituloFinal =
+      livro.titulo ||
+      tituloSalvo ||
+      "Livro";
+
     if (nomeLivro) {
       nomeLivro.textContent =
-        livro.titulo ||
-        tituloSalvo ||
-        "Livro";
+        tituloFinal;
     }
+
+    return tituloFinal;
 
   } catch (erro) {
     console.error(
       "Erro ao carregar nome do livro:",
       erro
     );
+
+    return tituloFinal;
   }
 }
 
@@ -414,10 +559,28 @@ async function carregarCapitulo() {
           : ""
       }${titulo} | Entre Capítulos`;
 
-    await carregarNomeLivro(
-      capitulo.livroId,
-      capitulo.livroTitulo
-    );
+    const tituloDoLivro =
+      await carregarNomeLivro(
+        capitulo.livroId,
+        capitulo.livroTitulo
+      );
+
+    /*
+      O progresso é salvo depois que o título
+      verdadeiro do livro é carregado.
+    */
+
+    salvarProgressoLeitura({
+      livroId:
+        capitulo.livroId,
+      livroTitulo:
+        tituloDoLivro,
+      capituloId,
+      capituloNumero:
+        numero,
+      capituloTitulo:
+        titulo
+    });
 
     if (capitulo.livroId) {
       await carregarNavegacao(
