@@ -54,11 +54,38 @@ const totalCapitulos =
 const totalLivros =
   document.getElementById("totalLivros");
 
+const totalConcluidos =
+  document.getElementById("totalConcluidos");
+
 const listaFavoritos =
   document.getElementById("listaFavoritos");
 
 const areaContinueLendo =
   document.getElementById("areaContinueLendo");
+
+const nivelLeitor =
+  document.getElementById("nivelLeitor");
+
+const barraNivel =
+  document.getElementById("barraNivel");
+
+const textoNivel =
+  document.getElementById("textoNivel");
+
+const conquistaPrimeiroCapitulo =
+  document.getElementById(
+    "conquistaPrimeiroCapitulo"
+  );
+
+const conquistaPrimeiroFavorito =
+  document.getElementById(
+    "conquistaPrimeiroFavorito"
+  );
+
+const conquistaLeitorDedicado =
+  document.getElementById(
+    "conquistaLeitorDedicado"
+  );
 
 
 // ========================================
@@ -67,6 +94,8 @@ const areaContinueLendo =
 
 const capaPadrao =
   "images/depois-de-te-odiar.png";
+
+let quantidadeFavoritosAtual = 0;
 
 
 // ========================================
@@ -97,21 +126,19 @@ function obterIniciais(nome = "Leitor") {
 }
 
 
-function lerListaLocal(chave) {
+function lerValorLocal(
+  chave,
+  valorPadrao = null
+) {
   try {
     const valor =
       localStorage.getItem(chave);
 
     if (!valor) {
-      return [];
+      return valorPadrao;
     }
 
-    const lista =
-      JSON.parse(valor);
-
-    return Array.isArray(lista)
-      ? lista
-      : [];
+    return JSON.parse(valor);
 
   } catch (erro) {
     console.error(
@@ -119,8 +146,55 @@ function lerListaLocal(chave) {
       erro
     );
 
-    return [];
+    return valorPadrao;
   }
+}
+
+
+function transformarEmLista(valor) {
+  if (Array.isArray(valor)) {
+    return valor;
+  }
+
+  if (
+    valor &&
+    typeof valor === "object"
+  ) {
+    return Object.values(valor);
+  }
+
+  return [];
+}
+
+
+function lerListaLocal(chave) {
+  const valor =
+    lerValorLocal(chave, []);
+
+  return transformarEmLista(valor);
+}
+
+
+function obterIdLivro(item) {
+  if (typeof item === "string") {
+    return item;
+  }
+
+  return (
+    item?.livroId ||
+    item?.idLivro ||
+    item?.id ||
+    null
+  );
+}
+
+
+function removerDuplicados(lista) {
+  return [
+    ...new Set(
+      lista.filter(Boolean)
+    )
+  ];
 }
 
 
@@ -163,15 +237,214 @@ function mostrarMensagemFavoritosVazios() {
 
 
 // ========================================
+// CONQUISTAS
+// ========================================
+
+function atualizarConquista(
+  elemento,
+  desbloqueada
+) {
+  if (!elemento) {
+    return;
+  }
+
+  const estado =
+    elemento.querySelector(
+      ".estado-conquista"
+    );
+
+  if (desbloqueada) {
+    elemento.classList.add(
+      "desbloqueada"
+    );
+
+    if (estado) {
+      estado.textContent =
+        "Desbloqueada";
+    }
+
+  } else {
+    elemento.classList.remove(
+      "desbloqueada"
+    );
+
+    if (estado) {
+      estado.textContent =
+        "Bloqueada";
+    }
+  }
+}
+
+
+function atualizarConquistas(
+  capitulosLidos,
+  favoritos
+) {
+  atualizarConquista(
+    conquistaPrimeiroCapitulo,
+    capitulosLidos >= 1
+  );
+
+  atualizarConquista(
+    conquistaPrimeiroFavorito,
+    favoritos >= 1
+  );
+
+  atualizarConquista(
+    conquistaLeitorDedicado,
+    capitulosLidos >= 10
+  );
+}
+
+
+// ========================================
+// NÍVEL DO LEITOR
+// ========================================
+
+function atualizarNivelLeitor(
+  quantidadeCapitulos
+) {
+  let nivel =
+    "Iniciante";
+
+  let progresso =
+    Math.min(
+      20,
+      quantidadeCapitulos * 4
+    );
+
+  let mensagem =
+    `${quantidadeCapitulos} capítulos lidos até agora.`;
+
+  if (quantidadeCapitulos >= 5) {
+    nivel =
+      "Leitor";
+
+    progresso =
+      35;
+  }
+
+  if (quantidadeCapitulos >= 15) {
+    nivel =
+      "Apaixonado por livros";
+
+    progresso =
+      60;
+  }
+
+  if (quantidadeCapitulos >= 30) {
+    nivel =
+      "Veterano";
+
+    progresso =
+      85;
+  }
+
+  if (quantidadeCapitulos >= 50) {
+    nivel =
+      "Lenda do Entre Capítulos";
+
+    progresso =
+      100;
+
+    mensagem =
+      "Você alcançou o nível máximo de leitura!";
+  }
+
+  if (nivelLeitor) {
+    nivelLeitor.textContent =
+      nivel;
+  }
+
+  if (barraNivel) {
+    barraNivel.style.width =
+      `${progresso}%`;
+  }
+
+  if (textoNivel) {
+    textoNivel.textContent =
+      mensagem;
+  }
+}
+
+
+// ========================================
+// LIVROS CONCLUÍDOS
+// ========================================
+
+function calcularLivrosConcluidos(
+  capitulosLidos,
+  livrosIniciados
+) {
+  const livrosMarcados =
+    lerListaLocal("livrosConcluidos");
+
+  if (livrosMarcados.length > 0) {
+    return removerDuplicados(
+      livrosMarcados.map(
+        obterIdLivro
+      )
+    ).length;
+  }
+
+  const progresso =
+    lerValorLocal(
+      "ultimoCapituloLido",
+      null
+    );
+
+  if (
+    progresso &&
+    Number(progresso.porcentagem) >= 100
+  ) {
+    return 1;
+  }
+
+  if (
+    capitulosLidos.length > 0 &&
+    livrosIniciados.length === 1
+  ) {
+    return 0;
+  }
+
+  return 0;
+}
+
+
+// ========================================
 // ESTATÍSTICAS LOCAIS
 // ========================================
 
 function carregarEstatisticasLocais() {
   const capitulosLidos =
-    lerListaLocal("capitulosLidos");
+    removerDuplicados(
+      lerListaLocal(
+        "capitulosLidos"
+      ).map((item) => {
+        if (typeof item === "string") {
+          return item;
+        }
+
+        return (
+          item?.capituloId ||
+          item?.id ||
+          null
+        );
+      })
+    );
 
   const livrosIniciados =
-    lerListaLocal("livrosIniciados");
+    removerDuplicados(
+      lerListaLocal(
+        "livrosIniciados"
+      ).map(obterIdLivro)
+    );
+
+  const livrosConcluidos =
+    calcularLivrosConcluidos(
+      capitulosLidos,
+      livrosIniciados
+    );
 
   if (totalCapitulos) {
     totalCapitulos.textContent =
@@ -182,6 +455,20 @@ function carregarEstatisticasLocais() {
     totalLivros.textContent =
       String(livrosIniciados.length);
   }
+
+  if (totalConcluidos) {
+    totalConcluidos.textContent =
+      String(livrosConcluidos);
+  }
+
+  atualizarNivelLeitor(
+    capitulosLidos.length
+  );
+
+  atualizarConquistas(
+    capitulosLidos.length,
+    quantidadeFavoritosAtual
+  );
 }
 
 
@@ -231,22 +518,23 @@ async function removerFavorito(
 
     cartao.remove();
 
-    const quantidadeAtual =
-      Number(
-        totalFavoritos?.textContent ||
-        0
-      );
-
-    const novaQuantidade =
+    quantidadeFavoritosAtual =
       Math.max(
         0,
-        quantidadeAtual - 1
+        quantidadeFavoritosAtual - 1
       );
 
     if (totalFavoritos) {
       totalFavoritos.textContent =
-        String(novaQuantidade);
+        String(
+          quantidadeFavoritosAtual
+        );
     }
+
+    atualizarConquista(
+      conquistaPrimeiroFavorito,
+      quantidadeFavoritosAtual >= 1
+    );
 
     const cartoesRestantes =
       listaFavoritos?.querySelectorAll(
@@ -311,7 +599,8 @@ function criarCartaoFavorito(favorito) {
     () => {
       imagem.src =
         capaPadrao;
-    }
+    },
+    { once: true }
   );
 
   const conteudo =
@@ -349,7 +638,7 @@ function criarCartaoFavorito(favorito) {
   botaoAbrir.href =
     favorito.livroId
       ? `livro.html?id=${favorito.livroId}`
-      : "index.html#biblioteca";
+      : "biblioteca.html";
 
   botaoAbrir.textContent =
     "📖 Abrir livro";
@@ -432,10 +721,20 @@ async function carregarFavoritos(
         consultaFavoritos
       );
 
+    quantidadeFavoritosAtual =
+      resultadoFavoritos.size;
+
     if (totalFavoritos) {
       totalFavoritos.textContent =
-        String(resultadoFavoritos.size);
+        String(
+          quantidadeFavoritosAtual
+        );
     }
+
+    atualizarConquista(
+      conquistaPrimeiroFavorito,
+      quantidadeFavoritosAtual >= 1
+    );
 
     if (!listaFavoritos) {
       return;
@@ -481,10 +780,17 @@ async function carregarFavoritos(
       erro
     );
 
+    quantidadeFavoritosAtual = 0;
+
     if (totalFavoritos) {
       totalFavoritos.textContent =
         "0";
     }
+
+    atualizarConquista(
+      conquistaPrimeiroFavorito,
+      false
+    );
 
     if (listaFavoritos) {
       listaFavoritos.innerHTML = "";
@@ -515,89 +821,70 @@ function carregarContinueLendo() {
     return;
   }
 
-  const progressoSalvo =
-    localStorage.getItem(
-      "ultimoCapituloLido"
+  const progresso =
+    lerValorLocal(
+      "ultimoCapituloLido",
+      null
     );
 
-  if (!progressoSalvo) {
+  if (
+    !progresso ||
+    !progresso.capituloId
+  ) {
     areaContinueLendo.textContent =
       "Você ainda não começou nenhuma leitura.";
 
     return;
   }
 
-  try {
-    const progresso =
-      JSON.parse(progressoSalvo);
+  areaContinueLendo.innerHTML = "";
 
-    if (
-      !progresso ||
-      !progresso.capituloId
-    ) {
-      throw new Error(
-        "Progresso inválido"
-      );
-    }
+  const tituloLivro =
+    document.createElement("h3");
 
-    areaContinueLendo.innerHTML = "";
+  tituloLivro.textContent =
+    progresso.livroTitulo ||
+    "Livro";
 
-    const tituloLivro =
-      document.createElement("h3");
+  tituloLivro.style.margin =
+    "0 0 8px";
 
-    tituloLivro.textContent =
-      progresso.livroTitulo ||
-      "Livro";
+  const capitulo =
+    document.createElement("p");
 
-    tituloLivro.style.margin =
-      "0 0 8px";
+  const numero =
+    progresso.numero
+      ? `Capítulo ${progresso.numero}`
+      : "Capítulo";
 
-    const capitulo =
-      document.createElement("p");
+  const titulo =
+    progresso.capituloTitulo
+      ? ` • ${progresso.capituloTitulo}`
+      : "";
 
-    const numero =
-      progresso.numero
-        ? `Capítulo ${progresso.numero}`
-        : "Capítulo";
+  capitulo.textContent =
+    `${numero}${titulo}`;
 
-    const titulo =
-      progresso.capituloTitulo
-        ? ` • ${progresso.capituloTitulo}`
-        : "";
+  capitulo.style.margin =
+    "0 0 16px";
 
-    capitulo.textContent =
-      `${numero}${titulo}`;
+  const botao =
+    document.createElement("a");
 
-    capitulo.style.margin =
-      "0 0 16px";
+  botao.href =
+    `leitura.html?id=${progresso.capituloId}`;
 
-    const botao =
-      document.createElement("a");
+  botao.className =
+    "acao-perfil";
 
-    botao.href =
-      `leitura.html?id=${progresso.capituloId}`;
+  botao.textContent =
+    "📖 Continuar leitura";
 
-    botao.className =
-      "acao-perfil";
-
-    botao.textContent =
-      "📖 Continuar leitura";
-
-    areaContinueLendo.append(
-      tituloLivro,
-      capitulo,
-      botao
-    );
-
-  } catch (erro) {
-    console.error(
-      "Erro ao carregar progresso:",
-      erro
-    );
-
-    areaContinueLendo.textContent =
-      "Não foi possível carregar seu progresso de leitura.";
-  }
+  areaContinueLendo.append(
+    tituloLivro,
+    capitulo,
+    botao
+  );
 }
 
 
@@ -649,11 +936,11 @@ async function carregarPerfil(usuario) {
         obterIniciais(nome);
     }
 
-    carregarEstatisticasLocais();
-
     await carregarFavoritos(
       usuario.uid
     );
+
+    carregarEstatisticasLocais();
 
     carregarContinueLendo();
 
@@ -695,6 +982,24 @@ onAuthStateChanged(
     }
 
     carregarPerfil(usuario);
+  }
+);
+
+
+// ========================================
+// ATUALIZAR AO VOLTAR PARA A PÁGINA
+// ========================================
+
+window.addEventListener(
+  "pageshow",
+  () => {
+    if (
+      conteudoPerfil &&
+      !conteudoPerfil.hidden
+    ) {
+      carregarEstatisticasLocais();
+      carregarContinueLendo();
+    }
   }
 );
 
