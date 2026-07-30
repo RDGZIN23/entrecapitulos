@@ -21,7 +21,7 @@ import {
 
 
 // ==============================
-// ELEMENTOS DA PÁGINA
+// PARÂMETROS DA PÁGINA
 // ==============================
 
 const parametros =
@@ -29,6 +29,11 @@ const parametros =
 
 const livroId =
   parametros.get("id");
+
+
+// ==============================
+// ELEMENTOS DA PÁGINA
+// ==============================
 
 const tituloLivro =
   document.getElementById("tituloLivro");
@@ -57,6 +62,53 @@ const botaoComecarLeitura =
 const botaoFavorito =
   document.getElementById("botaoFavorito");
 
+const seloStatusLivro =
+  document.getElementById("seloStatusLivro");
+
+const seloGeneroLivro =
+  document.getElementById("seloGeneroLivro");
+
+const seloQuantidadeLivro =
+  document.getElementById("seloQuantidadeLivro");
+
+const painelProgresso =
+  document.getElementById("painelProgresso");
+
+const porcentagemProgresso =
+  document.getElementById("porcentagemProgresso");
+
+const barraProgressoLivro =
+  document.getElementById("barraProgressoLivro");
+
+const descricaoProgresso =
+  document.getElementById("descricaoProgresso");
+
+const nomeAutorSecao =
+  document.getElementById("nomeAutorSecao");
+
+const estrelasLivro =
+  document.getElementById("estrelasLivro");
+
+const textoAvaliacaoLivro =
+  document.getElementById("textoAvaliacaoLivro");
+
+const mediaAvaliacoes =
+  document.getElementById("mediaAvaliacoes");
+
+const estrelasMedia =
+  document.getElementById("estrelasMedia");
+
+const totalAvaliacoes =
+  document.getElementById("totalAvaliacoes");
+
+
+// ==============================
+// DADOS TEMPORÁRIOS DA PÁGINA
+// ==============================
+
+let livroAtual = null;
+let capitulosPublicados = [];
+
 
 // ==============================
 // PROTEGER TEXTOS DO HTML
@@ -69,6 +121,142 @@ function escaparHTML(valor = "") {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+
+// ==============================
+// LER DADOS DO LOCALSTORAGE
+// ==============================
+
+function lerLocalStorage(chave, valorPadrao = null) {
+  try {
+    const valor =
+      localStorage.getItem(chave);
+
+    if (!valor) {
+      return valorPadrao;
+    }
+
+    return JSON.parse(valor);
+
+  } catch (erro) {
+    console.error(
+      `Erro ao ler ${chave}:`,
+      erro
+    );
+
+    return valorPadrao;
+  }
+}
+
+
+// ==============================
+// NORMALIZAR LISTA
+// ==============================
+
+function transformarEmLista(valor) {
+  if (Array.isArray(valor)) {
+    return valor;
+  }
+
+  if (
+    valor &&
+    typeof valor === "object"
+  ) {
+    return Object.values(valor);
+  }
+
+  return [];
+}
+
+
+// ==============================
+// OBTER CAPÍTULOS LIDOS
+// ==============================
+
+function obterIdsCapitulosLidos() {
+  const dados =
+    lerLocalStorage(
+      "capitulosLidos",
+      []
+    );
+
+  const lista =
+    transformarEmLista(dados);
+
+  return lista
+    .map((item) => {
+      if (typeof item === "string") {
+        return item;
+      }
+
+      return (
+        item?.capituloId ||
+        item?.id ||
+        null
+      );
+    })
+    .filter(Boolean);
+}
+
+
+// ==============================
+// OBTER ÚLTIMO CAPÍTULO LIDO
+// ==============================
+
+function obterUltimoCapituloLido() {
+  const progresso =
+    lerLocalStorage(
+      "ultimoCapituloLido",
+      null
+    );
+
+  if (
+    !progresso ||
+    typeof progresso !== "object"
+  ) {
+    return null;
+  }
+
+  const idLivroSalvo =
+    progresso.livroId ||
+    progresso.idLivro;
+
+  if (
+    idLivroSalvo &&
+    idLivroSalvo !== livroId
+  ) {
+    return null;
+  }
+
+  return progresso;
+}
+
+
+// ==============================
+// VERIFICAR SE O LIVRO FOI INICIADO
+// ==============================
+
+function livroFoiIniciado() {
+  const livros =
+    lerLocalStorage(
+      "livrosIniciados",
+      []
+    );
+
+  const lista =
+    transformarEmLista(livros);
+
+  return lista.some((item) => {
+    if (typeof item === "string") {
+      return item === livroId;
+    }
+
+    return (
+      item?.livroId === livroId ||
+      item?.id === livroId
+    );
+  });
 }
 
 
@@ -99,7 +287,9 @@ function mostrarErro(mensagem) {
 
   if (listaCapitulos) {
     listaCapitulos.innerHTML = `
-      <p>${escaparHTML(mensagem)}</p>
+      <p class="mensagem-status">
+        ${escaparHTML(mensagem)}
+      </p>
     `;
   }
 
@@ -108,17 +298,213 @@ function mostrarErro(mensagem) {
       "0 capítulos";
   }
 
-  if (botaoComecarLeitura) {
-    botaoComecarLeitura.href = "#";
-    botaoComecarLeitura.style.pointerEvents =
-      "none";
-    botaoComecarLeitura.style.opacity =
-      "0.6";
+  if (seloQuantidadeLivro) {
+    seloQuantidadeLivro.textContent =
+      "📖 0 capítulos";
   }
+
+  desativarBotaoLeitura(
+    "Livro indisponível"
+  );
 
   if (botaoFavorito) {
     botaoFavorito.disabled = true;
     botaoFavorito.style.opacity = "0.6";
+  }
+}
+
+
+// ==============================
+// DESATIVAR BOTÃO DE LEITURA
+// ==============================
+
+function desativarBotaoLeitura(texto) {
+  if (!botaoComecarLeitura) {
+    return;
+  }
+
+  botaoComecarLeitura.href = "#";
+  botaoComecarLeitura.textContent =
+    texto;
+
+  botaoComecarLeitura.style.pointerEvents =
+    "none";
+
+  botaoComecarLeitura.style.opacity =
+    "0.6";
+}
+
+
+// ==============================
+// ATIVAR BOTÃO DE LEITURA
+// ==============================
+
+function ativarBotaoLeitura(
+  capituloId,
+  texto
+) {
+  if (
+    !botaoComecarLeitura ||
+    !capituloId
+  ) {
+    return;
+  }
+
+  botaoComecarLeitura.href =
+    `leitura.html?id=${capituloId}`;
+
+  botaoComecarLeitura.textContent =
+    texto;
+
+  botaoComecarLeitura.style.pointerEvents =
+    "auto";
+
+  botaoComecarLeitura.style.opacity =
+    "1";
+}
+
+
+// ==============================
+// CONFIGURAR IMAGEM
+// ==============================
+
+function configurarCapa(
+  capa,
+  titulo
+) {
+  if (!capaLivro) {
+    return;
+  }
+
+  capaLivro.src =
+    capa ||
+    "images/depois-de-te-odiar.png";
+
+  capaLivro.alt =
+    `Capa do livro ${titulo}`;
+
+  capaLivro.addEventListener(
+    "error",
+    () => {
+      capaLivro.src =
+        "images/depois-de-te-odiar.png";
+    },
+    { once: true }
+  );
+}
+
+
+// ==============================
+// CONFIGURAR SELOS
+// ==============================
+
+function configurarSelos(livro) {
+  const genero =
+    livro.genero ||
+    "Literatura";
+
+  const status =
+    String(
+      livro.status ||
+      "publicado"
+    ).toLowerCase();
+
+  if (seloGeneroLivro) {
+    seloGeneroLivro.textContent =
+      `📚 ${genero}`;
+  }
+
+  if (seloStatusLivro) {
+    if (
+      livro.destaque === true ||
+      livro.emDestaque === true
+    ) {
+      seloStatusLivro.textContent =
+        "✨ Em destaque";
+
+    } else if (
+      status === "concluido" ||
+      status === "finalizado"
+    ) {
+      seloStatusLivro.textContent =
+        "✅ História concluída";
+
+    } else {
+      seloStatusLivro.textContent =
+        "🆕 Em publicação";
+    }
+  }
+}
+
+
+// ==============================
+// CONFIGURAR AVALIAÇÕES
+// ==============================
+
+function configurarAvaliacoes(livro) {
+  const media =
+    Number(
+      livro.mediaAvaliacoes ||
+      livro.avaliacaoMedia ||
+      0
+    );
+
+  const total =
+    Number(
+      livro.totalAvaliacoes ||
+      0
+    );
+
+  const mediaValida =
+    Math.min(
+      5,
+      Math.max(0, media)
+    );
+
+  const estrelasPreenchidas =
+    Math.round(mediaValida);
+
+  const textoEstrelas =
+    "★".repeat(estrelasPreenchidas) +
+    "☆".repeat(5 - estrelasPreenchidas);
+
+  if (estrelasLivro) {
+    estrelasLivro.textContent =
+      textoEstrelas;
+  }
+
+  if (estrelasMedia) {
+    estrelasMedia.textContent =
+      textoEstrelas;
+  }
+
+  if (mediaAvaliacoes) {
+    mediaAvaliacoes.textContent =
+      mediaValida
+        .toFixed(1)
+        .replace(".", ",");
+  }
+
+  if (textoAvaliacaoLivro) {
+    textoAvaliacaoLivro.textContent =
+      total > 0
+        ? `${total} ${
+            total === 1
+              ? "avaliação"
+              : "avaliações"
+          }`
+        : "Ainda sem avaliações";
+  }
+
+  if (totalAvaliacoes) {
+    totalAvaliacoes.textContent =
+      total > 0
+        ? `${total} ${
+            total === 1
+              ? "avaliação"
+              : "avaliações"
+          }`
+        : "Nenhuma avaliação";
   }
 }
 
@@ -151,17 +537,25 @@ async function carregarLivro() {
       return;
     }
 
-    const livro =
-      resultadoLivro.data();
+    livroAtual = {
+      id: resultadoLivro.id,
+      ...resultadoLivro.data()
+    };
 
     const titulo =
-      livro.titulo || "Livro sem título";
+      livroAtual.titulo ||
+      "Livro sem título";
 
     const autor =
-      livro.autor || "Autor desconhecido";
+      livroAtual.autor ||
+      "Autor desconhecido";
+
+    const genero =
+      livroAtual.genero ||
+      "Gênero não definido";
 
     const capa =
-      livro.capa ||
+      livroAtual.capa ||
       "images/depois-de-te-odiar.png";
 
     if (tituloLivro) {
@@ -174,25 +568,34 @@ async function carregarLivro() {
         autor;
     }
 
+    if (nomeAutorSecao) {
+      nomeAutorSecao.textContent =
+        autor;
+    }
+
     if (generoLivro) {
       generoLivro.textContent =
-        livro.genero ||
-        "Gênero não definido";
+        genero;
     }
 
     if (sinopseLivro) {
       sinopseLivro.textContent =
-        livro.sinopse ||
+        livroAtual.sinopse ||
         "Sinopse não disponível.";
     }
 
-    if (capaLivro) {
-      capaLivro.src =
-        capa;
+    configurarCapa(
+      capa,
+      titulo
+    );
 
-      capaLivro.alt =
-        `Capa do livro ${titulo}`;
-    }
+    configurarSelos(
+      livroAtual
+    );
+
+    configurarAvaliacoes(
+      livroAtual
+    );
 
     document.title =
       `${titulo} | Entre Capítulos`;
@@ -228,7 +631,9 @@ async function carregarCapitulos() {
   }
 
   listaCapitulos.innerHTML = `
-    <p>Carregando capítulos...</p>
+    <p class="mensagem-status">
+      Carregando capítulos...
+    </p>
   `;
 
   try {
@@ -243,125 +648,54 @@ async function carregarCapitulos() {
       await getDocs(consulta);
 
     if (resultado.empty) {
+      capitulosPublicados = [];
+
       listaCapitulos.innerHTML = `
-        <p>
+        <p class="mensagem-status">
           Nenhum capítulo publicado ainda.
         </p>
       `;
 
-      if (quantidadeCapitulos) {
-        quantidadeCapitulos.textContent =
-          "0 capítulos";
-      }
+      atualizarQuantidadeCapitulos(0);
 
-      if (botaoComecarLeitura) {
-        botaoComecarLeitura.href = "#";
-        botaoComecarLeitura.style.pointerEvents =
-          "none";
-        botaoComecarLeitura.style.opacity =
-          "0.6";
-        botaoComecarLeitura.textContent =
-          "Nenhum capítulo disponível";
-      }
+      atualizarProgressoLeitura();
+
+      desativarBotaoLeitura(
+        "Nenhum capítulo disponível"
+      );
 
       return;
     }
 
     listaCapitulos.innerHTML = "";
-
-    const capitulos = [];
+    capitulosPublicados = [];
 
     resultado.forEach((documento) => {
-      capitulos.push({
+      capitulosPublicados.push({
         id: documento.id,
         ...documento.data()
       });
     });
 
-    if (quantidadeCapitulos) {
-      const total =
-        capitulos.length;
+    atualizarQuantidadeCapitulos(
+      capitulosPublicados.length
+    );
 
-      quantidadeCapitulos.textContent =
-        total === 1
-          ? "1 capítulo"
-          : `${total} capítulos`;
-    }
+    const idsCapitulosLidos =
+      obterIdsCapitulosLidos();
 
-    capitulos.forEach((capitulo) => {
-      const numero =
-        Number(capitulo.numero) || 0;
-
-      const numeroFormatado =
-        String(numero).padStart(2, "0");
-
-      const titulo =
-        escaparHTML(
-          capitulo.titulo ||
-          "Capítulo sem título"
+    capitulosPublicados.forEach(
+      (capitulo) => {
+        criarCartaoCapitulo(
+          capitulo,
+          idsCapitulosLidos
         );
+      }
+    );
 
-      const resumo =
-        escaparHTML(
-          capitulo.resumo ||
-          "Continue acompanhando esta história."
-        );
+    atualizarProgressoLeitura();
 
-      const cartao =
-        document.createElement("a");
-
-      cartao.href =
-        `leitura.html?id=${capitulo.id}`;
-
-      cartao.className =
-        "cartao-capitulo";
-
-      cartao.innerHTML = `
-        <div class="numero-capitulo">
-          ${numeroFormatado}
-        </div>
-
-        <div class="dados-capitulo">
-          <span>
-            Capítulo ${numero}
-          </span>
-
-          <h3>
-            ${titulo}
-          </h3>
-
-          <p>
-            ${resumo}
-          </p>
-        </div>
-
-        <div class="seta-capitulo">
-          ›
-        </div>
-      `;
-
-      listaCapitulos.appendChild(cartao);
-    });
-
-    const primeiroCapitulo =
-      capitulos[0];
-
-    if (
-      primeiroCapitulo &&
-      botaoComecarLeitura
-    ) {
-      botaoComecarLeitura.href =
-        `leitura.html?id=${primeiroCapitulo.id}`;
-
-      botaoComecarLeitura.style.pointerEvents =
-        "auto";
-
-      botaoComecarLeitura.style.opacity =
-        "1";
-
-      botaoComecarLeitura.textContent =
-        "Começar a ler";
-    }
+    configurarBotaoInteligente();
 
   } catch (erro) {
     console.error(
@@ -370,23 +704,304 @@ async function carregarCapitulos() {
     );
 
     listaCapitulos.innerHTML = `
-      <p>
+      <p class="mensagem-status">
         Não foi possível carregar os capítulos.
       </p>
     `;
 
-    if (quantidadeCapitulos) {
-      quantidadeCapitulos.textContent =
-        "0 capítulos";
-    }
+    atualizarQuantidadeCapitulos(0);
 
-    if (botaoComecarLeitura) {
-      botaoComecarLeitura.href = "#";
-      botaoComecarLeitura.style.pointerEvents =
-        "none";
-      botaoComecarLeitura.style.opacity =
-        "0.6";
+    desativarBotaoLeitura(
+      "Capítulos indisponíveis"
+    );
+  }
+}
+
+
+// ==============================
+// ATUALIZAR QUANTIDADE
+// ==============================
+
+function atualizarQuantidadeCapitulos(
+  total
+) {
+  const texto =
+    total === 1
+      ? "1 capítulo"
+      : `${total} capítulos`;
+
+  if (quantidadeCapitulos) {
+    quantidadeCapitulos.textContent =
+      texto;
+  }
+
+  if (seloQuantidadeLivro) {
+    seloQuantidadeLivro.textContent =
+      `📖 ${texto}`;
+  }
+}
+
+
+// ==============================
+// CRIAR CARTÃO DO CAPÍTULO
+// ==============================
+
+function criarCartaoCapitulo(
+  capitulo,
+  idsCapitulosLidos
+) {
+  const numero =
+    Number(capitulo.numero) || 0;
+
+  const numeroFormatado =
+    String(numero).padStart(2, "0");
+
+  const titulo =
+    escaparHTML(
+      capitulo.titulo ||
+      "Capítulo sem título"
+    );
+
+  const resumo =
+    escaparHTML(
+      capitulo.resumo ||
+      "Continue acompanhando esta história."
+    );
+
+  const foiLido =
+    idsCapitulosLidos.includes(
+      capitulo.id
+    );
+
+  const cartao =
+    document.createElement("a");
+
+  cartao.href =
+    `leitura.html?id=${capitulo.id}`;
+
+  cartao.className =
+    "cartao-capitulo";
+
+  if (foiLido) {
+    cartao.classList.add(
+      "capitulo-lido"
+    );
+  }
+
+  cartao.innerHTML = `
+    <div class="numero-capitulo">
+      ${foiLido ? "✓" : numeroFormatado}
+    </div>
+
+    <div class="dados-capitulo">
+      <span>
+        ${
+          foiLido
+            ? "Capítulo lido"
+            : `Capítulo ${numero}`
+        }
+      </span>
+
+      <h3>
+        ${titulo}
+      </h3>
+
+      <p>
+        ${resumo}
+      </p>
+    </div>
+
+    <div class="seta-capitulo">
+      ›
+    </div>
+  `;
+
+  listaCapitulos.appendChild(
+    cartao
+  );
+}
+
+
+// ==============================
+// CONFIGURAR BOTÃO INTELIGENTE
+// ==============================
+
+function configurarBotaoInteligente() {
+  if (
+    capitulosPublicados.length === 0
+  ) {
+    desativarBotaoLeitura(
+      "Nenhum capítulo disponível"
+    );
+
+    return;
+  }
+
+  const ultimoProgresso =
+    obterUltimoCapituloLido();
+
+  const capituloSalvo =
+    capitulosPublicados.find(
+      (capitulo) =>
+        capitulo.id ===
+        ultimoProgresso?.capituloId
+    );
+
+  if (capituloSalvo) {
+    ativarBotaoLeitura(
+      capituloSalvo.id,
+      "Continuar leitura"
+    );
+
+    return;
+  }
+
+  if (livroFoiIniciado()) {
+    const idsLidos =
+      obterIdsCapitulosLidos();
+
+    const proximoNaoLido =
+      capitulosPublicados.find(
+        (capitulo) =>
+          !idsLidos.includes(
+            capitulo.id
+          )
+      );
+
+    if (proximoNaoLido) {
+      ativarBotaoLeitura(
+        proximoNaoLido.id,
+        "Continuar leitura"
+      );
+
+      return;
     }
+  }
+
+  ativarBotaoLeitura(
+    capitulosPublicados[0].id,
+    "Começar a ler"
+  );
+}
+
+
+// ==============================
+// ATUALIZAR PROGRESSO
+// ==============================
+
+function atualizarProgressoLeitura() {
+  const total =
+    capitulosPublicados.length;
+
+  if (total === 0) {
+    definirProgresso(
+      0,
+      "Nenhum capítulo disponível."
+    );
+
+    return;
+  }
+
+  const idsPublicados =
+    capitulosPublicados.map(
+      (capitulo) => capitulo.id
+    );
+
+  const idsLidos =
+    obterIdsCapitulosLidos();
+
+  const quantidadeLida =
+    idsPublicados.filter(
+      (id) => idsLidos.includes(id)
+    ).length;
+
+  const ultimoProgresso =
+    obterUltimoCapituloLido();
+
+  let percentual =
+    Math.round(
+      (quantidadeLida / total) *
+      100
+    );
+
+  if (
+    quantidadeLida === 0 &&
+    ultimoProgresso
+  ) {
+    percentual =
+      Number(
+        ultimoProgresso.porcentagem ||
+        5
+      );
+  }
+
+  percentual =
+    Math.min(
+      100,
+      Math.max(0, percentual)
+    );
+
+  if (quantidadeLida === 0) {
+    definirProgresso(
+      percentual,
+      percentual > 0
+        ? "Você começou esta leitura."
+        : "Você ainda não começou este livro."
+    );
+
+    return;
+  }
+
+  if (quantidadeLida >= total) {
+    definirProgresso(
+      100,
+      "Parabéns! Você concluiu todos os capítulos publicados."
+    );
+
+    return;
+  }
+
+  definirProgresso(
+    percentual,
+    `${quantidadeLida} de ${total} capítulos concluídos.`
+  );
+}
+
+
+// ==============================
+// DEFINIR PROGRESSO VISUAL
+// ==============================
+
+function definirProgresso(
+  percentual,
+  descricao
+) {
+  const valor =
+    Math.min(
+      100,
+      Math.max(
+        0,
+        Number(percentual) || 0
+      )
+    );
+
+  if (porcentagemProgresso) {
+    porcentagemProgresso.textContent =
+      `${valor}%`;
+  }
+
+  if (barraProgressoLivro) {
+    barraProgressoLivro.style.width =
+      `${valor}%`;
+  }
+
+  if (descricaoProgresso) {
+    descricaoProgresso.textContent =
+      descricao;
+  }
+
+  if (painelProgresso) {
+    painelProgresso.hidden = false;
   }
 }
 
@@ -415,6 +1030,7 @@ async function configurarFavorito(
       botaoFavorito.classList.add(
         "favoritado"
       );
+
     } else {
       botaoFavorito.textContent =
         "♡ Adicionar aos favoritos";
@@ -426,10 +1042,22 @@ async function configurarFavorito(
   }
 
   botaoFavorito.disabled = true;
+
   botaoFavorito.textContent =
     "Verificando favorito...";
 
-  await atualizarBotao();
+  try {
+    await atualizarBotao();
+
+  } catch (erro) {
+    console.error(
+      "Erro ao verificar favorito:",
+      erro
+    );
+
+    botaoFavorito.textContent =
+      "♡ Adicionar aos favoritos";
+  }
 
   botaoFavorito.disabled = false;
 
@@ -437,6 +1065,7 @@ async function configurarFavorito(
     "click",
     async () => {
       botaoFavorito.disabled = true;
+
       botaoFavorito.textContent =
         "Salvando...";
 
@@ -471,6 +1100,23 @@ async function configurarFavorito(
     }
   );
 }
+
+
+// ==============================
+// ATUALIZAR AO VOLTAR À PÁGINA
+// ==============================
+
+window.addEventListener(
+  "pageshow",
+  () => {
+    if (
+      capitulosPublicados.length > 0
+    ) {
+      atualizarProgressoLeitura();
+      configurarBotaoInteligente();
+    }
+  }
+);
 
 
 // ==============================
