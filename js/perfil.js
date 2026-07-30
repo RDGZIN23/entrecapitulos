@@ -13,8 +13,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
+  collection,
   doc,
-  getDoc
+  getDoc,
+  getDocs,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
@@ -81,6 +85,33 @@ function obterIniciais(nome = "Leitor") {
 }
 
 
+function lerListaLocal(chave) {
+  try {
+    const valor =
+      localStorage.getItem(chave);
+
+    if (!valor) {
+      return [];
+    }
+
+    const lista =
+      JSON.parse(valor);
+
+    return Array.isArray(lista)
+      ? lista
+      : [];
+
+  } catch (erro) {
+    console.error(
+      `Erro ao ler ${chave}:`,
+      erro
+    );
+
+    return [];
+  }
+}
+
+
 function mostrarErro(mensagem) {
   if (mensagemCarregando) {
     mensagemCarregando.hidden =
@@ -102,61 +133,62 @@ function mostrarErro(mensagem) {
 // ========================================
 
 function carregarEstatisticasLocais() {
-  let favoritos = 0;
-
-  for (
-    let indice = 0;
-    indice < localStorage.length;
-    indice++
-  ) {
-    const chave =
-      localStorage.key(indice);
-
-    if (
-      chave &&
-      chave.startsWith("livroFavorito_") &&
-      !chave.endsWith("_titulo")
-    ) {
-      const valor =
-        localStorage.getItem(chave);
-
-      if (valor === "true") {
-        favoritos++;
-      }
-    }
-  }
-
   const capitulosLidos =
-    JSON.parse(
-      localStorage.getItem(
-        "capitulosLidos"
-      ) || "[]"
-    );
+    lerListaLocal("capitulosLidos");
 
   const livrosIniciados =
-    JSON.parse(
-      localStorage.getItem(
-        "livrosIniciados"
-      ) || "[]"
-    );
-
-  if (totalFavoritos) {
-    totalFavoritos.textContent =
-      String(favoritos);
-  }
+    lerListaLocal("livrosIniciados");
 
   if (totalCapitulos) {
     totalCapitulos.textContent =
-      Array.isArray(capitulosLidos)
-        ? String(capitulosLidos.length)
-        : "0";
+      String(capitulosLidos.length);
   }
 
   if (totalLivros) {
     totalLivros.textContent =
-      Array.isArray(livrosIniciados)
-        ? String(livrosIniciados.length)
-        : "0";
+      String(livrosIniciados.length);
+  }
+}
+
+
+// ========================================
+// FAVORITOS DO FIREBASE
+// ========================================
+
+async function carregarFavoritos(
+  usuarioId
+) {
+  try {
+    const consultaFavoritos =
+      query(
+        collection(db, "favoritos"),
+        where(
+          "usuarioId",
+          "==",
+          usuarioId
+        )
+      );
+
+    const resultadoFavoritos =
+      await getDocs(
+        consultaFavoritos
+      );
+
+    if (totalFavoritos) {
+      totalFavoritos.textContent =
+        String(resultadoFavoritos.size);
+    }
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar favoritos:",
+      erro
+    );
+
+    if (totalFavoritos) {
+      totalFavoritos.textContent =
+        "0";
+    }
   }
 }
 
@@ -305,6 +337,11 @@ async function carregarPerfil(usuario) {
     }
 
     carregarEstatisticasLocais();
+
+    await carregarFavoritos(
+      usuario.uid
+    );
+
     carregarContinueLendo();
 
     if (mensagemCarregando) {
