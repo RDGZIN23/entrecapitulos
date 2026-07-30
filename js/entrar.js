@@ -343,8 +343,9 @@ formularioCadastrar.addEventListener(
       );
 
       mostrarMensagem(
-        traduzirErroFirebase(erro)
-      );
+  erro.code + " - " + erro.message,
+  "erro"
+);
 
       alterarEstadoBotao(
         botaoCadastrar,
