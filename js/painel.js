@@ -12,9 +12,11 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
+
 import {
     addDoc,
     collection,
+    deleteDoc,
     doc,
     getDoc,
     getDocs,
@@ -974,6 +976,7 @@ async function carregarLivros() {
                         </div>
 
                         <div class="livro-painel-acoes">
+
                             <a
                                 href="livro.html?id=${livroId}"
                                 class="botao-secundario"
@@ -988,11 +991,22 @@ async function carregarLivros() {
                             >
                                 Editar
                             </button>
+
+                            <button
+                                type="button"
+                                class="botao-excluir"
+                                data-id="${livroId}"
+                            >
+                                Excluir
+                            </button>
+
                         </div>
                     `;
 
                     const imagem =
-                        card.querySelector("img");
+                        card.querySelector(
+                            "img"
+                        );
 
                     if (imagem) {
                         imagem.addEventListener(
@@ -1005,47 +1019,175 @@ async function carregarLivros() {
                         );
                     }
 
+                    const botaoEditar =
+                        card.querySelector(
+                            ".botao-editar"
+                        );
+
+                    if (botaoEditar) {
+                        botaoEditar.addEventListener(
+                            "click",
+                            () => {
+                                livroEmEdicaoId =
+                                    livroId;
+
+                                capaAtualLivroEmEdicao =
+                                    livro.capa ||
+                                    capaPadrao;
+
+                                const campoTitulo =
+                                    document.getElementById(
+                                        "tituloLivro"
+                                    );
+
+                                const campoAutor =
+                                    document.getElementById(
+                                        "autorLivro"
+                                    );
+
+                                const campoSinopse =
+                                    document.getElementById(
+                                        "sinopseLivro"
+                                    );
+
+                                const campoGenero =
+                                    document.getElementById(
+                                        "generoLivro"
+                                    );
+
+                                const campoStatus =
+                                    document.getElementById(
+                                        "statusLivro"
+                                    );
+
+                                if (campoTitulo) {
+                                    campoTitulo.value =
+                                        livro.titulo ||
+                                        "";
+                                }
+
+                                if (campoAutor) {
+                                    campoAutor.value =
+                                        livro.autor ||
+                                        "";
+                                }
+
+                                if (campoSinopse) {
+                                    campoSinopse.value =
+                                        livro.sinopse ||
+                                        "";
+                                }
+
+                                if (campoGenero) {
+                                    campoGenero.value =
+                                        livro.genero ||
+                                        "";
+                                }
+
+                                if (campoStatus) {
+                                    campoStatus.value =
+                                        livro.status ||
+                                        "rascunho";
+                                }
+
+                                abrirSecao(
+                                    "novoLivro"
+                                );
+
+                                mostrarMensagem(
+                                    "Modo de edição ativado."
+                                );
+
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: "smooth"
+                                });
+                            }
+                        );
+                    }
+
+                    const botaoExcluir =
+                        card.querySelector(
+                            ".botao-excluir"
+                        );
+
+                    if (botaoExcluir) {
+                        botaoExcluir.addEventListener(
+                            "click",
+                            async () => {
+                                const tituloLivro =
+                                    livro.titulo ||
+                                    "Livro sem título";
+
+                                const confirmar =
+                                    window.confirm(
+                                        `Deseja excluir o livro "${tituloLivro}"? Essa ação não pode ser desfeita.`
+                                    );
+
+                                if (!confirmar) {
+                                    return;
+                                }
+
+                                botaoExcluir.disabled =
+                                    true;
+
+                                botaoExcluir.textContent =
+                                    "Excluindo...";
+
+                                try {
+                                    await deleteDoc(
+                                        doc(
+                                            db,
+                                            "livros",
+                                            livroId
+                                        )
+                                    );
+
+                                    if (
+                                        livroEmEdicaoId ===
+                                        livroId
+                                    ) {
+                                        livroEmEdicaoId =
+                                            null;
+
+                                        capaAtualLivroEmEdicao =
+                                            capaPadrao;
+
+                                        formLivro?.reset();
+                                    }
+
+                                    mostrarMensagem(
+                                        "Livro excluído com sucesso!"
+                                    );
+
+                                    await carregarLivros();
+
+                                    await carregarDadosPainel();
+
+                                } catch (erro) {
+                                    console.error(
+                                        "Erro ao excluir livro:",
+                                        erro
+                                    );
+
+                                    mostrarMensagem(
+                                        "Não foi possível excluir o livro.",
+                                        "erro"
+                                    );
+
+                                    botaoExcluir.disabled =
+                                        false;
+
+                                    botaoExcluir.textContent =
+                                        "Excluir";
+                                }
+                            }
+                        );
+                    }
+
                     listaLivros.appendChild(
                         card
                     );
-
-const botaoEditar =
-    card.querySelector(".botao-editar");
-
-if (botaoEditar) {
-    botaoEditar.addEventListener(
-        "click",
-        () => {
-
-            livroEmEdicaoId = livroId;
-
-            capaAtualLivroEmEdicao =
-                livro.capa || capaPadrao;
-
-            document.getElementById("tituloLivro").value =
-                livro.titulo || "";
-
-            document.getElementById("autorLivro").value =
-                livro.autor || "";
-
-            document.getElementById("sinopseLivro").value =
-                livro.sinopse || "";
-
-            document.getElementById("generoLivro").value =
-                livro.genero || "";
-
-            document.getElementById("statusLivro").value =
-                livro.status || "rascunho";
-
-            abrirSecao("novoLivro");
-
-            mostrarMensagem(
-                "Modo de edição ativado."
-            );
-        }
-    );
-}
-
                 }
 
                 if (seletorLivros) {
