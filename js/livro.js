@@ -1075,4 +1075,1221 @@ function mostrarFormularioAvaliacao() {
 // ATUALIZAR ESTRELAS DO FORMULÁRIO
 // ==============================
 
-function atualizarEstrelasFormul
+function atualizarEstrelasFormulario() {
+  const estrelas =
+    document.querySelectorAll(
+      ".estrela-selecionavel"
+    );
+
+  estrelas.forEach((estrela) => {
+    const nota =
+      Number(
+        estrela.dataset.nota
+      );
+
+    estrela.classList.toggle(
+      "ativa",
+      nota <= notaSelecionada
+    );
+  });
+}
+
+
+// ==============================
+// MOSTRAR MENSAGEM DO FORMULÁRIO
+// ==============================
+
+function mostrarMensagemAvaliacao(
+  mensagem,
+  tipo = ""
+) {
+  const elemento =
+    document.getElementById(
+      "mensagemFormularioAvaliacao"
+    );
+
+  if (!elemento) {
+    return;
+  }
+
+  elemento.textContent =
+    mensagem;
+
+  elemento.className =
+    "mensagem-formulario-avaliacao";
+
+  if (tipo) {
+    elemento.classList.add(tipo);
+  }
+}
+
+
+// ==============================
+// CONFIGURAR EVENTOS DO FORMULÁRIO
+// ==============================
+
+function configurarEventosFormulario() {
+  const formulario =
+    document.getElementById(
+      "formularioAvaliacao"
+    );
+
+  const estrelas =
+    document.querySelectorAll(
+      ".estrela-selecionavel"
+    );
+
+  const campoResenha =
+    document.getElementById(
+      "campoResenha"
+    );
+
+  const contadorResenha =
+    document.getElementById(
+      "contadorResenha"
+    );
+
+  estrelas.forEach((estrela) => {
+    estrela.addEventListener(
+      "click",
+      () => {
+        notaSelecionada =
+          Number(
+            estrela.dataset.nota
+          );
+
+        atualizarEstrelasFormulario();
+
+        mostrarMensagemAvaliacao("");
+      }
+    );
+  });
+
+  if (
+    campoResenha &&
+    contadorResenha
+  ) {
+    campoResenha.addEventListener(
+      "input",
+      () => {
+        contadorResenha.textContent =
+          `${campoResenha.value.length}/1000`;
+      }
+    );
+  }
+
+  if (!formulario) {
+    return;
+  }
+
+  formulario.addEventListener(
+    "submit",
+    async (evento) => {
+      evento.preventDefault();
+
+      await salvarAvaliacao();
+    }
+  );
+}
+
+
+// ==============================
+// VALIDAR AVALIAÇÃO
+// ==============================
+
+function validarAvaliacao(
+  nota,
+  comentario
+) {
+  if (!usuarioAtual) {
+    return {
+      valida: false,
+      mensagem:
+        "Entre na sua conta para avaliar esta história."
+    };
+  }
+
+  if (!livroId) {
+    return {
+      valida: false,
+      mensagem:
+        "Não foi possível identificar este livro."
+    };
+  }
+
+  if (
+    !Number.isInteger(nota) ||
+    nota < 1 ||
+    nota > 5
+  ) {
+    return {
+      valida: false,
+      mensagem:
+        "Escolha uma nota de 1 a 5 estrelas."
+    };
+  }
+
+  if (comentario.length < 3) {
+    return {
+      valida: false,
+      mensagem:
+        "Escreva uma resenha com pelo menos 3 caracteres."
+    };
+  }
+
+  if (comentario.length > 1000) {
+    return {
+      valida: false,
+      mensagem:
+        "Sua resenha não pode ultrapassar 1000 caracteres."
+    };
+  }
+
+  return {
+    valida: true,
+    mensagem: ""
+  };
+}
+
+
+// ==============================
+// SALVAR OU ATUALIZAR AVALIAÇÃO
+// ==============================
+
+async function salvarAvaliacao() {
+  const campoResenha =
+    document.getElementById(
+      "campoResenha"
+    );
+
+  const botaoPublicar =
+    document.getElementById(
+      "botaoPublicarAvaliacao"
+    );
+
+  const comentario =
+    campoResenha?.value
+      .trim() ||
+    "";
+
+  const validacao =
+    validarAvaliacao(
+      notaSelecionada,
+      comentario
+    );
+
+  if (!validacao.valida) {
+    mostrarMensagemAvaliacao(
+      validacao.mensagem,
+      "erro"
+    );
+
+    return;
+  }
+
+  if (!usuarioAtual) {
+    return;
+  }
+
+  try {
+    if (botaoPublicar) {
+      botaoPublicar.disabled =
+        true;
+
+      botaoPublicar.textContent =
+        "Salvando...";
+    }
+
+    mostrarMensagemAvaliacao(
+      "Salvando sua avaliação..."
+    );
+
+    const nomeUsuario =
+      await obterNomeUsuario(
+        usuarioAtual
+      );
+
+    const avaliacaoId =
+      `${livroId}_${usuarioAtual.uid}`;
+
+    const referenciaAvaliacao =
+      doc(
+        db,
+        "avaliacoes",
+        avaliacaoId
+      );
+
+    const dadosAvaliacao = {
+      livroId,
+      usuarioId:
+        usuarioAtual.uid,
+
+      usuarioNome:
+        nomeUsuario,
+
+      usuarioEmail:
+        usuarioAtual.email ||
+        "",
+
+      nota:
+        notaSelecionada,
+
+      comentario,
+
+      atualizadoEm:
+        serverTimestamp()
+    };
+
+    if (!avaliacaoUsuarioAtual) {
+      dadosAvaliacao.criadoEm =
+        serverTimestamp();
+    }
+
+    await setDoc(
+      referenciaAvaliacao,
+      dadosAvaliacao,
+      {
+        merge: true
+      }
+    );
+
+    avaliacaoUsuarioAtual = {
+      ...avaliacaoUsuarioAtual,
+      ...dadosAvaliacao,
+      id: avaliacaoId,
+      criadoEm:
+        avaliacaoUsuarioAtual
+          ?.criadoEm ||
+        new Date(),
+      atualizadoEm:
+        new Date()
+    };
+
+    mostrarMensagemAvaliacao(
+      avaliacaoUsuarioAtual
+        ? "Avaliação salva com sucesso."
+        : "Avaliação publicada com sucesso.",
+      "sucesso"
+    );
+
+    await carregarAvaliacoes();
+
+    mostrarFormularioAvaliacao();
+
+  } catch (erro) {
+    console.error(
+      "Erro ao salvar avaliação:",
+      erro
+    );
+
+    mostrarMensagemAvaliacao(
+      "Não foi possível salvar sua avaliação. Verifique as regras do Firebase.",
+      "erro"
+    );
+
+  } finally {
+    const novoBotao =
+      document.getElementById(
+        "botaoPublicarAvaliacao"
+      );
+
+    if (novoBotao) {
+      novoBotao.disabled =
+        false;
+
+      novoBotao.textContent =
+        avaliacaoUsuarioAtual
+          ? "Atualizar avaliação"
+          : "Publicar avaliação";
+    }
+  }
+}
+
+
+// ==============================
+// CARREGAR AVALIAÇÕES DO LIVRO
+// ==============================
+
+async function carregarAvaliacoes() {
+  const lista =
+    document.getElementById(
+      "listaAvaliacoesLeitores"
+    );
+
+  if (!livroId) {
+    configurarAvaliacoes(0, 0);
+
+    if (lista) {
+      lista.innerHTML = `
+        <div class="sem-avaliacoes">
+          Livro não identificado.
+        </div>
+      `;
+    }
+
+    return;
+  }
+
+  try {
+    const consulta =
+      query(
+        collection(
+          db,
+          "avaliacoes"
+        ),
+        where(
+          "livroId",
+          "==",
+          livroId
+        )
+      );
+
+    const resultado =
+      await getDocs(consulta);
+
+    avaliacoesLivro =
+      resultado.docs.map(
+        (documento) => ({
+          id: documento.id,
+          ...documento.data()
+        })
+      );
+
+    avaliacoesLivro.sort(
+      (a, b) => {
+        const dataA =
+          a.atualizadoEm?.seconds ||
+          a.criadoEm?.seconds ||
+          0;
+
+        const dataB =
+          b.atualizadoEm?.seconds ||
+          b.criadoEm?.seconds ||
+          0;
+
+        return dataB - dataA;
+      }
+    );
+
+    if (usuarioAtual) {
+      avaliacaoUsuarioAtual =
+        avaliacoesLivro.find(
+          (avaliacao) =>
+            avaliacao.usuarioId ===
+            usuarioAtual.uid
+        ) || null;
+
+    } else {
+      avaliacaoUsuarioAtual =
+        null;
+    }
+
+    const total =
+      avaliacoesLivro.length;
+
+    const soma =
+      avaliacoesLivro.reduce(
+        (acumulador, avaliacao) =>
+          acumulador +
+          Number(
+            avaliacao.nota || 0
+          ),
+        0
+      );
+
+    const media =
+      total > 0
+        ? soma / total
+        : 0;
+
+    configurarAvaliacoes(
+      media,
+      total
+    );
+
+    mostrarListaAvaliacoes();
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar avaliações:",
+      erro
+    );
+
+    configurarAvaliacoes(0, 0);
+
+    if (lista) {
+      lista.innerHTML = `
+        <div class="sem-avaliacoes">
+          Não foi possível carregar as avaliações.
+        </div>
+      `;
+    }
+  }
+}
+
+
+// ==============================
+// MOSTRAR LISTA DE AVALIAÇÕES
+// ==============================
+
+function mostrarListaAvaliacoes() {
+  const lista =
+    document.getElementById(
+      "listaAvaliacoesLeitores"
+    );
+
+  if (!lista) {
+    return;
+  }
+
+  if (
+    !Array.isArray(avaliacoesLivro) ||
+    avaliacoesLivro.length === 0
+  ) {
+    lista.innerHTML = `
+      <div class="sem-avaliacoes">
+        Ainda não existem avaliações.
+        Seja a primeira pessoa a avaliar esta história.
+      </div>
+    `;
+
+    return;
+  }
+
+  lista.innerHTML =
+    avaliacoesLivro
+      .map((avaliacao) => {
+        const nome =
+          avaliacao.usuarioNome ||
+          "Leitor";
+
+        const comentario =
+          avaliacao.comentario ||
+          "";
+
+        const nota =
+          Number(
+            avaliacao.nota || 0
+          );
+
+        const data =
+          avaliacao.atualizadoEm ||
+          avaliacao.criadoEm;
+
+        const pertenceAoUsuario =
+          usuarioAtual &&
+          avaliacao.usuarioId ===
+            usuarioAtual.uid;
+
+        return `
+          <article
+            class="cartao-avaliacao-leitor"
+          >
+            <div
+              class="cabecalho-avaliacao-leitor"
+            >
+              <div
+                class="dados-leitor-avaliacao"
+              >
+                <div
+                  class="avatar-leitor-avaliacao"
+                >
+                  ${escaparHTML(
+                    obterIniciais(nome)
+                  )}
+                </div>
+
+                <div>
+                  <strong
+                    class="nome-leitor-avaliacao"
+                  >
+                    ${escaparHTML(nome)}
+                  </strong>
+
+                  <span
+                    class="data-avaliacao"
+                  >
+                    ${escaparHTML(
+                      formatarData(data)
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              <div
+                class="estrelas-cartao-avaliacao"
+                aria-label="${nota} estrelas"
+              >
+                ${criarTextoEstrelas(nota)}
+              </div>
+            </div>
+
+            <p
+              class="texto-resenha-leitor"
+            >${escaparHTML(comentario)}</p>
+
+            ${
+              pertenceAoUsuario
+                ? `
+                  <span
+                    class="selo-sua-avaliacao"
+                  >
+                    Sua avaliação
+                  </span>
+                `
+                : ""
+            }
+          </article>
+        `;
+      })
+      .join("");
+}
+
+
+// ==============================
+// ATUALIZAR QUANTIDADE DE CAPÍTULOS
+// ==============================
+
+function atualizarQuantidadeCapitulos(
+  quantidade = 0
+) {
+  const total =
+    Math.max(
+      0,
+      Number(quantidade) || 0
+    );
+
+  const texto =
+    total === 1
+      ? "1 capítulo"
+      : `${total} capítulos`;
+
+  if (quantidadeCapitulos) {
+    quantidadeCapitulos.textContent =
+      texto;
+  }
+
+  if (seloQuantidadeLivro) {
+    seloQuantidadeLivro.textContent =
+      `📖 ${texto}`;
+  }
+}
+
+
+// ==============================
+// CALCULAR PROGRESSO DO LIVRO
+// ==============================
+
+function calcularProgressoLivro() {
+  if (
+    !Array.isArray(capitulosPublicados) ||
+    capitulosPublicados.length === 0
+  ) {
+    return {
+      lidos: 0,
+      total: 0,
+      porcentagem: 0
+    };
+  }
+
+  const idsLidos =
+    obterIdsCapitulosLidos();
+
+  const capitulosLidos =
+    capitulosPublicados.filter(
+      (capitulo) =>
+        idsLidos.includes(capitulo.id)
+    );
+
+  const total =
+    capitulosPublicados.length;
+
+  const lidos =
+    capitulosLidos.length;
+
+  const porcentagem =
+    total > 0
+      ? Math.round(
+          (lidos / total) * 100
+        )
+      : 0;
+
+  return {
+    lidos,
+    total,
+    porcentagem
+  };
+}
+
+
+// ==============================
+// ATUALIZAR PAINEL DE PROGRESSO
+// ==============================
+
+function atualizarPainelProgresso() {
+  if (!painelProgresso) {
+    return;
+  }
+
+  const progresso =
+    calcularProgressoLivro();
+
+  const iniciado =
+    livroFoiIniciado() ||
+    progresso.lidos > 0;
+
+  if (!iniciado) {
+    painelProgresso.style.display =
+      "none";
+
+    return;
+  }
+
+  painelProgresso.style.display =
+    "";
+
+  if (porcentagemProgresso) {
+    porcentagemProgresso.textContent =
+      `${progresso.porcentagem}%`;
+  }
+
+  if (barraProgressoLivro) {
+    barraProgressoLivro.style.width =
+      `${progresso.porcentagem}%`;
+
+    barraProgressoLivro.setAttribute(
+      "aria-valuenow",
+      String(progresso.porcentagem)
+    );
+  }
+
+  if (descricaoProgresso) {
+    if (
+      progresso.total > 0 &&
+      progresso.lidos >= progresso.total
+    ) {
+      descricaoProgresso.textContent =
+        "Você concluiu esta história. 🎉";
+
+    } else if (progresso.lidos === 1) {
+      descricaoProgresso.textContent =
+        `Você leu 1 de ${progresso.total} capítulos.`;
+
+    } else {
+      descricaoProgresso.textContent =
+        `Você leu ${progresso.lidos} de ${progresso.total} capítulos.`;
+    }
+  }
+}
+
+
+// ==============================
+// DEFINIR BOTÃO PRINCIPAL DE LEITURA
+// ==============================
+
+function atualizarBotaoPrincipalLeitura() {
+  if (
+    !Array.isArray(capitulosPublicados) ||
+    capitulosPublicados.length === 0
+  ) {
+    desativarBotaoLeitura(
+      "Nenhum capítulo publicado"
+    );
+
+    return;
+  }
+
+  const primeiroCapitulo =
+    capitulosPublicados[0];
+
+  const ultimoLido =
+    obterUltimoCapituloLido();
+
+  const idUltimoCapitulo =
+    ultimoLido?.capituloId ||
+    ultimoLido?.id ||
+    null;
+
+  const capituloEncontrado =
+    capitulosPublicados.find(
+      (capitulo) =>
+        capitulo.id ===
+        idUltimoCapitulo
+    );
+
+  if (capituloEncontrado) {
+    ativarBotaoLeitura(
+      capituloEncontrado.id,
+      "Continuar leitura"
+    );
+
+    return;
+  }
+
+  ativarBotaoLeitura(
+    primeiroCapitulo.id,
+    "Começar leitura"
+  );
+}
+
+
+// ==============================
+// ATUALIZAR FAVORITO NA TELA
+// ==============================
+
+function atualizarVisualFavorito(
+  favorito
+) {
+  if (!botaoFavorito) {
+    return;
+  }
+
+  botaoFavorito.classList.toggle(
+    "favoritado",
+    favorito
+  );
+
+  botaoFavorito.setAttribute(
+    "aria-pressed",
+    favorito
+      ? "true"
+      : "false"
+  );
+
+  botaoFavorito.innerHTML =
+    favorito
+      ? "❤️ Remover dos favoritos"
+      : "♡ Adicionar aos favoritos";
+}
+
+
+// ==============================
+// VERIFICAR ESTADO DO FAVORITO
+// ==============================
+
+async function carregarEstadoFavorito() {
+  if (!botaoFavorito) {
+    return;
+  }
+
+  if (!usuarioAtual) {
+    atualizarVisualFavorito(false);
+
+    botaoFavorito.disabled = false;
+    botaoFavorito.style.opacity = "1";
+
+    return;
+  }
+
+  try {
+    botaoFavorito.disabled = true;
+
+    const resultado =
+      await verificarFavorito(
+        livroId,
+        usuarioAtual.uid
+      );
+
+    const estaFavoritado =
+      typeof resultado === "boolean"
+        ? resultado
+        : Boolean(
+            resultado?.favorito ||
+            resultado?.favoritado ||
+            resultado?.existe
+          );
+
+    atualizarVisualFavorito(
+      estaFavoritado
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao verificar favorito:",
+      erro
+    );
+
+    atualizarVisualFavorito(false);
+
+  } finally {
+    botaoFavorito.disabled = false;
+    botaoFavorito.style.opacity = "1";
+  }
+}
+
+
+// ==============================
+// CLIQUE NO BOTÃO DE FAVORITO
+// ==============================
+
+async function clicarBotaoFavorito() {
+  if (!usuarioAtual) {
+    const confirmarLogin =
+      window.confirm(
+        "Você precisa entrar na sua conta para adicionar livros aos favoritos. Deseja entrar agora?"
+      );
+
+    if (confirmarLogin) {
+      window.location.href =
+        "login.html";
+    }
+
+    return;
+  }
+
+  if (
+    !livroId ||
+    !livroAtual
+  ) {
+    window.alert(
+      "Não foi possível identificar este livro."
+    );
+
+    return;
+  }
+
+  try {
+    botaoFavorito.disabled = true;
+    botaoFavorito.style.opacity = "0.65";
+
+    const resultado =
+      await alternarFavorito(
+        livroId,
+        livroAtual,
+        usuarioAtual.uid
+      );
+
+    let estaFavoritado;
+
+    if (typeof resultado === "boolean") {
+      estaFavoritado = resultado;
+
+    } else if (
+      resultado &&
+      typeof resultado === "object"
+    ) {
+      estaFavoritado =
+        Boolean(
+          resultado.favorito ??
+          resultado.favoritado ??
+          resultado.adicionado
+        );
+
+    } else {
+      const verificacao =
+        await verificarFavorito(
+          livroId,
+          usuarioAtual.uid
+        );
+
+      estaFavoritado =
+        typeof verificacao === "boolean"
+          ? verificacao
+          : Boolean(
+              verificacao?.favorito ||
+              verificacao?.favoritado ||
+              verificacao?.existe
+            );
+    }
+
+    atualizarVisualFavorito(
+      estaFavoritado
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao alterar favorito:",
+      erro
+    );
+
+    window.alert(
+      "Não foi possível atualizar seus favoritos."
+    );
+
+  } finally {
+    botaoFavorito.disabled = false;
+    botaoFavorito.style.opacity = "1";
+  }
+}
+
+
+// ==============================
+// CONFIGURAR BOTÃO DE FAVORITO
+// ==============================
+
+function configurarBotaoFavorito() {
+  if (!botaoFavorito) {
+    return;
+  }
+
+  botaoFavorito.addEventListener(
+    "click",
+    async (evento) => {
+      evento.preventDefault();
+
+      await clicarBotaoFavorito();
+    }
+  );
+}
+
+
+// ==============================
+// CARREGAR DADOS DO LIVRO
+// ==============================
+
+async function carregarLivro() {
+  if (!livroId) {
+    mostrarErro(
+      "O endereço deste livro está incompleto."
+    );
+    return;
+  }
+
+  try {
+    const referencia =
+      doc(db, "livros", livroId);
+
+    const resultado =
+      await getDoc(referencia);
+
+    if (!resultado.exists()) {
+      mostrarErro(
+        "Este livro não foi encontrado."
+      );
+      return;
+    }
+
+    livroAtual = {
+      id: resultado.id,
+      ...resultado.data()
+    };
+
+    if (tituloLivro) {
+      tituloLivro.textContent =
+        livroAtual.titulo ||
+        "Sem título";
+    }
+
+    if (autorLivro) {
+      autorLivro.textContent =
+        livroAtual.autor ||
+        "Autor desconhecido";
+    }
+
+    if (nomeAutorSecao) {
+      nomeAutorSecao.textContent =
+        livroAtual.autor ||
+        "Autor desconhecido";
+    }
+
+    if (generoLivro) {
+      generoLivro.textContent =
+        livroAtual.genero ||
+        "Literatura";
+    }
+
+    if (sinopseLivro) {
+      sinopseLivro.textContent =
+        livroAtual.sinopse ||
+        "Este livro ainda não possui uma sinopse.";
+    }
+
+    configurarCapa(
+      livroAtual.capa,
+      livroAtual.titulo
+    );
+
+    configurarSelos(
+      livroAtual
+    );
+
+    await carregarCapitulos();
+
+    await carregarAvaliacoes();
+
+    atualizarPainelProgresso();
+
+    atualizarBotaoPrincipalLeitura();
+
+    if (usuarioAtual) {
+      await carregarEstadoFavorito();
+    }
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar livro:",
+      erro
+    );
+
+    mostrarErro(
+      "Não foi possível carregar este livro."
+    );
+  }
+}
+
+
+// ==============================
+// CARREGAR CAPÍTULOS PUBLICADOS
+// ==============================
+
+async function carregarCapitulos() {
+  if (!listaCapitulos) {
+    return;
+  }
+
+  listaCapitulos.innerHTML = `
+    <p class="mensagem-status">
+      Carregando capítulos...
+    </p>
+  `;
+
+  try {
+    const consultaCapitulos =
+      query(
+        collection(
+          db,
+          "capitulos"
+        ),
+        where(
+          "livroId",
+          "==",
+          livroId
+        ),
+        where(
+          "status",
+          "==",
+          "publicado"
+        )
+      );
+
+    const resultado =
+      await getDocs(
+        consultaCapitulos
+      );
+
+    capitulosPublicados =
+      resultado.docs.map(
+        (documento) => ({
+          id: documento.id,
+          ...documento.data()
+        })
+      );
+
+    capitulosPublicados.sort(
+      (a, b) =>
+        Number(a.numero || 0) -
+        Number(b.numero || 0)
+    );
+
+    atualizarQuantidadeCapitulos(
+      capitulosPublicados.length
+    );
+
+    if (
+      capitulosPublicados.length === 0
+    ) {
+      listaCapitulos.innerHTML = `
+        <p class="mensagem-status">
+          Nenhum capítulo foi publicado ainda.
+        </p>
+      `;
+
+      desativarBotaoLeitura(
+        "Nenhum capítulo publicado"
+      );
+
+      atualizarPainelProgresso();
+
+      return;
+    }
+
+    listaCapitulos.innerHTML =
+      capitulosPublicados
+        .map((capitulo) => {
+          const numero =
+            Number(
+              capitulo.numero || 0
+            );
+
+          const titulo =
+            capitulo.titulo ||
+            `Capítulo ${numero}`;
+
+          return `
+            <a
+              class="item-capitulo"
+              href="leitura.html?id=${capitulo.id}"
+            >
+              <div class="numero-capitulo">
+                ${numero}
+              </div>
+
+              <div class="informacoes-capitulo">
+                <span class="rotulo-capitulo">
+                  Capítulo ${numero}
+                </span>
+
+                <strong class="titulo-capitulo">
+                  ${escaparHTML(titulo)}
+                </strong>
+              </div>
+
+              <span class="seta-capitulo">
+                ›
+              </span>
+            </a>
+          `;
+        })
+        .join("");
+
+    atualizarBotaoPrincipalLeitura();
+
+    atualizarPainelProgresso();
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar capítulos:",
+      erro
+    );
+
+    capitulosPublicados = [];
+
+    atualizarQuantidadeCapitulos(0);
+
+    listaCapitulos.innerHTML = `
+      <p class="mensagem-status">
+        Não foi possível carregar os capítulos.
+      </p>
+    `;
+
+    desativarBotaoLeitura(
+      "Capítulos indisponíveis"
+    );
+  }
+}
+
+
+// ==============================
+// INICIALIZAÇÃO DA PÁGINA
+// ==============================
+
+configurarBotaoFavorito();
+
+montarInterfaceAvaliacoes();
+
+onAuthStateChanged(
+  auth,
+  async (usuario) => {
+    usuarioAtual = usuario;
+
+    if (usuarioAtual) {
+      await carregarEstadoFavorito();
+    }
+
+    await carregarAvaliacoes();
+
+    mostrarFormularioAvaliacao();
+  }
+);
+
+carregarLivro();
