@@ -23,7 +23,9 @@ import {
     orderBy,
     query,
     serverTimestamp,
-    updateDoc
+    updateDoc,
+    where,
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
@@ -833,6 +835,69 @@ async function enviarCapaCloudinary(
 
 
 // ==============================
+// EXCLUIR LIVRO E DADOS RELACIONADOS
+// ==============================
+
+async function excluirLivroCompleto(
+    livroId
+) {
+    const batch =
+        writeBatch(db);
+
+    const referenciaLivro =
+        doc(
+            db,
+            "livros",
+            livroId
+        );
+
+    batch.delete(
+        referenciaLivro
+    );
+
+    const colecoesRelacionadas = [
+        "capitulos",
+        "favoritos",
+        "avaliacoes"
+    ];
+
+    for (
+        const nomeColecao
+        of colecoesRelacionadas
+    ) {
+        const consulta =
+            query(
+                collection(
+                    db,
+                    nomeColecao
+                ),
+                where(
+                    "livroId",
+                    "==",
+                    livroId
+                )
+            );
+
+        const resultado =
+            await getDocs(
+                consulta
+            );
+
+        resultado.forEach(
+            (documento) => {
+                batch.delete(
+                    documento.ref
+                );
+            }
+        );
+    }
+
+    await batch.commit();
+}
+
+
+
+// ==============================
 // CARREGAR LIVROS NO PAINEL
 // ==============================
 
@@ -1135,13 +1200,9 @@ async function carregarLivros() {
                                     "Excluindo...";
 
                                 try {
-                                    await deleteDoc(
-                                        doc(
-                                            db,
-                                            "livros",
-                                            livroId
-                                        )
-                                    );
+                                    await excluirLivroCompleto(
+    livroId
+);
 
                                     if (
                                         livroEmEdicaoId ===
