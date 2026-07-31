@@ -26,7 +26,11 @@
                 Ver site
             </a>
 
-            <button id="botaoSair" class="botao-sair" type="button">
+            <button
+                id="botaoSair"
+                class="botao-sair"
+                type="button"
+            >
                 Sair
             </button>
         </div>
@@ -48,6 +52,7 @@
             </div>
 
             <nav class="painel-navegacao">
+
                 <button
                     class="menu-item ativo"
                     type="button"
@@ -79,6 +84,7 @@
                 >
                     📝 Adicionar capítulo
                 </button>
+
             </nav>
 
         </aside>
@@ -90,6 +96,7 @@
                 id="visaoGeral"
                 class="painel-secao ativa"
             >
+
                 <div class="secao-cabecalho">
                     <div>
                         <span class="secao-etiqueta">
@@ -99,8 +106,8 @@
                         <h1>Olá, Rd Sebastião</h1>
 
                         <p>
-                            Gerencie seus livros e capítulos do
-                            Entre Capítulos.
+                            Acompanhe o desempenho das suas histórias
+                            e gerencie o Entre Capítulos.
                         </p>
                     </div>
                 </div>
@@ -108,38 +115,155 @@
                 <div class="painel-estatisticas">
 
                     <article class="estatistica-card">
-                        <span class="estatistica-icone">📚</span>
+                        <span class="estatistica-icone">
+                            📚
+                        </span>
 
                         <div>
-                            <strong id="totalLivros">1</strong>
-                            <span>Livro publicado</span>
+                            <strong id="totalLivros">
+                                0
+                            </strong>
+
+                            <span>
+                                Livros cadastrados
+                            </span>
                         </div>
                     </article>
 
                     <article class="estatistica-card">
-                        <span class="estatistica-icone">📄</span>
+                        <span class="estatistica-icone">
+                            📄
+                        </span>
 
                         <div>
-                            <strong id="totalCapitulos">2</strong>
-                            <span>Capítulos publicados</span>
+                            <strong id="totalCapitulos">
+                                0
+                            </strong>
+
+                            <span>
+                                Capítulos publicados
+                            </span>
                         </div>
                     </article>
 
                     <article class="estatistica-card">
-                        <span class="estatistica-icone">✍️</span>
+                        <span class="estatistica-icone">
+                            ✍️
+                        </span>
 
                         <div>
-                            <strong id="totalRascunhos">0</strong>
-                            <span>Rascunhos</span>
+                            <strong id="totalRascunhos">
+                                0
+                            </strong>
+
+                            <span>
+                                Rascunhos
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="estatistica-card">
+                        <span class="estatistica-icone">
+                            ❤️
+                        </span>
+
+                        <div>
+                            <strong id="totalFavoritosPainel">
+                                0
+                            </strong>
+
+                            <span>
+                                Favoritos recebidos
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="estatistica-card">
+                        <span class="estatistica-icone">
+                            ⭐
+                        </span>
+
+                        <div>
+                            <strong id="totalAvaliacoesPainel">
+                                0
+                            </strong>
+
+                            <span>
+                                Avaliações recebidas
+                            </span>
+                        </div>
+                    </article>
+
+                    <article class="estatistica-card">
+                        <span class="estatistica-icone">
+                            🌟
+                        </span>
+
+                        <div>
+                            <strong id="mediaAvaliacoesPainel">
+                                0,0
+                            </strong>
+
+                            <span>
+                                Média das avaliações
+                            </span>
                         </div>
                     </article>
 
                 </div>
 
                 <section class="painel-bloco">
+
+                    <div class="bloco-titulo">
+                        <div>
+                            <h2>Desempenho das obras</h2>
+
+                            <p>
+                                Veja os resultados de cada livro cadastrado.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        id="desempenhoLivros"
+                        class="lista-livros-painel"
+                    >
+                        <p>
+                            Carregando desempenho dos livros...
+                        </p>
+                    </div>
+
+                </section>
+
+                <section class="painel-bloco">
+
+                    <div class="bloco-titulo">
+                        <div>
+                            <h2>Atividades recentes</h2>
+
+                            <p>
+                                Acompanhe avaliações, favoritos e publicações.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        id="atividadesRecentes"
+                        class="lista-atividades-painel"
+                    >
+                        <p>
+                            Carregando atividades recentes...
+                        </p>
+                    </div>
+
+                </section>
+
+                <section class="painel-bloco">
+
                     <div class="bloco-titulo">
                         <div>
                             <h2>Ações rápidas</h2>
+
                             <p>
                                 Escolha o que deseja adicionar ao site.
                             </p>
@@ -157,6 +281,7 @@
 
                             <div>
                                 <strong>Novo livro</strong>
+
                                 <small>
                                     Cadastre uma nova história.
                                 </small>
@@ -172,6 +297,7 @@
 
                             <div>
                                 <strong>Novo capítulo</strong>
+
                                 <small>
                                     Continue um livro publicado.
                                 </small>
@@ -179,7 +305,9 @@
                         </button>
 
                     </div>
+
                 </section>
+
             </section>
 
             <!-- MEUS LIVROS -->
@@ -187,6 +315,7 @@
                 id="livros"
                 class="painel-secao"
             >
+
                 <div class="secao-cabecalho">
                     <div>
                         <span class="secao-etiqueta">
@@ -209,50 +338,15 @@
                     </button>
                 </div>
 
-                <div id="listaLivros" class="lista-livros-painel">
-
-                    <article class="livro-painel-card">
-
-                        <div class="livro-painel-capa">
-                            <img
-                                src="images/depois-de-te-odiar.png"
-                                alt="Capa do livro Depois de Te Odiar"
-                            >
-                        </div>
-
-                        <div class="livro-painel-info">
-                            <span class="status-publicado">
-                                Publicado
-                            </span>
-
-                            <h2>Depois de Te Odiar</h2>
-
-                            <p>Rd Sebastião</p>
-
-                            <small>
-                                2 capítulos publicados
-                            </small>
-                        </div>
-
-                        <div class="livro-painel-acoes">
-                            <a
-                                href="livro.html"
-                                class="botao-secundario"
-                            >
-                                Visualizar
-                            </a>
-
-                            <button
-                                type="button"
-                                class="botao-editar"
-                            >
-                                Editar
-                            </button>
-                        </div>
-
-                    </article>
-
+                <div
+                    id="listaLivros"
+                    class="lista-livros-painel"
+                >
+                    <p>
+                        Carregando livros...
+                    </p>
                 </div>
+
             </section>
 
             <!-- ADICIONAR LIVRO -->
@@ -260,6 +354,7 @@
                 id="novoLivro"
                 class="painel-secao"
             >
+
                 <div class="secao-cabecalho">
                     <div>
                         <span class="secao-etiqueta">
@@ -274,7 +369,10 @@
                     </div>
                 </div>
 
-                <form id="formLivro" class="painel-formulario">
+                <form
+                    id="formLivro"
+                    class="painel-formulario"
+                >
 
                     <div class="campo-formulario">
                         <label for="tituloLivro">
@@ -353,7 +451,6 @@
                             </option>
                         </select>
                     </div>
-
                     <div class="campo-formulario">
                         <label for="statusLivro">
                             Status
@@ -392,6 +489,7 @@
                     </div>
 
                     <div class="formulario-acoes campo-largo">
+
                         <button
                             type="reset"
                             class="botao-secundario"
@@ -405,9 +503,11 @@
                         >
                             Salvar livro
                         </button>
+
                     </div>
 
                 </form>
+
             </section>
 
             <!-- ADICIONAR CAPÍTULO -->
@@ -415,6 +515,7 @@
                 id="novoCapitulo"
                 class="painel-secao"
             >
+
                 <div class="secao-cabecalho">
                     <div>
                         <span class="secao-etiqueta">
@@ -429,7 +530,10 @@
                     </div>
                 </div>
 
-                <form id="formCapitulo" class="painel-formulario">
+                <form
+                    id="formCapitulo"
+                    class="painel-formulario"
+                >
 
                     <div class="campo-formulario">
                         <label for="livroCapitulo">
@@ -442,11 +546,7 @@
                             required
                         >
                             <option value="">
-                                Selecione um livro
-                            </option>
-
-                            <option value="depois-de-te-odiar">
-                                Depois de Te Odiar
+                                Carregando livros...
                             </option>
                         </select>
                     </div>
@@ -534,6 +634,7 @@
                     </div>
 
                     <div class="formulario-acoes campo-largo">
+
                         <button
                             type="reset"
                             class="botao-secundario"
@@ -547,17 +648,26 @@
                         >
                             Salvar capítulo
                         </button>
+
                     </div>
 
                 </form>
+
             </section>
 
         </main>
 
     </div>
 
-    <div id="mensagemPainel" class="mensagem-painel"></div>
+    <div
+        id="mensagemPainel"
+        class="mensagem-painel"
+    ></div>
 
-    <script type="module" src="js/painel.js"></script>
+    <script
+        type="module"
+        src="js/painel.js"
+    ></script>
+
 </body>
 </html>
