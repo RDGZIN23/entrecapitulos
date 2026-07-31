@@ -1302,11 +1302,15 @@ if (formLivro) {
             botaoSalvar.textContent =
                 arquivoCapa
                     ? "Enviando capa..."
-                    : "Salvando livro...";
+                    : livroEmEdicaoId
+                        ? "Atualizando livro..."
+                        : "Salvando livro...";
 
             try {
                 let urlCapa =
-                    capaPadrao;
+                    livroEmEdicaoId
+                        ? capaAtualLivroEmEdicao
+                        : capaPadrao;
 
                 if (arquivoCapa) {
                     urlCapa =
@@ -1315,39 +1319,59 @@ if (formLivro) {
                         );
 
                     botaoSalvar.textContent =
-                        "Salvando livro...";
+                        livroEmEdicaoId
+                            ? "Atualizando livro..."
+                            : "Salvando livro...";
                 }
 
-                await addDoc(
-                    collection(
-                        db,
-                        "livros"
-                    ),
-                    {
-                        titulo,
-                        autor,
-                        sinopse,
-                        genero,
-                        status,
+                const dadosLivro = {
+                    titulo,
+                    autor,
+                    sinopse,
+                    genero,
+                    status,
+                    capa: urlCapa,
 
-                        capa:
-                            urlCapa,
+                    atualizadoEm:
+                        serverTimestamp()
+                };
 
-                        criadoPor:
-                            auth.currentUser
-                                .uid,
+                if (livroEmEdicaoId) {
+                    await updateDoc(
+                        doc(
+                            db,
+                            "livros",
+                            livroEmEdicaoId
+                        ),
+                        dadosLivro
+                    );
 
-                        criadoEm:
-                            serverTimestamp(),
+                    mostrarMensagem(
+                        "Livro atualizado com sucesso!"
+                    );
 
-                        atualizadoEm:
-                            serverTimestamp()
-                    }
-                );
+                } else {
+                    await addDoc(
+                        collection(
+                            db,
+                            "livros"
+                        ),
+                        {
+                            ...dadosLivro,
 
-                mostrarMensagem(
-                    "Livro e capa salvos com sucesso!"
-                );
+                            criadoPor:
+                                auth.currentUser
+                                    .uid,
+
+                            criadoEm:
+                                serverTimestamp()
+                        }
+                    );
+
+                    mostrarMensagem(
+                        "Livro e capa salvos com sucesso!"
+                    );
+                }
 
                 formLivro.reset();
 
@@ -1360,6 +1384,12 @@ if (formLivro) {
                     campoAutor.value =
                         "Rd Sebastião";
                 }
+
+                livroEmEdicaoId =
+                    null;
+
+                capaAtualLivroEmEdicao =
+                    capaPadrao;
 
                 await carregarLivros();
 
