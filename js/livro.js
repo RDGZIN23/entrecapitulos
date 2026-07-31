@@ -1931,7 +1931,7 @@ async function clicarBotaoFavorito() {
 
     if (confirmarLogin) {
       window.location.href =
-        "login.html";
+        "entrar.html";
     }
 
     return;
@@ -1949,51 +1949,37 @@ async function clicarBotaoFavorito() {
   }
 
   try {
-    botaoFavorito.disabled = true;
-    botaoFavorito.style.opacity = "0.65";
+    botaoFavorito.disabled =
+      true;
+
+    botaoFavorito.style.opacity =
+      "0.65";
 
     const resultado =
-      await alternarFavorito(
+      await alternarFavorito({
         livroId,
-        livroAtual,
-        usuarioAtual.uid
-      );
 
-    let estaFavoritado;
+        titulo:
+          livroAtual.titulo ||
+          "Livro",
 
-    if (typeof resultado === "boolean") {
-      estaFavoritado = resultado;
+        autor:
+          livroAtual.autor ||
+          "Autor não informado",
 
-    } else if (
-      resultado &&
-      typeof resultado === "object"
+        capa:
+          livroAtual.capa ||
+          "images/depois-de-te-odiar.png"
+      });
+
+    if (
+      resultado.redirecionado
     ) {
-      estaFavoritado =
-        Boolean(
-          resultado.favorito ??
-          resultado.favoritado ??
-          resultado.adicionado
-        );
-
-    } else {
-      const verificacao =
-        await verificarFavorito(
-          livroId,
-          usuarioAtual.uid
-        );
-
-      estaFavoritado =
-        typeof verificacao === "boolean"
-          ? verificacao
-          : Boolean(
-              verificacao?.favorito ||
-              verificacao?.favoritado ||
-              verificacao?.existe
-            );
+      return;
     }
 
     atualizarVisualFavorito(
-      estaFavoritado
+      resultado.favoritado
     );
 
   } catch (erro) {
@@ -2006,9 +1992,21 @@ async function clicarBotaoFavorito() {
       "Não foi possível atualizar seus favoritos."
     );
 
+    const favoritoAtual =
+      await verificarFavorito(
+        livroId
+      );
+
+    atualizarVisualFavorito(
+      favoritoAtual
+    );
+
   } finally {
-    botaoFavorito.disabled = false;
-    botaoFavorito.style.opacity = "1";
+    botaoFavorito.disabled =
+      false;
+
+    botaoFavorito.style.opacity =
+      "1";
   }
 }
 
