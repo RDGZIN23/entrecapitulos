@@ -29,6 +29,15 @@ import {
 const capaPadrao =
     "images/depois-de-te-odiar.png";
 
+const CLOUDINARY_CLOUD_NAME =
+    "dzsf7cwf";
+
+const CLOUDINARY_UPLOAD_PRESET =
+    "entre_capitulos";
+
+const CLOUDINARY_UPLOAD_URL =
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
 let livrosCarregados = [];
 let capitulosCarregados = [];
 let favoritosCarregados = [];
@@ -731,6 +740,89 @@ async function carregarDadosPainel() {
     mostrarDesempenhoLivros();
     mostrarAtividadesRecentes();
 }
+
+// ==============================
+// ENVIAR CAPA PARA O CLOUDINARY
+// ==============================
+
+async function enviarCapaCloudinary(
+    arquivo
+) {
+    if (!arquivo) {
+        return capaPadrao;
+    }
+
+    const formatosPermitidos = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (
+        !formatosPermitidos.includes(
+            arquivo.type
+        )
+    ) {
+        throw new Error(
+            "Escolha uma imagem JPG, PNG ou WEBP."
+        );
+    }
+
+    const tamanhoMaximo =
+        8 * 1024 * 1024;
+
+    if (
+        arquivo.size >
+        tamanhoMaximo
+    ) {
+        throw new Error(
+            "A imagem deve ter no máximo 8 MB."
+        );
+    }
+
+    const dados =
+        new FormData();
+
+    dados.append(
+        "file",
+        arquivo
+    );
+
+    dados.append(
+        "upload_preset",
+        CLOUDINARY_UPLOAD_PRESET
+    );
+
+    const resposta =
+        await fetch(
+            CLOUDINARY_UPLOAD_URL,
+            {
+                method: "POST",
+                body: dados
+            }
+        );
+
+    const resultado =
+        await resposta.json();
+
+    if (
+        !resposta.ok ||
+        !resultado.secure_url
+    ) {
+        console.error(
+            "Erro retornado pelo Cloudinary:",
+            resultado
+        );
+
+        throw new Error(
+            resultado.error?.message ||
+            "Não foi possível enviar a capa."
+        );
+    }
+
+    return resultado.secure_url;
+}
+
 
 // ==============================
 // CARREGAR LIVROS NO PAINEL
