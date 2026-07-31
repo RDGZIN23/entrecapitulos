@@ -866,3 +866,168 @@ pointer-events:none;
     }
 
 }
+
+
+/* =========================================
+   NOVO VISUAL DOS CAPÍTULOS PUBLICADOS
+========================================= */
+
+.secao-capitulos {
+    margin-top: 40px;
+}
+
+.lista-capitulos {
+    display: grid;
+    gap: 14px;
+}
+
+.cartao-capitulo,
+.item-capitulo {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) 24px;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 16px;
+    border: 1px solid rgba(124, 77, 255, 0.18);
+    border-radius: 16px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 77, 255, 0.08),
+            rgba(255, 255, 255, 0.025)
+        );
+    color: #ffffff;
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.cartao-capitulo:hover,
+.item-capitulo:hover {
+    transform: translateY(-2px);
+    border-color: rgba(124, 77, 255, 0.5);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 77, 255, 0.14),
+            rgba(255, 255, 255, 0.04)
+        );
+}
+
+.numero-capitulo {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 14px;
+    background:
+        linear-gradient(
+            135deg,
+            #6f43df,
+            #8f5cff
+        );
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.dados-capitulo,
+.informacoes-capitulo {
+    min-width: 0;
+    margin: 0;
+}
+
+.dados-capitulo span,
+.rotulo-capitulo {
+    display: block;
+    margin-bottom: 4px;
+    color: #b99cff;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dados-capitulo h3,
+.titulo-capitulo {
+    display: block;
+    margin: 0 0 5px;
+    color: #ffffff;
+    font-size: 17px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.dados-capitulo p {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: #aaaab5;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.seta-capitulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    margin: 0;
+    color: #b99cff;
+    font-size: 28px;
+    line-height: 1;
+}
+
+/* Capítulo já lido */
+.cartao-capitulo.capitulo-lido {
+    border-color: rgba(84, 214, 149, 0.28);
+}
+
+.cartao-capitulo.capitulo-lido .numero-capitulo {
+    background:
+        linear-gradient(
+            135deg,
+            #299968,
+            #43c98c
+        );
+}
+
+/* Celular pequeno */
+@media (max-width: 480px) {
+    .cartao-capitulo,
+    .item-capitulo {
+        grid-template-columns: 48px minmax(0, 1fr) 18px;
+        gap: 11px;
+        padding: 13px;
+    }
+
+    .numero-capitulo {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        font-size: 15px;
+    }
+
+    .dados-capitulo h3,
+    .titulo-capitulo {
+        font-size: 15px;
+    }
+
+    .dados-capitulo p {
+        font-size: 12px;
+    }
+
+    .seta-capitulo {
+        width: 18px;
+        font-size: 23px;
+    }
+}
