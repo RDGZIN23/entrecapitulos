@@ -787,3 +787,82 @@ pointer-events:none;
       repeat(3, minmax(0, 1fr));
   }
 }
+
+/* =========================================
+   CORREÇÃO DO CARD "CONTINUE LENDO"
+========================================= */
+
+.continue {
+    padding: 25px 20px;
+}
+
+.livro-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: #171722;
+    border: 1px solid rgba(168,85,247,.15);
+    border-radius: 20px;
+    padding: 18px;
+    width: 100%;
+}
+
+.livro-horizontal img {
+    width: 90px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.livro-horizontal .livro {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.livro-horizontal h3 {
+    margin: 0;
+    font-size: 26px;
+    color: #fff;
+}
+
+.livro-horizontal p {
+    margin: 6px 0 0;
+    color: #bdbdc8;
+}
+
+#continueBotao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 14px;
+    background: linear-gradient(135deg,#7c4dff,#b05cff);
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+@media (max-width:700px){
+
+    .livro-horizontal{
+        align-items:center;
+    }
+
+    #continueBotao{
+        padding:12px 20px;
+        font-size:15px;
+    }
+
+    .livro-horizontal h3{
+        font-size:22px;
+    }
+
+}
