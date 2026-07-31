@@ -1220,6 +1220,15 @@ if (formLivro) {
                     )
                     .value;
 
+            const campoCapa =
+                document.getElementById(
+                    "capaLivro"
+                );
+
+            const arquivoCapa =
+                campoCapa?.files?.[0] ||
+                null;
+
             if (
                 !titulo ||
                 !autor ||
@@ -1243,12 +1252,28 @@ if (formLivro) {
                 return;
             }
 
-            botaoSalvar.disabled = true;
+            botaoSalvar.disabled =
+                true;
 
             botaoSalvar.textContent =
-                "Salvando...";
+                arquivoCapa
+                    ? "Enviando capa..."
+                    : "Salvando livro...";
 
             try {
+                let urlCapa =
+                    capaPadrao;
+
+                if (arquivoCapa) {
+                    urlCapa =
+                        await enviarCapaCloudinary(
+                            arquivoCapa
+                        );
+
+                    botaoSalvar.textContent =
+                        "Salvando livro...";
+                }
+
                 await addDoc(
                     collection(
                         db,
@@ -1262,7 +1287,7 @@ if (formLivro) {
                         status,
 
                         capa:
-                            capaPadrao,
+                            urlCapa,
 
                         criadoPor:
                             auth.currentUser
@@ -1277,17 +1302,20 @@ if (formLivro) {
                 );
 
                 mostrarMensagem(
-                    "Livro salvo no Firebase com sucesso!"
+                    "Livro e capa salvos com sucesso!"
                 );
 
                 formLivro.reset();
 
-                document
-                    .getElementById(
+                const campoAutor =
+                    document.getElementById(
                         "autorLivro"
-                    )
-                    .value =
+                    );
+
+                if (campoAutor) {
+                    campoAutor.value =
                         "Rd Sebastião";
+                }
 
                 await carregarLivros();
 
@@ -1302,6 +1330,7 @@ if (formLivro) {
                 );
 
                 mostrarMensagem(
+                    erro.message ||
                     "Não foi possível salvar o livro.",
                     "erro"
                 );
