@@ -15,10 +15,13 @@ import {
 import {
     addDoc,
     collection,
+    doc,
+    getDoc,
     getDocs,
     orderBy,
     query,
-    serverTimestamp
+    serverTimestamp,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 
@@ -42,6 +45,9 @@ let livrosCarregados = [];
 let capitulosCarregados = [];
 let favoritosCarregados = [];
 let avaliacoesCarregadas = [];
+
+let livroEmEdicaoId = null;
+let capaAtualLivroEmEdicao = capaPadrao;
 
 
 // ==============================
@@ -1002,6 +1008,44 @@ async function carregarLivros() {
                     listaLivros.appendChild(
                         card
                     );
+
+const botaoEditar =
+    card.querySelector(".botao-editar");
+
+if (botaoEditar) {
+    botaoEditar.addEventListener(
+        "click",
+        () => {
+
+            livroEmEdicaoId = livroId;
+
+            capaAtualLivroEmEdicao =
+                livro.capa || capaPadrao;
+
+            document.getElementById("tituloLivro").value =
+                livro.titulo || "";
+
+            document.getElementById("autorLivro").value =
+                livro.autor || "";
+
+            document.getElementById("sinopseLivro").value =
+                livro.sinopse || "";
+
+            document.getElementById("generoLivro").value =
+                livro.genero || "";
+
+            document.getElementById("statusLivro").value =
+                livro.status || "rascunho";
+
+            abrirSecao("novoLivro");
+
+            mostrarMensagem(
+                "Modo de edição ativado."
+            );
+        }
+    );
+}
+
                 }
 
                 if (seletorLivros) {
