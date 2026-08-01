@@ -1567,19 +1567,9 @@ async function carregarCapitulosPainel() {
                                     "";
                             }
 
-                            if (campoTexto) {
-    campoTexto.value =
-        capitulo.texto ||
-        "";
-}
-
-if (editorCapitulo) {
-    editorCapitulo.innerHTML =
-        capitulo.texto ||
-        "";
-
-    sincronizarEditorCapitulo();
-}
+                            preencherEditorCapitulo(
+    capitulo.texto || ""
+);
 
                             if (campoStatus) {
                                 campoStatus.value =
@@ -1663,13 +1653,9 @@ if (editorCapitulo) {
                                     capituloEmEdicaoId =
                                         null;
 
-                                    formCapitulo
-                                        ?.reset();
+                                    formCapitulo?.reset();
 
-                                    if (contador) {
-                                        contador.textContent =
-                                            "0 palavras";
-                                    }
+limparEditorCapitulo();
                                 }
 
                                 mostrarMensagem(
@@ -1801,13 +1787,8 @@ document
 
 
 // ==============================
-// EDITOR PROFISSIONAL DE CAPÍTULOS
+// EDITOR QUILL DE CAPÍTULOS
 // ==============================
-
-const editorCapitulo =
-    document.getElementById(
-        "editorCapitulo"
-    );
 
 const textoCapitulo =
     document.getElementById(
@@ -1824,27 +1805,66 @@ const contadorCaracteres =
         "contadorCaracteres"
     );
 
+const elementoEditorQuill =
+    document.getElementById(
+        "editorQuill"
+    );
+
+let editorQuill = null;
+
 
 // ==============================
-// SINCRONIZAR EDITOR
+// INICIAR O QUILL
+// ==============================
+
+if (
+    elementoEditorQuill &&
+    window.Quill
+) {
+    editorQuill =
+        new window.Quill(
+            "#editorQuill",
+            {
+                theme: "snow",
+
+                placeholder:
+                    "Cole ou escreva o capítulo completo aqui...",
+
+                modules: {
+                    toolbar:
+                        "#barraEditorQuill",
+
+                    history: {
+                        delay: 1000,
+                        maxStack: 100,
+                        userOnly: true
+                    }
+                }
+            }
+        );
+}
+
+
+// ==============================
+// SINCRONIZAR COM O FORMULÁRIO
 // ==============================
 
 function sincronizarEditorCapitulo() {
     if (
-        !editorCapitulo ||
+        !editorQuill ||
         !textoCapitulo
     ) {
         return;
     }
 
-    const html =
-        editorCapitulo.innerHTML
-            .trim();
-
     const textoPuro =
-        editorCapitulo.innerText
+        editorQuill
+            .getText()
             .replace(/\u00A0/g, " ")
             .trim();
+
+    const html =
+        editorQuill.getSemanticHTML();
 
     textoCapitulo.value =
         textoPuro
@@ -1883,121 +1903,67 @@ function sincronizarEditorCapitulo() {
 
 
 // ==============================
-// EXECUTAR COMANDO DO EDITOR
+// PREENCHER O EDITOR
 // ==============================
 
-function executarComandoEditor(
-    comando,
-    valor = null
+function preencherEditorCapitulo(
+    conteudo = ""
 ) {
-    if (!editorCapitulo) {
+    if (!editorQuill) {
+        if (textoCapitulo) {
+            textoCapitulo.value =
+                conteudo;
+        }
+
         return;
     }
 
-    editorCapitulo.focus();
+    editorQuill.setText("");
 
-    document.execCommand(
-        comando,
-        false,
-        valor
-    );
-
-    sincronizarEditorCapitulo();
-}
-
-
-// ==============================
-// FORMATAR BLOCO
-// ==============================
-
-function formatarBlocoEditor(
-    elemento
-) {
-    if (!editorCapitulo) {
-        return;
-    }
-
-    editorCapitulo.focus();
-
-    document.execCommand(
-        "formatBlock",
-        false,
-        elemento
-    );
-
-    sincronizarEditorCapitulo();
-}
-
-
-// ==============================
-// BOTÕES DA BARRA
-// ==============================
-
-document
-    .querySelectorAll(
-        ".botao-editor[data-comando]"
-    )
-    .forEach((botao) => {
-        botao.addEventListener(
-            "mousedown",
-            (evento) => {
-                evento.preventDefault();
-
-                executarComandoEditor(
-                    botao.dataset.comando
-                );
-            }
-        );
-    });
-
-
-document
-    .querySelectorAll(
-        ".botao-editor[data-bloco]"
-    )
-    .forEach((botao) => {
-        botao.addEventListener(
-            "mousedown",
-            (evento) => {
-                evento.preventDefault();
-
-                formatarBlocoEditor(
-                    botao.dataset.bloco
-                );
-            }
-        );
-    });
-
-
-// ==============================
-// ATUALIZAR CONTADORES
-// ==============================
-
-if (editorCapitulo) {
-    editorCapitulo.addEventListener(
-        "input",
-        sincronizarEditorCapitulo
-    );
-
-    editorCapitulo.addEventListener(
-        "blur",
-        sincronizarEditorCapitulo
-    );
-
-    editorCapitulo.addEventListener(
-        "paste",
-        () => {
-            setTimeout(
-                sincronizarEditorCapitulo,
-                0
+    if (conteudo) {
+        editorQuill.clipboard
+            .dangerouslyPasteHTML(
+                conteudo
             );
+    }
+
+    sincronizarEditorCapitulo();
+}
+
+
+// ==============================
+// LIMPAR O EDITOR
+// ==============================
+
+function limparEditorCapitulo() {
+    if (editorQuill) {
+        editorQuill.setText("");
+    }
+
+    if (textoCapitulo) {
+        textoCapitulo.value = "";
+    }
+
+    sincronizarEditorCapitulo();
+}
+
+
+// ==============================
+// ATUALIZAR EM TEMPO REAL
+// ==============================
+
+if (editorQuill) {
+    editorQuill.on(
+        "text-change",
+        () => {
+            sincronizarEditorCapitulo();
         }
     );
 }
 
 
 // ==============================
-// LIMPAR EDITOR AO REDEFINIR
+// LIMPAR AO REDEFINIR FORMULÁRIO
 // ==============================
 
 const formularioCapituloEditor =
@@ -2010,19 +1976,7 @@ if (formularioCapituloEditor) {
         "reset",
         () => {
             setTimeout(
-                () => {
-                    if (editorCapitulo) {
-                        editorCapitulo.innerHTML =
-                            "";
-                    }
-
-                    if (textoCapitulo) {
-                        textoCapitulo.value =
-                            "";
-                    }
-
-                    sincronizarEditorCapitulo();
-                },
+                limparEditorCapitulo,
                 0
             );
         }
@@ -2031,7 +1985,7 @@ if (formularioCapituloEditor) {
 
 
 // ==============================
-// INICIAR EDITOR
+// INICIAR CONTADORES
 // ==============================
 
 sincronizarEditorCapitulo();
