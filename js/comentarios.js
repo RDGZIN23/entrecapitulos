@@ -43,7 +43,8 @@ const parametros =
 const capituloId =
   parametros.get("id");
 
-let usuarioAtual = null;
+let usuarioAtual =
+  null;
 
 
 // ========================================
@@ -67,38 +68,7 @@ const quantidadeComentarios =
 
 
 // ========================================
-// FORMATAR DATA
-// ========================================
-
-function formatarData(data) {
-  if (!data) {
-    return "Agora";
-  }
-
-  try {
-    const dataConvertida =
-      typeof data.toDate === "function"
-        ? data.toDate()
-        : new Date(data);
-
-    return dataConvertida
-      .toLocaleDateString(
-        "pt-BR",
-        {
-          day: "2-digit",
-          month: "long",
-          year: "numeric"
-        }
-      );
-
-  } catch (erro) {
-    return "Data não disponível";
-  }
-}
-
-
-// ========================================
-// OBTER MILISSEGUNDOS
+// FUNÇÕES AUXILIARES
 // ========================================
 
 function obterMilissegundos(data) {
@@ -117,20 +87,49 @@ function obterMilissegundos(data) {
     return data.seconds * 1000;
   }
 
-  const convertida =
+  const dataConvertida =
     new Date(data);
 
   return Number.isNaN(
-    convertida.getTime()
+    dataConvertida.getTime()
   )
     ? 0
-    : convertida.getTime();
+    : dataConvertida.getTime();
 }
 
 
-// ========================================
-// OBTER INICIAIS
-// ========================================
+function formatarData(data) {
+  if (!data) {
+    return "Agora";
+  }
+
+  try {
+    const dataConvertida =
+      typeof data.toDate ===
+      "function"
+        ? data.toDate()
+        : new Date(data);
+
+    return dataConvertida
+      .toLocaleDateString(
+        "pt-BR",
+        {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao formatar data:",
+      erro
+    );
+
+    return "Data não disponível";
+  }
+}
+
 
 function obterIniciais(
   nome = "Leitor"
@@ -152,11 +151,62 @@ function obterIniciais(
   }
 
   return (
-    partes[0][0] +
+    partes[0].charAt(0) +
     partes[
       partes.length - 1
-    ][0]
+    ].charAt(0)
   ).toUpperCase();
+}
+
+
+function atualizarQuantidade(
+  total
+) {
+  if (!quantidadeComentarios) {
+    return;
+  }
+
+  quantidadeComentarios.textContent =
+    total === 1
+      ? "1 comentário"
+      : `${total} comentários`;
+}
+
+
+function mostrarListaVazia() {
+  if (!listaComentarios) {
+    return;
+  }
+
+  listaComentarios.innerHTML = `
+    <div class="sem-comentarios">
+      Ainda não há comentários neste capítulo.
+      Seja a primeira pessoa a comentar.
+    </div>
+  `;
+
+  atualizarQuantidade(0);
+}
+
+
+function mostrarMensagemFormulario(
+  texto,
+  tipo = ""
+) {
+  const mensagem =
+    document.getElementById(
+      "mensagemComentario"
+    );
+
+  if (!mensagem) {
+    return;
+  }
+
+  mensagem.textContent =
+    texto;
+
+  mensagem.className =
+    `mensagem-comentario ${tipo}`;
 }
 
 
@@ -214,69 +264,6 @@ async function obterNomeUsuario(
       ?.split("@")[0] ||
     "Leitor"
   );
-}
-
-
-// ========================================
-// ATUALIZAR QUANTIDADE
-// ========================================
-
-function atualizarQuantidade(
-  total
-) {
-  if (!quantidadeComentarios) {
-    return;
-  }
-
-  quantidadeComentarios.textContent =
-    total === 1
-      ? "1 comentário"
-      : `${total} comentários`;
-}
-
-
-// ========================================
-// MOSTRAR LISTA VAZIA
-// ========================================
-
-function mostrarListaVazia() {
-  if (!listaComentarios) {
-    return;
-  }
-
-  listaComentarios.innerHTML = `
-    <div class="sem-comentarios">
-      Ainda não há comentários neste capítulo.
-      Seja a primeira pessoa a comentar.
-    </div>
-  `;
-
-  atualizarQuantidade(0);
-}
-
-
-// ========================================
-// MOSTRAR MENSAGEM DO FORMULÁRIO
-// ========================================
-
-function mostrarMensagemFormulario(
-  texto,
-  tipo = ""
-) {
-  const elemento =
-    document.getElementById(
-      "mensagemComentario"
-    );
-
-  if (!elemento) {
-    return;
-  }
-
-  elemento.textContent =
-    texto;
-
-  elemento.className =
-    `mensagem-comentario ${tipo}`;
 }
 
 
@@ -377,7 +364,15 @@ function configurarFormularioComentario() {
       "contadorComentario"
     );
 
-  if (!formulario || !campo) {
+  const botaoPublicar =
+    document.getElementById(
+      "botaoPublicarComentario"
+    );
+
+  if (
+    !formulario ||
+    !campo
+  ) {
     return;
   }
 
@@ -388,6 +383,10 @@ function configurarFormularioComentario() {
         contador.textContent =
           `${campo.value.length}/${LIMITE_COMENTARIO}`;
       }
+
+      mostrarMensagemFormulario(
+        ""
+      );
     }
   );
 
@@ -398,11 +397,6 @@ function configurarFormularioComentario() {
 
       const comentario =
         campo.value.trim();
-
-      const botaoPublicar =
-        document.getElementById(
-          "botaoPublicarComentario"
-        );
 
       if (!usuarioAtual) {
         mostrarMensagemFormulario(
@@ -480,7 +474,7 @@ function configurarFormularioComentario() {
           }
         );
 
-        campo.value = "";
+        formulario.reset();
 
         if (contador) {
           contador.textContent =
@@ -501,7 +495,7 @@ function configurarFormularioComentario() {
         );
 
         mostrarMensagemFormulario(
-          "Não foi possível publicar o comentário. Verifique as regras do Firebase.",
+          "Não foi possível publicar o comentário.",
           "erro"
         );
 
@@ -518,13 +512,15 @@ function configurarFormularioComentario() {
   );
 }
 
+
 // ========================================
 // EDITAR COMENTÁRIO
 // ========================================
 
 async function editarComentario(
   comentario,
-  textoElemento,
+  elementoTexto,
+  elementoData,
   botaoEditar
 ) {
   if (
@@ -567,7 +563,9 @@ async function editarComentario(
     return;
   }
 
-  botaoEditar.disabled = true;
+  botaoEditar.disabled =
+    true;
+
   botaoEditar.textContent =
     "Salvando...";
 
@@ -590,11 +588,13 @@ async function editarComentario(
     comentario.comentario =
       textoLimpo;
 
-    textoElemento.textContent =
+    elementoTexto.textContent =
       textoLimpo;
 
-    botaoEditar.textContent =
-      "Editar";
+    if (elementoData) {
+      elementoData.textContent =
+        "Editado agora";
+    }
 
   } catch (erro) {
     console.error(
@@ -606,12 +606,12 @@ async function editarComentario(
       "Não foi possível editar o comentário."
     );
 
-    botaoEditar.textContent =
-      "Editar";
-
   } finally {
     botaoEditar.disabled =
       false;
+
+    botaoEditar.textContent =
+      "Editar";
   }
 }
 
@@ -696,6 +696,7 @@ async function excluirComentario(
   }
 }
 
+
 // ========================================
 // CRIAR CARTÃO DO COMENTÁRIO
 // ========================================
@@ -711,6 +712,9 @@ function criarCartaoComentario(
   cartao.className =
     "cartao-comentario";
 
+
+  // Cabeçalho principal
+
   const cabecalho =
     document.createElement(
       "div"
@@ -718,6 +722,9 @@ function criarCartaoComentario(
 
   cabecalho.className =
     "cabecalho-cartao-comentario";
+
+
+  // Dados do autor
 
   const dadosAutor =
     document.createElement(
@@ -745,6 +752,9 @@ function criarCartaoComentario(
     document.createElement(
       "div"
     );
+
+  informacoes.className =
+    "informacoes-autor-comentario";
 
   const nome =
     document.createElement(
@@ -785,6 +795,9 @@ function criarCartaoComentario(
     dadosAutor
   );
 
+
+  // Texto do comentário
+
   const texto =
     document.createElement(
       "p"
@@ -797,51 +810,66 @@ function criarCartaoComentario(
     comentario.comentario ||
     "";
 
-  const podeExcluir =
-    usuarioAtual &&
-    (
-      usuarioAtual.uid ===
-        comentario.usuarioId ||
-      usuarioAtual.uid ===
-        ADMIN_UID
+
+  // Área dos botões
+
+  const areaAcoes =
+    document.createElement(
+      "div"
     );
 
-  if (podeExcluir) {
+  areaAcoes.className =
+    "acoes-comentario";
 
-    if (
-      usuarioAtual.uid ===
-      comentario.usuarioId
-    ) {
-      const botaoEditar =
-        document.createElement(
-          "button"
+  const eDono =
+    usuarioAtual &&
+    usuarioAtual.uid ===
+      comentario.usuarioId;
+
+  const eAdmin =
+    usuarioAtual &&
+    usuarioAtual.uid ===
+      ADMIN_UID;
+
+
+  // Botão Editar
+
+  if (eDono) {
+    const botaoEditar =
+      document.createElement(
+        "button"
+      );
+
+    botaoEditar.type =
+      "button";
+
+    botaoEditar.className =
+      "botao-editar-comentario";
+
+    botaoEditar.textContent =
+      "Editar";
+
+    botaoEditar.addEventListener(
+      "click",
+      () => {
+        editarComentario(
+          comentario,
+          texto,
+          data,
+          botaoEditar
         );
+      }
+    );
 
-      botaoEditar.type =
-        "button";
+    areaAcoes.appendChild(
+      botaoEditar
+    );
+  }
 
-      botaoEditar.className =
-        "botao-editar-comentario";
 
-      botaoEditar.textContent =
-        "Editar";
+  // Botão Excluir
 
-      botaoEditar.addEventListener(
-        "click",
-        () => {
-          editarComentario(
-            comentario,
-            texto,
-            botaoEditar
-          );
-        }
-      );
-
-      cabecalho.appendChild(
-        botaoEditar
-      );
-    }
-
+  if (eDono || eAdmin) {
     const botaoExcluir =
       document.createElement(
         "button"
@@ -867,8 +895,16 @@ function criarCartaoComentario(
       }
     );
 
-    cabecalho.appendChild(
+    areaAcoes.appendChild(
       botaoExcluir
+    );
+  }
+
+  if (
+    areaAcoes.children.length > 0
+  ) {
+    cabecalho.appendChild(
+      areaAcoes
     );
   }
 
@@ -929,21 +965,19 @@ async function carregarComentarios() {
 
     if (resultado.empty) {
       mostrarListaVazia();
+
       return;
     }
 
-    const comentarios = [];
-
-    resultado.forEach(
-      (documentoComentario) => {
-        comentarios.push({
+    const comentarios =
+      resultado.docs.map(
+        (documentoComentario) => ({
           id:
             documentoComentario.id,
 
           ...documentoComentario.data()
-        });
-      }
-    );
+        })
+      );
 
     comentarios.sort(
       (a, b) =>
