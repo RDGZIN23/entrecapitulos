@@ -1297,6 +1297,424 @@ async function carregarLivros() {
 
 
 // ==============================
+// CARREGAR CAPÍTULOS NO PAINEL
+// ==============================
+
+async function carregarCapitulosPainel() {
+    const listaCapitulosPainel =
+        document.getElementById(
+            "listaCapitulosPainel"
+        );
+
+    if (!listaCapitulosPainel) {
+        return;
+    }
+
+    listaCapitulosPainel.innerHTML = `
+        <p>
+            Carregando capítulos...
+        </p>
+    `;
+
+    try {
+        const resultado =
+            await getDocs(
+                collection(
+                    db,
+                    "capitulos"
+                )
+            );
+
+        if (resultado.empty) {
+            listaCapitulosPainel.innerHTML = `
+                <p>
+                    Nenhum capítulo cadastrado ainda.
+                </p>
+            `;
+
+            return;
+        }
+
+        const capitulos = [];
+
+        resultado.forEach(
+            (documento) => {
+                capitulos.push({
+                    id: documento.id,
+                    ...documento.data()
+                });
+            }
+        );
+
+        capitulos.sort(
+            (a, b) => {
+                const dataA =
+                    obterMilissegundos(
+                        a.atualizadoEm ||
+                        a.criadoEm
+                    );
+
+                const dataB =
+                    obterMilissegundos(
+                        b.atualizadoEm ||
+                        b.criadoEm
+                    );
+
+                if (dataA !== dataB) {
+                    return dataB - dataA;
+                }
+
+                return (
+                    Number(a.numero) -
+                    Number(b.numero)
+                );
+            }
+        );
+
+        listaCapitulosPainel.innerHTML =
+            "";
+
+        capitulos.forEach(
+            (capitulo) => {
+                const capituloId =
+                    capitulo.id;
+
+                const numero =
+                    Number(
+                        capitulo.numero
+                    ) || 0;
+
+                const titulo =
+                    capitulo.titulo ||
+                    "Capítulo sem título";
+
+                const livroTitulo =
+                    capitulo.livroTitulo ||
+                    "Livro não informado";
+
+                const status =
+                    String(
+                        capitulo.status ||
+                        "rascunho"
+                    ).toLowerCase();
+
+                const quantidadePalavras =
+                    String(
+                        capitulo.texto || ""
+                    )
+                        .trim()
+                        .split(/\s+/)
+                        .filter(Boolean)
+                        .length;
+
+                const card =
+                    document.createElement(
+                        "article"
+                    );
+
+                card.className =
+                    "livro-painel-card";
+
+                card.innerHTML = `
+                    <div
+                        class="livro-painel-capa"
+                        style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-height: 120px;
+                            background:
+                                rgba(124, 77, 255, 0.12);
+                            color: #cbb7ff;
+                            font-size: 30px;
+                            font-weight: bold;
+                        "
+                    >
+                        ${String(numero)
+                            .padStart(2, "0")}
+                    </div>
+
+                    <div class="livro-painel-info">
+
+                        <span
+                            class="${
+                                status ===
+                                "publicado"
+                                    ? "status-publicado"
+                                    : "status-rascunho"
+                            }"
+                        >
+                            ${escaparHTML(
+                                status
+                            )}
+                        </span>
+
+                        <h2>
+                            ${escaparHTML(
+                                titulo
+                            )}
+                        </h2>
+
+                        <p>
+                            ${escaparHTML(
+                                livroTitulo
+                            )}
+                        </p>
+
+                        <small>
+                            Capítulo ${numero}
+                            •
+                            ${quantidadePalavras}
+                            ${
+                                quantidadePalavras ===
+                                1
+                                    ? "palavra"
+                                    : "palavras"
+                            }
+                        </small>
+
+                    </div>
+
+                    <div class="livro-painel-acoes">
+
+                        <a
+                            href="leitura.html?id=${capituloId}"
+                            class="botao-secundario"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Visualizar
+                        </a>
+
+                        <button
+                            type="button"
+                            class="botao-editar-capitulo"
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            type="button"
+                            class="botao-excluir"
+                        >
+                            Excluir
+                        </button>
+
+                    </div>
+                `;
+
+                const botaoEditar =
+                    card.querySelector(
+                        ".botao-editar-capitulo"
+                    );
+
+                if (botaoEditar) {
+                    botaoEditar.addEventListener(
+                        "click",
+                        () => {
+                            capituloEmEdicaoId =
+                                capituloId;
+
+                            const campoLivro =
+                                document.getElementById(
+                                    "livroCapitulo"
+                                );
+
+                            const campoNumero =
+                                document.getElementById(
+                                    "numeroCapitulo"
+                                );
+
+                            const campoTitulo =
+                                document.getElementById(
+                                    "tituloCapitulo"
+                                );
+
+                            const campoResumo =
+                                document.getElementById(
+                                    "resumoCapitulo"
+                                );
+
+                            const campoTexto =
+                                document.getElementById(
+                                    "textoCapitulo"
+                                );
+
+                            const campoStatus =
+                                document.getElementById(
+                                    "statusCapitulo"
+                                );
+
+                            if (campoLivro) {
+                                campoLivro.value =
+                                    capitulo.livroId ||
+                                    "";
+                            }
+
+                            if (campoNumero) {
+                                campoNumero.value =
+                                    String(numero);
+                            }
+
+                            if (campoTitulo) {
+                                campoTitulo.value =
+                                    titulo;
+                            }
+
+                            if (campoResumo) {
+                                campoResumo.value =
+                                    capitulo.resumo ||
+                                    "";
+                            }
+
+                            if (campoTexto) {
+                                campoTexto.value =
+                                    capitulo.texto ||
+                                    "";
+                            }
+
+                            if (campoStatus) {
+                                campoStatus.value =
+                                    status;
+                            }
+
+                            if (contador) {
+                                contador.textContent =
+                                    `${quantidadePalavras} ${
+                                        quantidadePalavras ===
+                                        1
+                                            ? "palavra"
+                                            : "palavras"
+                                    }`;
+                            }
+
+                            abrirSecao(
+                                "novoCapitulo"
+                            );
+
+                            const botaoSalvar =
+                                formCapitulo
+                                    ?.querySelector(
+                                        'button[type="submit"]'
+                                    );
+
+                            if (botaoSalvar) {
+                                botaoSalvar.textContent =
+                                    "Atualizar capítulo";
+                            }
+
+                            mostrarMensagem(
+                                "Modo de edição do capítulo ativado."
+                            );
+
+                            window.scrollTo({
+                                top: 0,
+                                behavior: "smooth"
+                            });
+                        }
+                    );
+                }
+
+                const botaoExcluir =
+                    card.querySelector(
+                        ".botao-excluir"
+                    );
+
+                if (botaoExcluir) {
+                    botaoExcluir.addEventListener(
+                        "click",
+                        async () => {
+                            const confirmar =
+                                window.confirm(
+                                    `Deseja excluir o capítulo ${numero} — "${titulo}"? Essa ação não pode ser desfeita.`
+                                );
+
+                            if (!confirmar) {
+                                return;
+                            }
+
+                            botaoExcluir.disabled =
+                                true;
+
+                            botaoExcluir.textContent =
+                                "Excluindo...";
+
+                            try {
+                                await deleteDoc(
+                                    doc(
+                                        db,
+                                        "capitulos",
+                                        capituloId
+                                    )
+                                );
+
+                                if (
+                                    capituloEmEdicaoId ===
+                                    capituloId
+                                ) {
+                                    capituloEmEdicaoId =
+                                        null;
+
+                                    formCapitulo
+                                        ?.reset();
+
+                                    if (contador) {
+                                        contador.textContent =
+                                            "0 palavras";
+                                    }
+                                }
+
+                                mostrarMensagem(
+                                    "Capítulo excluído com sucesso!"
+                                );
+
+                                await Promise.all([
+                                    carregarCapitulosPainel(),
+                                    carregarDadosPainel()
+                                ]);
+
+                            } catch (erro) {
+                                console.error(
+                                    "Erro ao excluir capítulo:",
+                                    erro
+                                );
+
+                                mostrarMensagem(
+                                    "Não foi possível excluir o capítulo.",
+                                    "erro"
+                                );
+
+                                botaoExcluir.disabled =
+                                    false;
+
+                                botaoExcluir.textContent =
+                                    "Excluir";
+                            }
+                        }
+                    );
+                }
+
+                listaCapitulosPainel
+                    .appendChild(card);
+            }
+        );
+
+    } catch (erro) {
+        console.error(
+            "Erro ao carregar capítulos no painel:",
+            erro
+        );
+
+        listaCapitulosPainel.innerHTML = `
+            <p>
+                Não foi possível carregar os capítulos.
+            </p>
+        `;
+    }
+}
+
+
+// ==============================
 // MENU DO PAINEL
 // ==============================
 
