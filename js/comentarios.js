@@ -696,7 +696,6 @@ async function excluirComentario(
   }
 }
 
-
 // ========================================
 // CRIAR CARTÃO DO COMENTÁRIO
 // ========================================
@@ -787,15 +786,221 @@ function criarCartaoComentario(
   );
 
   const texto =
-  document.createElement("p");
+    document.createElement(
+      "p"
+    );
 
-texto.className =
-  "texto-comentario";
+  texto.className =
+    "texto-comentario";
 
-texto.textContent =
-  comentario.comentario ||
-  "";
-  
+  texto.textContent =
+    comentario.comentario ||
+    "";
+
   const podeExcluir =
     usuarioAtual &&
     (
+      usuarioAtual.uid ===
+        comentario.usuarioId ||
+      usuarioAtual.uid ===
+        ADMIN_UID
+    );
+
+  if (podeExcluir) {
+
+    if (
+      usuarioAtual.uid ===
+      comentario.usuarioId
+    ) {
+      const botaoEditar =
+        document.createElement(
+          "button"
+        );
+
+      botaoEditar.type =
+        "button";
+
+      botaoEditar.className =
+        "botao-editar-comentario";
+
+      botaoEditar.textContent =
+        "Editar";
+
+      botaoEditar.addEventListener(
+        "click",
+        () => {
+          editarComentario(
+            comentario,
+            texto,
+            botaoEditar
+          );
+        }
+      );
+
+      cabecalho.appendChild(
+        botaoEditar
+      );
+    }
+
+    const botaoExcluir =
+      document.createElement(
+        "button"
+      );
+
+    botaoExcluir.type =
+      "button";
+
+    botaoExcluir.className =
+      "botao-excluir-comentario";
+
+    botaoExcluir.textContent =
+      "Excluir";
+
+    botaoExcluir.addEventListener(
+      "click",
+      () => {
+        excluirComentario(
+          comentario,
+          cartao,
+          botaoExcluir
+        );
+      }
+    );
+
+    cabecalho.appendChild(
+      botaoExcluir
+    );
+  }
+
+  cartao.append(
+    cabecalho,
+    texto
+  );
+
+  return cartao;
+}
+
+
+// ========================================
+// CARREGAR COMENTÁRIOS
+// ========================================
+
+async function carregarComentarios() {
+  if (!listaComentarios) {
+    return;
+  }
+
+  if (!capituloId) {
+    listaComentarios.innerHTML = `
+      <div class="sem-comentarios">
+        Não foi possível identificar este capítulo.
+      </div>
+    `;
+
+    atualizarQuantidade(0);
+
+    return;
+  }
+
+  listaComentarios.innerHTML = `
+    <div class="sem-comentarios">
+      Carregando comentários...
+    </div>
+  `;
+
+  try {
+    const consultaComentarios =
+      query(
+        collection(
+          db,
+          "comentarios"
+        ),
+        where(
+          "capituloId",
+          "==",
+          capituloId
+        )
+      );
+
+    const resultado =
+      await getDocs(
+        consultaComentarios
+      );
+
+    if (resultado.empty) {
+      mostrarListaVazia();
+      return;
+    }
+
+    const comentarios = [];
+
+    resultado.forEach(
+      (documentoComentario) => {
+        comentarios.push({
+          id:
+            documentoComentario.id,
+
+          ...documentoComentario.data()
+        });
+      }
+    );
+
+    comentarios.sort(
+      (a, b) =>
+        obterMilissegundos(
+          b.criadoEm
+        ) -
+        obterMilissegundos(
+          a.criadoEm
+        )
+    );
+
+    listaComentarios.innerHTML =
+      "";
+
+    comentarios.forEach(
+      (comentario) => {
+        listaComentarios.appendChild(
+          criarCartaoComentario(
+            comentario
+          )
+        );
+      }
+    );
+
+    atualizarQuantidade(
+      comentarios.length
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar comentários:",
+      erro
+    );
+
+    listaComentarios.innerHTML = `
+      <div class="sem-comentarios">
+        Não foi possível carregar os comentários.
+      </div>
+    `;
+
+    atualizarQuantidade(0);
+  }
+}
+
+
+// ========================================
+// VERIFICAR LOGIN E INICIAR
+// ========================================
+
+onAuthStateChanged(
+  auth,
+  async (usuario) => {
+    usuarioAtual =
+      usuario || null;
+
+    montarFormularioComentario();
+
+    await carregarComentarios();
+  }
+);
