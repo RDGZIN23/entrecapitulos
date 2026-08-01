@@ -8,13 +8,15 @@ import {
 } from "./firebase-config.js";
 
 import {
-  onAuthStateChanged
+  onAuthStateChanged,
+  signInAnonymously
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
   arrayUnion,
   collection,
   doc,
+  getCountFromServer,
   getDoc,
   getDocs,
   query,
@@ -66,6 +68,7 @@ const proximoCapitulo =
     "proximoCapitulo"
   );
 
+let totalVisualizacoesAtual = 0;
 
 // ========================================
 // MOSTRAR MENSAGEM DE ERRO
@@ -592,6 +595,222 @@ async function salvarProgressoLeitura(
   }
 }
 
+
+// ========================================
+// GARANTIR IDENTIFICAÇÃO DO VISITANTE
+// ========================================
+
+async function garantirUsuarioVisualizacao() {
+  if (auth.currentUser) {
+    return auth.currentUser;
+  }
+
+  try {
+    const resultado =
+      await signInAnonymously(auth);
+
+    return resultado.user;
+
+  } catch (erro) {
+    console.error(
+      "Erro ao identificar visitante:",
+      erro
+    );
+
+    return null;
+  }
+}
+
+
+// ========================================
+// MOSTRAR TOTAL DE VISUALIZAÇÕES
+// ========================================
+
+function mostrarTotalVisualizacoes(
+  quantidade
+) {
+  totalVisualizacoesAtual =
+    Math.max(
+      0,
+      Number(quantidade) || 0
+    );
+
+  let elemento =
+    document.getElementById(
+      "visualizacoesCapitulo"
+    );
+
+  if (!elemento) {
+    elemento =
+      document.createElement(
+        "p"
+      );
+
+    elemento.id =
+      "visualizacoesCapitulo";
+
+    elemento.className =
+      "visualizacoes-capitulo";
+
+    const cabecalho =
+      document.querySelector(
+        ".cabecalho-leitura"
+      );
+
+    const linha =
+      cabecalho?.querySelector(
+        ".linha-leitura"
+      );
+
+    if (cabecalho && linha) {
+      cabecalho.insertBefore(
+        elemento,
+        linha
+      );
+    }
+  }
+
+  if (!elemento) {
+    return;
+  }
+
+  elemento.textContent =
+    totalVisualizacoesAtual === 1
+      ? "👁️ 1 visualização"
+      : `👁️ ${totalVisualizacoesAtual} visualizações`;
+}
+
+
+// ========================================
+// BUSCAR TOTAL DE VISUALIZAÇÕES
+// ========================================
+
+async function carregarTotalVisualizacoes() {
+  if (!capituloId) {
+    mostrarTotalVisualizacoes(0);
+    return;
+  }
+
+  try {
+    const consultaVisualizacoes =
+      query(
+        collection(
+          db,
+          "visualizacoesCapitulos"
+        ),
+        where(
+          "capituloId",
+          "==",
+          capituloId
+        )
+      );
+
+    const resultado =
+      await getCountFromServer(
+        consultaVisualizacoes
+      );
+
+    mostrarTotalVisualizacoes(
+      resultado.data().count
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao contar visualizações:",
+      erro
+    );
+
+    mostrarTotalVisualizacoes(0);
+  }
+}
+
+
+// ========================================
+// REGISTRAR VISUALIZAÇÃO ÚNICA
+// ========================================
+
+async function registrarVisualizacao({
+  livroId,
+  capituloNumero,
+  capituloTitulo
+}) {
+  if (!capituloId) {
+    return;
+  }
+
+  try {
+    const usuario =
+      await garantirUsuarioVisualizacao();
+
+    if (!usuario) {
+      await carregarTotalVisualizacoes();
+      return;
+    }
+
+    /*
+      O ID combina capítulo e usuário.
+      Assim, cada conta ou visitante
+      anônimo gera somente uma visualização.
+    */
+
+    const visualizacaoId =
+      `${capituloId}_${usuario.uid}`;
+
+    const referenciaVisualizacao =
+      doc(
+        db,
+        "visualizacoesCapitulos",
+        visualizacaoId
+      );
+
+    const visualizacaoExistente =
+      await getDoc(
+        referenciaVisualizacao
+      );
+
+    if (!visualizacaoExistente.exists()) {
+      await setDoc(
+        referenciaVisualizacao,
+        {
+          usuarioId:
+            usuario.uid,
+
+          usuarioAnonimo:
+            usuario.isAnonymous === true,
+
+          livroId:
+            livroId || "",
+
+          capituloId,
+
+          capituloNumero:
+            Number(
+              capituloNumero
+            ) || 0,
+
+          capituloTitulo:
+            capituloTitulo ||
+            "Capítulo",
+
+          criadoEm:
+            serverTimestamp()
+        }
+      );
+    }
+
+    await carregarTotalVisualizacoes();
+
+  } catch (erro) {
+    console.error(
+      "Erro ao registrar visualização:",
+      erro
+    );
+
+    await carregarTotalVisualizacoes();
+  }
+}
+
+
 // ========================================
 // CARREGAR CAPÍTULOS DO MESMO LIVRO
 // ========================================
@@ -905,6 +1124,17 @@ async function carregarCapitulo() {
       capituloTitulo:
         titulo
     });
+
+await registrarVisualizacao({
+  livroId:
+    capitulo.livroId,
+
+  capituloNumero:
+    numero,
+
+  capituloTitulo:
+    titulo
+});
 
     if (capitulo.livroId) {
       await carregarNavegacao(
