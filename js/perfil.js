@@ -96,7 +96,11 @@ const capaPadrao =
   "images/depois-de-te-odiar.png";
 
 let quantidadeFavoritosAtual = 0;
-
+let progressosFirebase = [];
+let ultimoProgressoAtual = null;
+let quantidadeCapitulosAtual = 0;
+let quantidadeLivrosAtual = 0;
+let quantidadeConcluidosAtual = 0;
 
 // ========================================
 // FUNÇÕES AUXILIARES
@@ -369,53 +373,10 @@ function atualizarNivelLeitor(
 
 
 // ========================================
-// LIVROS CONCLUÍDOS
+// PROGRESSO LOCAL COMO ALTERNATIVA
 // ========================================
 
-function calcularLivrosConcluidos(
-  capitulosLidos,
-  livrosIniciados
-) {
-  const livrosMarcados =
-    lerListaLocal("livrosConcluidos");
-
-  if (livrosMarcados.length > 0) {
-    return removerDuplicados(
-      livrosMarcados.map(
-        obterIdLivro
-      )
-    ).length;
-  }
-
-  const progresso =
-    lerValorLocal(
-      "ultimoCapituloLido",
-      null
-    );
-
-  if (
-    progresso &&
-    Number(progresso.porcentagem) >= 100
-  ) {
-    return 1;
-  }
-
-  if (
-    capitulosLidos.length > 0 &&
-    livrosIniciados.length === 1
-  ) {
-    return 0;
-  }
-
-  return 0;
-}
-
-
-// ========================================
-// ESTATÍSTICAS LOCAIS
-// ========================================
-
-function carregarEstatisticasLocais() {
+function obterProgressoLocal() {
   const capitulosLidos =
     removerDuplicados(
       lerListaLocal(
@@ -440,36 +401,363 @@ function carregarEstatisticasLocais() {
       ).map(obterIdLivro)
     );
 
-  const livrosConcluidos =
-    calcularLivrosConcluidos(
-      capitulosLidos,
-      livrosIniciados
+  const ultimoProgresso =
+    lerValorLocal(
+      "ultimoCapituloLido",
+      null
+    );
+
+  return {
+    capitulosLidos,
+    livrosIniciados,
+    ultimoProgresso
+  };
+}
+
+
+// ========================================
+// CONVERTER DATA DO FIREBASE
+// ========================================
+
+function obterTempoFirebase(data) {
+  if (!data) {
+    return 0;
+  }
+
+  if (
+    typeof data.toMillis ===
+    "function"
+  ) {
+    return data.toMillis();
+  }
+
+  if (data.seconds) {
+    return data.seconds * 1000;
+  }
+
+  const convertida =
+    new Date(data);
+
+  return Number.isNaN(
+    convertida.getTime()
+  )
+    ? 0
+    : convertida.getTime();
+}
+
+
+// ========================================
+// ATUALIZAR ESTATÍSTICAS VISUAIS
+// ========================================
+
+function atualizarEstatisticasPerfil({
+  capitulos,
+  livros,
+  concluidos
+}) {
+  quantidadeCapitulosAtual =
+    Math.max(
+      0,
+      Number(capitulos) || 0
+    );
+
+  quantidadeLivrosAtual =
+    Math.max(
+      0,
+      Number(livros) || 0
+    );
+
+  quantidadeConcluidosAtual =
+    Math.max(
+      0,
+      Number(concluidos) || 0
     );
 
   if (totalCapitulos) {
     totalCapitulos.textContent =
-      String(capitulosLidos.length);
+      String(
+        quantidadeCapitulosAtual
+      );
   }
 
   if (totalLivros) {
     totalLivros.textContent =
-      String(livrosIniciados.length);
+      String(
+        quantidadeLivrosAtual
+      );
   }
 
   if (totalConcluidos) {
     totalConcluidos.textContent =
-      String(livrosConcluidos);
+      String(
+        quantidadeConcluidosAtual
+      );
   }
 
   atualizarNivelLeitor(
-    capitulosLidos.length
+    quantidadeCapitulosAtual
   );
 
   atualizarConquistas(
-    capitulosLidos.length,
+    quantidadeCapitulosAtual,
     quantidadeFavoritosAtual
   );
 }
+
+
+// ========================================
+// VERIFICAR LIVRO CONCLUÍDO
+// ========================================
+
+async function verificarLivroConcluido(
+  progresso
+) {
+  if (!progresso?.livroId) {
+    return false;
+  }
+
+  try {
+    const consultaCapitulos =
+      query(
+        collection(
+          db,
+          "capitulos"
+        ),
+        where(
+          "livroId",
+          "==",
+          progresso.livroId
+        ),
+        where(
+          "status",
+          "==",
+          "publicado"
+        )
+      );
+
+    const resultadoCapitulos =
+      await getDocs(
+        consultaCapitulos
+      );
+
+    const idsPublicados =
+      resultadoCapitulos.docs.map(
+        (documento) =>
+          documento.id
+      );
+
+    if (idsPublicados.length === 0) {
+      return false;
+    }
+
+    const capitulosLidos =
+      Array.isArray(
+        progresso.capitulosLidos
+      )
+        ? progresso.capitulosLidos
+        : [];
+
+    return idsPublicados.every(
+      (id) =>
+        capitulosLidos.includes(id)
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao verificar livro concluído:",
+      erro
+    );
+
+    return false;
+  }
+}
+
+
+// ========================================
+// SALVAR CÓPIA LOCAL DO FIREBASE
+// ========================================
+
+function atualizarProgressoLocal(
+  progresso
+) {
+  if (
+    !progresso ||
+    !progresso.ultimoCapituloId
+  ) {
+    return;
+  }
+
+  const dadosLocais = {
+    livroId:
+      progresso.livroId,
+
+    livroTitulo:
+      progresso.livroTitulo ||
+      "Livro",
+
+    capa:
+      progresso.capa || "",
+
+    capituloId:
+      progresso.ultimoCapituloId,
+
+    numero:
+      progresso.ultimoCapituloNumero ||
+      0,
+
+    capituloTitulo:
+      progresso.ultimoCapituloTitulo ||
+      "Capítulo",
+
+    atualizadoEm:
+      new Date(
+        obterTempoFirebase(
+          progresso.atualizadoEm
+        ) || Date.now()
+      ).toISOString()
+  };
+
+  localStorage.setItem(
+    "ultimoCapituloLido",
+    JSON.stringify(dadosLocais)
+  );
+}
+
+
+// ========================================
+// CARREGAR PROGRESSO DO FIREBASE
+// ========================================
+
+async function carregarProgressoFirebase(
+  usuarioId
+) {
+  if (!usuarioId) {
+    return false;
+  }
+
+  try {
+    const consultaProgresso =
+      query(
+        collection(
+          db,
+          "progressoLeitura"
+        ),
+        where(
+          "usuarioId",
+          "==",
+          usuarioId
+        )
+      );
+
+    const resultado =
+      await getDocs(
+        consultaProgresso
+      );
+
+    if (resultado.empty) {
+      progressosFirebase = [];
+      ultimoProgressoAtual = null;
+
+      return false;
+    }
+
+    progressosFirebase =
+      resultado.docs.map(
+        (documento) => ({
+          id: documento.id,
+          ...documento.data()
+        })
+      );
+
+    progressosFirebase.sort(
+      (a, b) =>
+        obterTempoFirebase(
+          b.atualizadoEm
+        ) -
+        obterTempoFirebase(
+          a.atualizadoEm
+        )
+    );
+
+    ultimoProgressoAtual =
+      progressosFirebase[0] ||
+      null;
+
+    if (ultimoProgressoAtual) {
+      atualizarProgressoLocal(
+        ultimoProgressoAtual
+      );
+    }
+
+    const idsCapitulosLidos =
+      removerDuplicados(
+        progressosFirebase.flatMap(
+          (progresso) =>
+            Array.isArray(
+              progresso.capitulosLidos
+            )
+              ? progresso.capitulosLidos
+              : []
+        )
+      );
+
+    const resultadosConcluidos =
+      await Promise.all(
+        progressosFirebase.map(
+          verificarLivroConcluido
+        )
+      );
+
+    const livrosConcluidos =
+      resultadosConcluidos.filter(
+        Boolean
+      ).length;
+
+    atualizarEstatisticasPerfil({
+      capitulos:
+        idsCapitulosLidos.length,
+
+      livros:
+        progressosFirebase.length,
+
+      concluidos:
+        livrosConcluidos
+    });
+
+    return true;
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar progresso do Firebase:",
+      erro
+    );
+
+    return false;
+  }
+}
+
+
+// ========================================
+// CARREGAR ESTATÍSTICAS LOCAIS
+// ========================================
+
+function carregarEstatisticasLocais() {
+  const local =
+    obterProgressoLocal();
+
+  atualizarEstatisticasPerfil({
+    capitulos:
+      local.capitulosLidos.length,
+
+    livros:
+      local.livrosIniciados.length,
+
+    concluidos: 0
+  });
+
+  ultimoProgressoAtual =
+    local.ultimoProgresso;
+    }
 
 
 // ========================================
@@ -816,63 +1104,124 @@ async function carregarFavoritos(
 // CONTINUAR LENDO
 // ========================================
 
-function carregarContinueLendo() {
+function carregarContinueLendo(
+  progressoRecebido = null
+) {
   if (!areaContinueLendo) {
     return;
   }
 
-  const progresso =
+  const progressoFirebase =
+    progressoRecebido ||
+    ultimoProgressoAtual;
+
+  const progressoLocal =
     lerValorLocal(
       "ultimoCapituloLido",
       null
     );
 
+  const progresso =
+    progressoFirebase ||
+    progressoLocal;
+
+  const capituloIdAtual =
+    progresso?.ultimoCapituloId ||
+    progresso?.capituloId;
+
   if (
     !progresso ||
-    !progresso.capituloId
+    !capituloIdAtual
   ) {
-    areaContinueLendo.textContent =
-      "Você ainda não começou nenhuma leitura.";
+    areaContinueLendo.innerHTML = `
+      <div class="cartao-vazio">
+        Você ainda não começou nenhuma leitura.
+      </div>
+    `;
 
     return;
   }
 
+  const livroTitulo =
+    progresso.livroTitulo ||
+    "Livro";
+
+  const numeroAtual =
+    progresso.ultimoCapituloNumero ??
+    progresso.numero ??
+    0;
+
+  const tituloAtual =
+    progresso.ultimoCapituloTitulo ||
+    progresso.capituloTitulo ||
+    "Capítulo";
+
+  const capaAtual =
+    progresso.capa ||
+    capaPadrao;
+
   areaContinueLendo.innerHTML = "";
+
+  const cartao =
+    document.createElement(
+      "article"
+    );
+
+  cartao.className =
+    "cartao-continuar-perfil";
+
+  const imagem =
+    document.createElement(
+      "img"
+    );
+
+  imagem.src =
+    capaAtual;
+
+  imagem.alt =
+    `Capa de ${livroTitulo}`;
+
+  imagem.className =
+    "capa-continuar-perfil";
+
+  imagem.addEventListener(
+    "error",
+    () => {
+      imagem.src =
+        capaPadrao;
+    },
+    { once: true }
+  );
+
+  const conteudo =
+    document.createElement(
+      "div"
+    );
+
+  conteudo.className =
+    "conteudo-continuar-perfil";
 
   const tituloLivro =
     document.createElement("h3");
 
   tituloLivro.textContent =
-    progresso.livroTitulo ||
-    "Livro";
-
-  tituloLivro.style.margin =
-    "0 0 8px";
+    livroTitulo;
 
   const capitulo =
     document.createElement("p");
 
-  const numero =
-    progresso.numero
-      ? `Capítulo ${progresso.numero}`
-      : "Capítulo";
-
-  const titulo =
-    progresso.capituloTitulo
-      ? ` • ${progresso.capituloTitulo}`
-      : "";
-
   capitulo.textContent =
-    `${numero}${titulo}`;
-
-  capitulo.style.margin =
-    "0 0 16px";
+    `${
+      numeroAtual
+        ? `Capítulo ${numeroAtual}`
+        : "Capítulo"
+    } • ${tituloAtual}`;
 
   const botao =
     document.createElement("a");
 
   botao.href =
-    `leitura.html?id=${progresso.capituloId}`;
+    `leitura.html?id=${capituloIdAtual}`;
 
   botao.className =
     "acao-perfil";
@@ -880,10 +1229,19 @@ function carregarContinueLendo() {
   botao.textContent =
     "📖 Continuar leitura";
 
-  areaContinueLendo.append(
+  conteudo.append(
     tituloLivro,
     capitulo,
     botao
+  );
+
+  cartao.append(
+    imagem,
+    conteudo
+  );
+
+  areaContinueLendo.appendChild(
+    cartao
   );
 }
 
@@ -937,12 +1295,21 @@ async function carregarPerfil(usuario) {
     }
 
     await carregarFavoritos(
-      usuario.uid
-    );
+  usuario.uid
+);
 
-    carregarEstatisticasLocais();
+const progressoFirebaseCarregado =
+  await carregarProgressoFirebase(
+    usuario.uid
+  );
 
-    carregarContinueLendo();
+if (!progressoFirebaseCarregado) {
+  carregarEstatisticasLocais();
+}
+
+carregarContinueLendo(
+  ultimoProgressoAtual
+);
 
     if (mensagemCarregando) {
       mensagemCarregando.hidden =
