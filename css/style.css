@@ -1031,3 +1031,199 @@ pointer-events:none;
         font-size: 23px;
     }
 }
+
+/* ========================================
+   VISUAL CORRIGIDO DOS COMENTÁRIOS
+======================================== */
+
+.secao-comentarios .lista-comentarios {
+  display: grid;
+  gap: 14px;
+}
+
+.secao-comentarios .cartao-comentario {
+  width: 100%;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  overflow: hidden;
+}
+
+.secao-comentarios
+.cabecalho-cartao-comentario {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.secao-comentarios
+.dados-autor-comentario {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.secao-comentarios
+.avatar-comentario {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.2);
+  color: #d6c7ff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.secao-comentarios
+.informacoes-autor-comentario {
+  flex: 1;
+  min-width: 0;
+}
+
+.secao-comentarios
+.nome-autor-comentario {
+  display: block;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.secao-comentarios
+.data-comentario {
+  display: block;
+  margin-top: 4px;
+  color: #898995;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.secao-comentarios
+.acoes-comentario {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.secao-comentarios
+.botao-editar-comentario,
+.secao-comentarios
+.botao-excluir-comentario {
+  min-width: 72px;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.secao-comentarios
+.botao-editar-comentario {
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.12);
+  color: #d0bfff;
+}
+
+.secao-comentarios
+.botao-excluir-comentario {
+  border: 1px solid rgba(239, 68, 68, 0.38);
+  background: rgba(239, 68, 68, 0.1);
+  color: #ff9da8;
+}
+
+.secao-comentarios
+.botao-editar-comentario:hover,
+.secao-comentarios
+.botao-excluir-comentario:hover {
+  transform: translateY(-1px);
+}
+
+.secao-comentarios
+.botao-editar-comentario:disabled,
+.secao-comentarios
+.botao-excluir-comentario:disabled {
+  cursor: wait;
+  opacity: 0.6;
+  transform: none;
+}
+
+.secao-comentarios
+.texto-comentario {
+  margin: 0;
+  padding-left: 56px;
+  color: #c7c7d0;
+  font-size: 15px;
+  line-height: 1.7;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* ========================================
+   COMENTÁRIOS NO CELULAR
+======================================== */
+
+@media (max-width: 600px) {
+  .secao-comentarios
+  .cabecalho-cartao-comentario {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr);
+    gap: 13px;
+  }
+
+  .secao-comentarios
+  .acoes-comentario {
+    width: 100%;
+    padding-left: 56px;
+    justify-content: flex-start;
+  }
+
+  .secao-comentarios
+  .texto-comentario {
+    padding-left: 56px;
+  }
+}
+
+@media (max-width: 420px) {
+  .secao-comentarios
+  .cartao-comentario {
+    padding: 15px;
+  }
+
+  .secao-comentarios
+  .acoes-comentario {
+    padding-left: 0;
+  }
+
+  .secao-comentarios
+  .texto-comentario {
+    padding-left: 0;
+  }
+
+  .secao-comentarios
+  .botao-editar-comentario,
+  .secao-comentarios
+  .botao-excluir-comentario {
+    flex: 1;
+  }
+}
