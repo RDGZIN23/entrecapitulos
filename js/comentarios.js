@@ -18,8 +18,9 @@ import {
   doc,
   getDoc,
   getDocs,
-  serverTimestamp,
   query,
+  serverTimestamp,
+  updateDoc,
   where
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
@@ -517,6 +518,103 @@ function configurarFormularioComentario() {
   );
 }
 
+// ========================================
+// EDITAR COMENTÁRIO
+// ========================================
+
+async function editarComentario(
+  comentario,
+  textoElemento,
+  botaoEditar
+) {
+  if (
+    !usuarioAtual ||
+    usuarioAtual.uid !==
+      comentario.usuarioId
+  ) {
+    return;
+  }
+
+  const novoTexto =
+    window.prompt(
+      "Edite seu comentário:",
+      comentario.comentario || ""
+    );
+
+  if (novoTexto === null) {
+    return;
+  }
+
+  const textoLimpo =
+    novoTexto.trim();
+
+  if (textoLimpo.length < 2) {
+    window.alert(
+      "O comentário precisa ter pelo menos 2 caracteres."
+    );
+
+    return;
+  }
+
+  if (
+    textoLimpo.length >
+    LIMITE_COMENTARIO
+  ) {
+    window.alert(
+      `O comentário deve ter no máximo ${LIMITE_COMENTARIO} caracteres.`
+    );
+
+    return;
+  }
+
+  botaoEditar.disabled = true;
+  botaoEditar.textContent =
+    "Salvando...";
+
+  try {
+    await updateDoc(
+      doc(
+        db,
+        "comentarios",
+        comentario.id
+      ),
+      {
+        comentario:
+          textoLimpo,
+
+        atualizadoEm:
+          serverTimestamp()
+      }
+    );
+
+    comentario.comentario =
+      textoLimpo;
+
+    textoElemento.textContent =
+      textoLimpo;
+
+    botaoEditar.textContent =
+      "Editar";
+
+  } catch (erro) {
+    console.error(
+      "Erro ao editar comentário:",
+      erro
+    );
+
+    window.alert(
+      "Não foi possível editar o comentário."
+    );
+
+    botaoEditar.textContent =
+      "Editar";
+
+  } finally {
+    botaoEditar.disabled =
+      false;
+  }
+}
+
 
 // ========================================
 // EXCLUIR COMENTÁRIO
@@ -688,185 +786,16 @@ function criarCartaoComentario(
     dadosAutor
   );
 
+  const texto =
+  document.createElement("p");
+
+texto.className =
+  "texto-comentario";
+
+texto.textContent =
+  comentario.comentario ||
+  "";
+  
   const podeExcluir =
     usuarioAtual &&
     (
-      usuarioAtual.uid ===
-        comentario.usuarioId ||
-      usuarioAtual.uid ===
-        ADMIN_UID
-    );
-
-  if (podeExcluir) {
-    const botaoExcluir =
-      document.createElement(
-        "button"
-      );
-
-    botaoExcluir.type =
-      "button";
-
-    botaoExcluir.className =
-      "botao-excluir-comentario";
-
-    botaoExcluir.textContent =
-      "Excluir";
-
-    botaoExcluir.addEventListener(
-      "click",
-      () => {
-        excluirComentario(
-          comentario,
-          cartao,
-          botaoExcluir
-        );
-      }
-    );
-
-    cabecalho.appendChild(
-      botaoExcluir
-    );
-  }
-
-  const texto =
-    document.createElement("p");
-
-  texto.className =
-    "texto-comentario";
-
-  texto.textContent =
-    comentario.comentario ||
-    "";
-
-  cartao.append(
-    cabecalho,
-    texto
-  );
-
-  return cartao;
-}
-
-
-// ========================================
-// CARREGAR COMENTÁRIOS
-// ========================================
-
-async function carregarComentarios() {
-  if (!listaComentarios) {
-    return;
-  }
-
-  if (!capituloId) {
-    listaComentarios.innerHTML = `
-      <div class="sem-comentarios">
-        Não foi possível identificar este capítulo.
-      </div>
-    `;
-
-    atualizarQuantidade(0);
-
-    return;
-  }
-
-  listaComentarios.innerHTML = `
-    <div class="sem-comentarios">
-      Carregando comentários...
-    </div>
-  `;
-
-  try {
-    const consultaComentarios =
-      query(
-        collection(
-          db,
-          "comentarios"
-        ),
-        where(
-          "capituloId",
-          "==",
-          capituloId
-        )
-      );
-
-    const resultado =
-      await getDocs(
-        consultaComentarios
-      );
-
-    if (resultado.empty) {
-      mostrarListaVazia();
-      return;
-    }
-
-    const comentarios = [];
-
-    resultado.forEach(
-      (documentoComentario) => {
-        comentarios.push({
-          id:
-            documentoComentario.id,
-
-          ...documentoComentario.data()
-        });
-      }
-    );
-
-    comentarios.sort(
-      (a, b) =>
-        obterMilissegundos(
-          b.criadoEm
-        ) -
-        obterMilissegundos(
-          a.criadoEm
-        )
-    );
-
-    listaComentarios.innerHTML =
-      "";
-
-    comentarios.forEach(
-      (comentario) => {
-        listaComentarios.appendChild(
-          criarCartaoComentario(
-            comentario
-          )
-        );
-      }
-    );
-
-    atualizarQuantidade(
-      comentarios.length
-    );
-
-  } catch (erro) {
-    console.error(
-      "Erro ao carregar comentários:",
-      erro
-    );
-
-    listaComentarios.innerHTML = `
-      <div class="sem-comentarios">
-        Não foi possível carregar os comentários.
-      </div>
-    `;
-
-    atualizarQuantidade(0);
-  }
-}
-
-
-// ========================================
-// VERIFICAR LOGIN E INICIAR
-// ========================================
-
-onAuthStateChanged(
-  auth,
-  async (usuario) => {
-    usuarioAtual =
-      usuario || null;
-
-    montarFormularioComentario();
-
-    await carregarComentarios();
-  }
-);
