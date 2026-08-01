@@ -1017,3 +1017,32 @@ body.painel-body {
         font-size: 16px;
     }
 }
+
+/* =========================================
+   ESTATÍSTICA DO CAPÍTULO MAIS LIDO
+========================================= */
+
+.estatistica-card-largo {
+    grid-column: span 2;
+}
+
+#capituloMaisLidoPainel {
+    display: -webkit-box;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 17px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+@media (max-width: 700px) {
+    .estatistica-card-largo {
+        grid-column: span 1;
+    }
+
+    #capituloMaisLidoPainel {
+        font-size: 15px;
+    }
+}
