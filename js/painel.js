@@ -52,7 +52,7 @@ let avaliacoesCarregadas = [];
 
 let livroEmEdicaoId = null;
 let capaAtualLivroEmEdicao = capaPadrao;
-
+let capituloEmEdicaoId = null;
 
 // ==============================
 // ELEMENTOS DAS ESTATÍSTICAS
@@ -1654,9 +1654,9 @@ if (formCapitulo) {
 
             const livroTitulo =
                 seletorLivro.options[
-                    seletorLivro
-                        .selectedIndex
-                ]?.textContent.trim();
+                    seletorLivro.selectedIndex
+                ]?.textContent.trim() ||
+                "Livro";
 
             const numero =
                 Number(
@@ -1722,43 +1722,68 @@ if (formCapitulo) {
                 return;
             }
 
-            botaoSalvar.disabled = true;
+            botaoSalvar.disabled =
+                true;
 
             botaoSalvar.textContent =
-                "Salvando capítulo...";
+                capituloEmEdicaoId
+                    ? "Atualizando capítulo..."
+                    : "Salvando capítulo...";
 
             try {
-                await addDoc(
-                    collection(
-                        db,
-                        "capitulos"
-                    ),
-                    {
-                        livroId,
-                        livroTitulo,
-                        numero,
-                        titulo,
-                        resumo,
-                        texto,
-                        status,
+                const dadosCapitulo = {
+                    livroId,
+                    livroTitulo,
+                    numero,
+                    titulo,
+                    resumo,
+                    texto,
+                    status,
 
-                        criadoPor:
-                            auth.currentUser
-                                .uid,
+                    atualizadoEm:
+                        serverTimestamp()
+                };
 
-                        criadoEm:
-                            serverTimestamp(),
+                if (capituloEmEdicaoId) {
+                    await updateDoc(
+                        doc(
+                            db,
+                            "capitulos",
+                            capituloEmEdicaoId
+                        ),
+                        dadosCapitulo
+                    );
 
-                        atualizadoEm:
-                            serverTimestamp()
-                    }
-                );
+                    mostrarMensagem(
+                        "Capítulo atualizado com sucesso!"
+                    );
 
-                mostrarMensagem(
-                    "Capítulo salvo no Firebase com sucesso!"
-                );
+                } else {
+                    await addDoc(
+                        collection(
+                            db,
+                            "capitulos"
+                        ),
+                        {
+                            ...dadosCapitulo,
+
+                            criadoPor:
+                                auth.currentUser.uid,
+
+                            criadoEm:
+                                serverTimestamp()
+                        }
+                    );
+
+                    mostrarMensagem(
+                        "Capítulo salvo no Firebase com sucesso!"
+                    );
+                }
 
                 formCapitulo.reset();
+
+                capituloEmEdicaoId =
+                    null;
 
                 if (contador) {
                     contador.textContent =
@@ -1767,6 +1792,10 @@ if (formCapitulo) {
 
                 await carregarDadosPainel();
 
+                abrirSecao(
+                    "visaoGeral"
+                );
+
             } catch (erro) {
                 console.error(
                     "Erro ao salvar capítulo:",
@@ -1774,6 +1803,7 @@ if (formCapitulo) {
                 );
 
                 mostrarMensagem(
+                    erro.message ||
                     "Não foi possível salvar o capítulo.",
                     "erro"
                 );
