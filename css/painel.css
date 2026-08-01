@@ -739,3 +739,164 @@ body.painel-body {
     background:#be3232;
 
 }
+
+
+/* =========================================
+   EDITOR DE CAPÍTULOS
+========================================= */
+
+.editor-capitulo-container {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: rgba(9, 10, 18, 0.72);
+}
+
+.barra-editor {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    padding: 11px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.botao-editor {
+    min-height: 38px;
+    padding: 8px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.055);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.botao-editor:hover,
+.botao-editor.ativo {
+    border-color: rgba(124, 77, 255, 0.52);
+    background: rgba(124, 77, 255, 0.18);
+    color: #d9ccff;
+    transform: translateY(-1px);
+}
+
+.separador-editor {
+    width: 1px;
+    height: 27px;
+    margin: 0 2px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.editor-capitulo {
+    min-height: 430px;
+    max-height: 720px;
+    overflow-y: auto;
+    padding: 25px;
+    outline: none;
+    color: #f2f2f7;
+    font-size: 17px;
+    line-height: 1.85;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.editor-capitulo:empty::before {
+    content: attr(data-placeholder);
+    color: #777784;
+    pointer-events: none;
+}
+
+.editor-capitulo p {
+    margin: 0 0 1.2em;
+}
+
+.editor-capitulo h2 {
+    margin: 1.5em 0 0.7em;
+    color: #ffffff;
+    font-size: 28px;
+    line-height: 1.3;
+}
+
+.editor-capitulo h3 {
+    margin: 1.35em 0 0.65em;
+    color: #d6c7ff;
+    font-size: 22px;
+    line-height: 1.35;
+}
+
+.editor-capitulo blockquote {
+    margin: 1.4em 0;
+    padding: 13px 17px;
+    border-left: 4px solid #8c58ff;
+    border-radius: 0 10px 10px 0;
+    background: rgba(124, 77, 255, 0.08);
+    color: #d3d3dc;
+    font-style: italic;
+}
+
+.editor-capitulo ul,
+.editor-capitulo ol {
+    margin: 1em 0;
+    padding-left: 28px;
+}
+
+.editor-capitulo a {
+    color: #b996ff;
+}
+
+.editor-capitulo img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 22px auto;
+    border-radius: 14px;
+}
+
+.contador-texto {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+    color: #92929f;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .barra-editor {
+        gap: 6px;
+        padding: 9px;
+    }
+
+    .botao-editor {
+        min-height: 36px;
+        padding: 7px 9px;
+        font-size: 12px;
+    }
+
+    .separador-editor {
+        display: none;
+    }
+
+    .editor-capitulo {
+        min-height: 360px;
+        padding: 18px;
+        font-size: 16px;
+        line-height: 1.75;
+    }
+
+    .editor-capitulo h2 {
+        font-size: 24px;
+    }
+
+    .editor-capitulo h3 {
+        font-size: 20px;
+    }
+}
