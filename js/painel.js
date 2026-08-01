@@ -1568,10 +1568,18 @@ async function carregarCapitulosPainel() {
                             }
 
                             if (campoTexto) {
-                                campoTexto.value =
-                                    capitulo.texto ||
-                                    "";
-                            }
+    campoTexto.value =
+        capitulo.texto ||
+        "";
+}
+
+if (editorCapitulo) {
+    editorCapitulo.innerHTML =
+        capitulo.texto ||
+        "";
+
+    sincronizarEditorCapitulo();
+}
 
                             if (campoStatus) {
                                 campoStatus.value =
@@ -1793,8 +1801,13 @@ document
 
 
 // ==============================
-// CONTADOR DE PALAVRAS
+// EDITOR PROFISSIONAL DE CAPÍTULOS
 // ==============================
+
+const editorCapitulo =
+    document.getElementById(
+        "editorCapitulo"
+    );
 
 const textoCapitulo =
     document.getElementById(
@@ -1806,25 +1819,222 @@ const contador =
         "contadorPalavras"
     );
 
-if (textoCapitulo && contador) {
-    textoCapitulo.addEventListener(
+const contadorCaracteres =
+    document.getElementById(
+        "contadorCaracteres"
+    );
+
+
+// ==============================
+// SINCRONIZAR EDITOR
+// ==============================
+
+function sincronizarEditorCapitulo() {
+    if (
+        !editorCapitulo ||
+        !textoCapitulo
+    ) {
+        return;
+    }
+
+    const html =
+        editorCapitulo.innerHTML
+            .trim();
+
+    const textoPuro =
+        editorCapitulo.innerText
+            .replace(/\u00A0/g, " ")
+            .trim();
+
+    textoCapitulo.value =
+        textoPuro
+            ? html
+            : "";
+
+    const quantidadePalavras =
+        textoPuro
+            ? textoPuro
+                .split(/\s+/)
+                .filter(Boolean)
+                .length
+            : 0;
+
+    const quantidadeCaracteres =
+        textoPuro.length;
+
+    if (contador) {
+        contador.textContent =
+            `${quantidadePalavras} ${
+                quantidadePalavras === 1
+                    ? "palavra"
+                    : "palavras"
+            }`;
+    }
+
+    if (contadorCaracteres) {
+        contadorCaracteres.textContent =
+            `${quantidadeCaracteres} ${
+                quantidadeCaracteres === 1
+                    ? "caractere"
+                    : "caracteres"
+            }`;
+    }
+}
+
+
+// ==============================
+// EXECUTAR COMANDO DO EDITOR
+// ==============================
+
+function executarComandoEditor(
+    comando,
+    valor = null
+) {
+    if (!editorCapitulo) {
+        return;
+    }
+
+    editorCapitulo.focus();
+
+    document.execCommand(
+        comando,
+        false,
+        valor
+    );
+
+    sincronizarEditorCapitulo();
+}
+
+
+// ==============================
+// FORMATAR BLOCO
+// ==============================
+
+function formatarBlocoEditor(
+    elemento
+) {
+    if (!editorCapitulo) {
+        return;
+    }
+
+    editorCapitulo.focus();
+
+    document.execCommand(
+        "formatBlock",
+        false,
+        elemento
+    );
+
+    sincronizarEditorCapitulo();
+}
+
+
+// ==============================
+// BOTÕES DA BARRA
+// ==============================
+
+document
+    .querySelectorAll(
+        ".botao-editor[data-comando]"
+    )
+    .forEach((botao) => {
+        botao.addEventListener(
+            "mousedown",
+            (evento) => {
+                evento.preventDefault();
+
+                executarComandoEditor(
+                    botao.dataset.comando
+                );
+            }
+        );
+    });
+
+
+document
+    .querySelectorAll(
+        ".botao-editor[data-bloco]"
+    )
+    .forEach((botao) => {
+        botao.addEventListener(
+            "mousedown",
+            (evento) => {
+                evento.preventDefault();
+
+                formatarBlocoEditor(
+                    botao.dataset.bloco
+                );
+            }
+        );
+    });
+
+
+// ==============================
+// ATUALIZAR CONTADORES
+// ==============================
+
+if (editorCapitulo) {
+    editorCapitulo.addEventListener(
         "input",
+        sincronizarEditorCapitulo
+    );
+
+    editorCapitulo.addEventListener(
+        "blur",
+        sincronizarEditorCapitulo
+    );
+
+    editorCapitulo.addEventListener(
+        "paste",
         () => {
-            const texto =
-                textoCapitulo.value
-                    .trim();
-
-            const quantidade =
-                texto
-                    ? texto.split(/\s+/)
-                        .length
-                    : 0;
-
-            contador.textContent =
-                `${quantidade} palavras`;
+            setTimeout(
+                sincronizarEditorCapitulo,
+                0
+            );
         }
     );
 }
+
+
+// ==============================
+// LIMPAR EDITOR AO REDEFINIR
+// ==============================
+
+const formularioCapituloEditor =
+    document.getElementById(
+        "formCapitulo"
+    );
+
+if (formularioCapituloEditor) {
+    formularioCapituloEditor.addEventListener(
+        "reset",
+        () => {
+            setTimeout(
+                () => {
+                    if (editorCapitulo) {
+                        editorCapitulo.innerHTML =
+                            "";
+                    }
+
+                    if (textoCapitulo) {
+                        textoCapitulo.value =
+                            "";
+                    }
+
+                    sincronizarEditorCapitulo();
+                },
+                0
+            );
+        }
+    );
+}
+
+
+// ==============================
+// INICIAR EDITOR
+// ==============================
+
+sincronizarEditorCapitulo();
 
 
 // ==============================
@@ -2056,6 +2266,7 @@ if (formCapitulo) {
         "submit",
         async (evento) => {
             evento.preventDefault();
+            sincronizarEditorCapitulo();
 
             const botaoSalvar =
                 formCapitulo.querySelector(
