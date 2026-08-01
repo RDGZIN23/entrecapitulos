@@ -637,17 +637,23 @@ function mostrarDesempenhoLivros() {
                     </p>
 
                     <small>
-                        📄 ${dados.capitulos}
-                        ${
-                            dados.capitulos === 1
-                                ? "capítulo"
-                                : "capítulos"
-                        }
-                        •
-                        ❤️ ${dados.favoritos}
-                        •
-                        ⭐ ${dados.avaliacoes}
-                    </small>
+    📄 ${dados.capitulos}
+    ${
+        dados.capitulos === 1
+            ? "capítulo"
+            : "capítulos"
+    }
+    •
+    👁️ ${dados.visualizacoes}
+    •
+    💬 ${dados.comentarios}
+</small>
+
+<small>
+    ❤️ ${dados.favoritos}
+    •
+    ⭐ ${dados.avaliacoes}
+</small>
 
                     <small>
                         ${criarEstrelas(
@@ -853,7 +859,11 @@ async function carregarDadosPainel() {
             buscarColecao("livros"),
             buscarColecao("capitulos"),
             buscarColecao("favoritos"),
-            buscarColecao("avaliacoes")
+            buscarColecao("avaliacoes"),
+            buscarColecao("comentarios"),
+            buscarColecao(
+                "visualizacoesCapitulos"
+            )
         ]);
 
     livrosCarregados =
@@ -867,6 +877,12 @@ async function carregarDadosPainel() {
 
     avaliacoesCarregadas =
         resultados[3];
+
+    comentariosCarregados =
+        resultados[4];
+
+    visualizacoesCarregadas =
+        resultados[5];
 
     livrosCarregados.sort(
         (a, b) =>
