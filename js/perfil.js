@@ -1359,14 +1359,37 @@ onAuthStateChanged(
 
 window.addEventListener(
   "pageshow",
-  () => {
+  async () => {
+
     if (
-      conteudoPerfil &&
-      !conteudoPerfil.hidden
+      !conteudoPerfil ||
+      conteudoPerfil.hidden
     ) {
+      return;
+    }
+
+    const usuario =
+      auth.currentUser;
+
+    if (!usuario) {
       carregarEstatisticasLocais();
       carregarContinueLendo();
+
+      return;
     }
+
+    const carregouFirebase =
+      await carregarProgressoFirebase(
+        usuario.uid
+      );
+
+    if (!carregouFirebase) {
+      carregarEstatisticasLocais();
+    }
+
+    carregarContinueLendo(
+      ultimoProgressoAtual
+    );
   }
 );
 
