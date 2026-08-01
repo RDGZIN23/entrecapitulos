@@ -900,3 +900,120 @@ body.painel-body {
         font-size: 20px;
     }
 }
+
+/* =========================================
+   CORREÇÃO VISUAL DO EDITOR QUILL
+========================================= */
+
+.editor-quill-container {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(124, 77, 255, 0.28);
+    border-radius: 16px;
+    background: #111827;
+}
+
+#barraEditorQuill {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #182235;
+}
+
+#editorQuill {
+    min-height: 420px;
+    background: #111827;
+}
+
+.editor-quill-container .ql-container {
+    min-height: 420px;
+    border: none !important;
+    color: #f4f4f7;
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+}
+
+.editor-quill-container .ql-editor {
+    min-height: 420px;
+    padding: 22px;
+    color: #f4f4f7;
+    font-size: 17px;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+}
+
+.editor-quill-container .ql-editor.ql-blank::before {
+    color: #777f90;
+    font-style: normal;
+}
+
+.editor-quill-container .ql-toolbar {
+    border: none !important;
+}
+
+.editor-quill-container .ql-toolbar button,
+.editor-quill-container .ql-toolbar select {
+    min-height: 30px;
+}
+
+.editor-quill-container .ql-toolbar .ql-stroke {
+    stroke: #b9beca;
+}
+
+.editor-quill-container .ql-toolbar .ql-fill {
+    fill: #b9beca;
+}
+
+.editor-quill-container .ql-toolbar .ql-picker {
+    color: #b9beca;
+}
+
+.editor-quill-container .ql-toolbar button:hover .ql-stroke,
+.editor-quill-container .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #a978ff;
+}
+
+.editor-quill-container .ql-toolbar button:hover .ql-fill,
+.editor-quill-container .ql-toolbar button.ql-active .ql-fill {
+    fill: #a978ff;
+}
+
+.editor-quill-container .ql-picker-options {
+    border: 1px solid rgba(124, 77, 255, 0.3) !important;
+    background: #182235 !important;
+    color: #ffffff;
+}
+
+.editor-quill-container .ql-editor h1,
+.editor-quill-container .ql-editor h2 {
+    color: #ffffff;
+}
+
+.editor-quill-container .ql-editor blockquote {
+    border-left-color: #945cff;
+    color: #d7caff;
+}
+
+@media (max-width: 600px) {
+    #barraEditorQuill {
+        padding: 8px 6px;
+    }
+
+    #barraEditorQuill .ql-formats {
+        margin-right: 4px;
+    }
+
+    #editorQuill,
+    .editor-quill-container .ql-container,
+    .editor-quill-container .ql-editor {
+        min-height: 360px;
+    }
+
+    .editor-quill-container .ql-editor {
+        padding: 16px;
+        font-size: 16px;
+    }
+}
