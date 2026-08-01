@@ -49,6 +49,8 @@ let livrosCarregados = [];
 let capitulosCarregados = [];
 let favoritosCarregados = [];
 let avaliacoesCarregadas = [];
+let comentariosCarregados = [];
+let visualizacoesCarregadas = [];
 
 let livroEmEdicaoId = null;
 let capaAtualLivroEmEdicao = capaPadrao;
@@ -81,6 +83,22 @@ const mediaAvaliacoesPainel =
     document.getElementById(
         "mediaAvaliacoesPainel"
     );
+
+const totalVisualizacoesPainel =
+    document.getElementById(
+        "totalVisualizacoesPainel"
+    );
+
+const totalComentariosPainel =
+    document.getElementById(
+        "totalComentariosPainel"
+    );
+
+const capituloMaisLidoPainel =
+    document.getElementById(
+        "capituloMaisLidoPainel"
+    );
+
 
 const desempenhoLivros =
     document.getElementById(
