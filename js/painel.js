@@ -2220,6 +2220,9 @@ if (formCapitulo) {
         "submit",
         async (evento) => {
             evento.preventDefault();
+
+            // Transfere o conteúdo formatado do Quill
+            // para o campo oculto textoCapitulo.
             sincronizarEditorCapitulo();
 
             const botaoSalvar =
@@ -2232,6 +2235,46 @@ if (formCapitulo) {
                     "livroCapitulo"
                 );
 
+            const campoNumero =
+                document.getElementById(
+                    "numeroCapitulo"
+                );
+
+            const campoTitulo =
+                document.getElementById(
+                    "tituloCapitulo"
+                );
+
+            const campoResumo =
+                document.getElementById(
+                    "resumoCapitulo"
+                );
+
+            const campoTexto =
+                document.getElementById(
+                    "textoCapitulo"
+                );
+
+            const campoStatus =
+                document.getElementById(
+                    "statusCapitulo"
+                );
+
+            if (
+                !seletorLivro ||
+                !campoNumero ||
+                !campoTitulo ||
+                !campoTexto ||
+                !campoStatus
+            ) {
+                mostrarMensagem(
+                    "Não foi possível acessar os campos do formulário.",
+                    "erro"
+                );
+
+                return;
+            }
+
             const livroId =
                 seletorLivro.value;
 
@@ -2243,43 +2286,22 @@ if (formCapitulo) {
 
             const numero =
                 Number(
-                    document
-                        .getElementById(
-                            "numeroCapitulo"
-                        )
-                        .value
+                    campoNumero.value
                 );
 
             const titulo =
-                document
-                    .getElementById(
-                        "tituloCapitulo"
-                    )
-                    .value
-                    .trim();
+                campoTitulo.value.trim();
 
             const resumo =
-                document
-                    .getElementById(
-                        "resumoCapitulo"
-                    )
-                    .value
-                    .trim();
+                campoResumo
+                    ?.value
+                    .trim() || "";
 
             const texto =
-                document
-                    .getElementById(
-                        "textoCapitulo"
-                    )
-                    .value
-                    .trim();
+                campoTexto.value.trim();
 
             const status =
-                document
-                    .getElementById(
-                        "statusCapitulo"
-                    )
-                    .value;
+                campoStatus.value;
 
             if (
                 !livroId ||
@@ -2305,13 +2327,24 @@ if (formCapitulo) {
                 return;
             }
 
-            botaoSalvar.disabled =
-                true;
+            // Guarda o ID antes de qualquer operação.
+            const idCapituloParaAtualizar =
+                capituloEmEdicaoId;
 
-            botaoSalvar.textContent =
-                capituloEmEdicaoId
-                    ? "Atualizando capítulo..."
-                    : "Salvando capítulo...";
+            const estaEditando =
+                Boolean(
+                    idCapituloParaAtualizar
+                );
+
+            if (botaoSalvar) {
+                botaoSalvar.disabled =
+                    true;
+
+                botaoSalvar.textContent =
+                    estaEditando
+                        ? "Atualizando capítulo..."
+                        : "Salvando capítulo...";
+            }
 
             try {
                 const dadosCapitulo = {
@@ -2327,12 +2360,12 @@ if (formCapitulo) {
                         serverTimestamp()
                 };
 
-                if (capituloEmEdicaoId) {
+                if (estaEditando) {
                     await updateDoc(
                         doc(
                             db,
                             "capitulos",
-                            capituloEmEdicaoId
+                            idCapituloParaAtualizar
                         ),
                         dadosCapitulo
                     );
@@ -2359,28 +2392,45 @@ if (formCapitulo) {
                     );
 
                     mostrarMensagem(
-                        "Capítulo salvo no Firebase com sucesso!"
+                        "Capítulo salvo com sucesso!"
                     );
                 }
 
-                formCapitulo.reset();
-
+                // Encerra o modo de edição.
                 capituloEmEdicaoId =
                     null;
+
+                // Limpa todos os campos comuns.
+                formCapitulo.reset();
+
+                // Limpa também o conteúdo interno do Quill.
+                limparEditorCapitulo();
 
                 if (contador) {
                     contador.textContent =
                         "0 palavras";
                 }
 
-                await Promise.all([
-    carregarDadosPainel(),
-    carregarCapitulosPainel()
-]);
+                if (contadorCaracteres) {
+                    contadorCaracteres.textContent =
+                        "0 caracteres";
+                }
 
+                // Atualiza as estatísticas e a lista.
+                await Promise.all([
+                    carregarDadosPainel(),
+                    carregarCapitulosPainel()
+                ]);
+
+                // O ID correto da seção é "capitulos".
                 abrirSecao(
-                    "visaoGeral"
+                    "capitulos"
                 );
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
 
             } catch (erro) {
                 console.error(
@@ -2395,11 +2445,13 @@ if (formCapitulo) {
                 );
 
             } finally {
-                botaoSalvar.disabled =
-                    false;
+                if (botaoSalvar) {
+                    botaoSalvar.disabled =
+                        false;
 
-                botaoSalvar.textContent =
-                    "Salvar capítulo";
+                    botaoSalvar.textContent =
+                        "Salvar capítulo";
+                }
             }
         }
     );
