@@ -692,3 +692,50 @@ body.painel-body {
     border-color: #8b5cf6;
     transform: translateY(-2px);
 }
+
+.botao-editar-capitulo,
+.botao-excluir{
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:10px 16px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.botao-editar-capitulo{
+
+    background:#7c4dff;
+
+    color:#fff;
+
+}
+
+.botao-editar-capitulo:hover{
+
+    background:#6a3ef0;
+
+}
+
+.botao-excluir{
+
+    background:#d64545;
+
+    color:#fff;
+
+}
+
+.botao-excluir:hover{
+
+    background:#be3232;
+
+}
