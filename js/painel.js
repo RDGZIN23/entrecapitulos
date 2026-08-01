@@ -2208,7 +2208,10 @@ if (formCapitulo) {
                         "0 palavras";
                 }
 
-                await carregarDadosPainel();
+                await Promise.all([
+    carregarDadosPainel(),
+    carregarCapitulosPainel()
+]);
 
                 abrirSecao(
                     "visaoGeral"
@@ -2257,10 +2260,11 @@ onAuthStateChanged(
             usuario.email
         );
 
-        await Promise.all([
-            carregarLivros(),
-            carregarDadosPainel()
-        ]);
+await Promise.all([
+    carregarLivros(),
+    carregarDadosPainel(),
+    carregarCapitulosPainel()
+]);
     }
 );
 
