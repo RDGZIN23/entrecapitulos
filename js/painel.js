@@ -361,6 +361,90 @@ function atualizarEstatisticas() {
                 .toFixed(1)
                 .replace(".", ",");
     }
+
+    if (totalVisualizacoesPainel) {
+        totalVisualizacoesPainel.textContent =
+            String(
+                visualizacoesCarregadas.length
+            );
+    }
+
+    if (totalComentariosPainel) {
+        totalComentariosPainel.textContent =
+            String(
+                comentariosCarregados.length
+            );
+    }
+
+    if (capituloMaisLidoPainel) {
+        if (
+            visualizacoesCarregadas.length === 0
+        ) {
+            capituloMaisLidoPainel.textContent =
+                "Nenhum";
+        } else {
+            const contagem =
+                new Map();
+
+            visualizacoesCarregadas.forEach(
+                (visualizacao) => {
+                    const id =
+                        visualizacao.capituloId;
+
+                    if (!id) {
+                        return;
+                    }
+
+                    contagem.set(
+                        id,
+                        (
+                            contagem.get(id) ||
+                            0
+                        ) + 1
+                    );
+                }
+            );
+
+            let idMaisLido =
+                null;
+
+            let maiorQuantidade =
+                0;
+
+            contagem.forEach(
+                (quantidade, id) => {
+                    if (
+                        quantidade >
+                        maiorQuantidade
+                    ) {
+                        maiorQuantidade =
+                            quantidade;
+
+                        idMaisLido =
+                            id;
+                    }
+                }
+            );
+
+            const capituloMaisLido =
+                capitulosCarregados.find(
+                    (capitulo) =>
+                        capitulo.id ===
+                        idMaisLido
+                );
+
+            capituloMaisLidoPainel.textContent =
+                capituloMaisLido
+                    ? `Cap. ${
+                        capituloMaisLido.numero ||
+                        ""
+                      } — ${
+                        capituloMaisLido.titulo ||
+                        "Sem título"
+                      }`
+                    : "Capítulo";
+        }
+    }
 }
 
 
@@ -376,6 +460,12 @@ function obterDesempenhoLivro(
             (capitulo) =>
                 capitulo.livroId ===
                 livro.id
+        );
+
+    const idsCapitulosDoLivro =
+        capitulosDoLivro.map(
+            (capitulo) =>
+                capitulo.id
         );
 
     const capitulosPublicados =
@@ -399,6 +489,24 @@ function obterDesempenhoLivro(
             (avaliacao) =>
                 avaliacao.livroId ===
                 livro.id
+        );
+
+    const comentariosDoLivro =
+        comentariosCarregados.filter(
+            (comentario) =>
+                idsCapitulosDoLivro.includes(
+                    comentario.capituloId
+                )
+        );
+
+    const visualizacoesDoLivro =
+        visualizacoesCarregadas.filter(
+            (visualizacao) =>
+                visualizacao.livroId ===
+                    livro.id ||
+                idsCapitulosDoLivro.includes(
+                    visualizacao.capituloId
+                )
         );
 
     const notas =
@@ -433,6 +541,12 @@ function obterDesempenhoLivro(
 
         avaliacoes:
             avaliacoesDoLivro.length,
+
+        comentarios:
+            comentariosDoLivro.length,
+
+        visualizacoes:
+            visualizacoesDoLivro.length,
 
         media
     };
