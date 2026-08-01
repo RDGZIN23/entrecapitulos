@@ -61,8 +61,8 @@
     }
 
     .cabecalho-leitura {
-      text-align: center;
       margin-bottom: 42px;
+      text-align: center;
     }
 
     .nome-livro-leitura {
@@ -96,23 +96,44 @@
     }
 
     .texto-capitulo {
+      color: #eeeeee;
       font-family: Georgia, "Times New Roman", serif;
       font-size: 20px;
       line-height: 1.9;
-      color: #eeeeee;
     }
 
     .texto-capitulo p {
       margin: 0 0 1.4em;
     }
 
+    .texto-capitulo h1,
+    .texto-capitulo h2,
+    .texto-capitulo h3 {
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .texto-capitulo blockquote {
+      margin: 1.5em 0;
+      padding: 12px 18px;
+      border-left: 4px solid #8b5cf6;
+      background: rgba(139, 92, 246, 0.08);
+      color: #d9d0ea;
+      font-style: italic;
+    }
+
+    .texto-capitulo ul,
+    .texto-capitulo ol {
+      padding-left: 30px;
+    }
+
     .mensagem-leitura {
       padding: 30px 20px;
-      text-align: center;
-      color: #cfcfcf;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.04);
+      color: #cfcfcf;
+      text-align: center;
     }
 
     .navegacao-capitulos {
@@ -125,8 +146,8 @@
     }
 
     .botao-navegacao {
-      flex: 1;
       display: flex;
+      flex: 1;
       align-items: center;
       justify-content: center;
       min-height: 50px;
@@ -135,9 +156,9 @@
       border-radius: 12px;
       background: rgba(139, 92, 246, 0.12);
       color: #ffffff;
+      font-weight: bold;
       text-align: center;
       text-decoration: none;
-      font-weight: bold;
     }
 
     .botao-navegacao:hover {
@@ -149,11 +170,243 @@
       opacity: 0.35;
     }
 
+    /* =====================================
+       COMENTÁRIOS
+    ===================================== */
+
+    .secao-comentarios {
+      margin-top: 55px;
+      padding-top: 38px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cabecalho-comentarios {
+      margin-bottom: 22px;
+    }
+
+    .etiqueta-comentarios {
+      display: block;
+      margin-bottom: 8px;
+      color: #b58cff;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cabecalho-comentarios h2 {
+      margin: 0;
+      color: #ffffff;
+      font-size: 28px;
+    }
+
+    .cabecalho-comentarios p {
+      margin: 8px 0 0;
+      color: #a9a9b4;
+      line-height: 1.6;
+    }
+
+    .formulario-comentario {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid rgba(139, 92, 246, 0.22);
+      border-radius: 17px;
+      background: rgba(139, 92, 246, 0.055);
+    }
+
+    .campo-comentario {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      outline: none;
+      background: #111119;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .campo-comentario:focus {
+      border-color: rgba(139, 92, 246, 0.7);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.11);
+    }
+
+    .rodape-formulario-comentario {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .contador-comentario {
+      color: #8f8f9b;
+      font-size: 12px;
+    }
+
+    .botao-publicar-comentario {
+      min-height: 44px;
+      padding: 11px 19px;
+      border: none;
+      border-radius: 11px;
+      background: linear-gradient(
+        135deg,
+        #7045ff,
+        #9e4fff
+      );
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .botao-publicar-comentario:disabled {
+      cursor: wait;
+      opacity: 0.55;
+    }
+
+    .mensagem-comentario {
+      min-height: 18px;
+      margin: 11px 0 0;
+      font-size: 13px;
+    }
+
+    .mensagem-comentario.sucesso {
+      color: #72dca5;
+    }
+
+    .mensagem-comentario.erro {
+      color: #ff9ca9;
+    }
+
+    .aviso-login-comentario {
+      margin-bottom: 28px;
+      padding: 19px;
+      border: 1px dashed rgba(139, 92, 246, 0.35);
+      border-radius: 15px;
+      background: rgba(139, 92, 246, 0.055);
+      color: #bcbcc7;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .aviso-login-comentario a {
+      color: #cbb7ff;
+      font-weight: bold;
+    }
+
+    .titulo-lista-comentarios {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 17px;
+    }
+
+    .titulo-lista-comentarios h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .quantidade-comentarios {
+      color: #aaaab5;
+      font-size: 13px;
+    }
+
+    .lista-comentarios {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cartao-comentario {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .cabecalho-cartao-comentario {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .dados-autor-comentario {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .avatar-comentario {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.18);
+      color: #d6c8ff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .nome-autor-comentario {
+      display: block;
+      color: #ffffff;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .data-comentario {
+      display: block;
+      margin-top: 4px;
+      color: #868691;
+      font-size: 11px;
+    }
+
+    .texto-comentario {
+      margin: 0;
+      color: #c2c2cc;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .botao-excluir-comentario {
+      flex: 0 0 auto;
+      padding: 7px 10px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 9px;
+      background: rgba(239, 68, 68, 0.08);
+      color: #ff9ca9;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .sem-comentarios {
+      padding: 20px;
+      border: 1px dashed rgba(255, 255, 255, 0.11);
+      border-radius: 14px;
+      color: #9696a2;
+      line-height: 1.6;
+      text-align: center;
+    }
+
     .rodape-leitura {
       padding: 25px 20px;
-      text-align: center;
-      color: #999999;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #999999;
+      text-align: center;
     }
 
     @media (max-width: 600px) {
@@ -173,6 +426,19 @@
 
       .logo-leitura {
         font-size: 12px;
+      }
+
+      .rodape-formulario-comentario {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .botao-publicar-comentario {
+        width: 100%;
+      }
+
+      .cabecalho-cartao-comentario {
+        flex-direction: column;
       }
     }
   </style>
@@ -253,6 +519,61 @@
 
     </nav>
 
+    <!-- COMENTÁRIOS -->
+    <section
+      class="secao-comentarios"
+      id="secaoComentarios"
+    >
+
+      <div class="cabecalho-comentarios">
+
+        <span class="etiqueta-comentarios">
+          Comunidade
+        </span>
+
+        <h2>Comentários do capítulo</h2>
+
+        <p>
+          Compartilhe sua opinião sobre este capítulo
+          com outros leitores.
+        </p>
+
+      </div>
+
+      <div id="areaFormularioComentario">
+
+        <div class="aviso-login-comentario">
+          Verificando sua conta...
+        </div>
+
+      </div>
+
+      <div class="titulo-lista-comentarios">
+
+        <h3>Comentários publicados</h3>
+
+        <span
+          class="quantidade-comentarios"
+          id="quantidadeComentarios"
+        >
+          0 comentários
+        </span>
+
+      </div>
+
+      <div
+        class="lista-comentarios"
+        id="listaComentarios"
+      >
+
+        <div class="sem-comentarios">
+          Carregando comentários...
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
   <footer class="rodape-leitura">
@@ -265,5 +586,10 @@
     src="js/leitura.js"
   ></script>
 
+  <script
+    type="module"
+    src="js/comentarios.js"
+  ></script>
+
 </body>
-</html>
+  </html>
