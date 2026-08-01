@@ -1227,3 +1227,93 @@ pointer-events:none;
     flex: 1;
   }
 }
+
+
+/* ========================================
+   AJUSTE FINAL DOS BOTÕES DOS COMENTÁRIOS
+======================================== */
+
+@media (max-width: 600px) {
+  .secao-comentarios
+  .cabecalho-cartao-comentario {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .secao-comentarios
+  .dados-autor-comentario {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .secao-comentarios
+  .acoes-comentario {
+    width: auto;
+    padding-left: 0;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .secao-comentarios
+  .botao-editar-comentario,
+  .secao-comentarios
+  .botao-excluir-comentario {
+    flex: initial;
+    min-width: auto;
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .secao-comentarios
+  .texto-comentario {
+    padding-left: 56px;
+  }
+}
+
+@media (max-width: 390px) {
+  .secao-comentarios
+  .cabecalho-cartao-comentario {
+    gap: 7px;
+  }
+
+  .secao-comentarios
+  .avatar-comentario {
+    width: 38px;
+    height: 38px;
+    font-size: 12px;
+  }
+
+  .secao-comentarios
+  .dados-autor-comentario {
+    gap: 9px;
+  }
+
+  .secao-comentarios
+  .nome-autor-comentario {
+    font-size: 13px;
+  }
+
+  .secao-comentarios
+  .data-comentario {
+    font-size: 10px;
+  }
+
+  .secao-comentarios
+  .botao-editar-comentario,
+  .secao-comentarios
+  .botao-excluir-comentario {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .secao-comentarios
+  .texto-comentario {
+    padding-left: 47px;
+  }
+}
