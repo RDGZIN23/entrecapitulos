@@ -370,53 +370,77 @@
         grid-template-columns: 1fr;
       }
 /* ========================================
-   CORREÇÃO DO CONTINUAR LENDO
+   CORREÇÃO DEFINITIVA — CONTINUAR LENDO
 ======================================== */
 
-#listaContinuar {
-  display: flex;
-  gap: 15px;
-  overflow-x: auto;
-  padding: 3px 2px 12px;
-  scroll-snap-type: x mandatory;
+#listaContinuar.lista-horizontal {
+  display: flex !important;
+  grid-auto-flow: unset !important;
+  grid-auto-columns: unset !important;
+  width: 100% !important;
+  gap: 14px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 4px 2px 14px !important;
 }
 
-#listaContinuar .cartao-continuar {
-  flex: 0 0 min(360px, 88vw);
-  width: min(360px, 88vw);
-  min-width: 0;
-  max-width: min(360px, 88vw);
-  scroll-snap-align: start;
+#listaContinuar > .cartao-continuar {
+  display: grid !important;
+  grid-template-columns: 92px minmax(0, 1fr) !important;
+  flex: 0 0 calc(100% - 18px) !important;
+  width: calc(100% - 18px) !important;
+  min-width: calc(100% - 18px) !important;
+  max-width: calc(100% - 18px) !important;
+  min-height: 145px !important;
+  overflow: hidden !important;
+  scroll-snap-align: start !important;
+}
+
+#listaContinuar .capa-continuar {
+  display: block !important;
+  width: 92px !important;
+  height: 100% !important;
+  min-height: 145px !important;
+  max-height: 175px !important;
+  object-fit: cover !important;
 }
 
 #listaContinuar .conteudo-continuar {
-  min-width: 0;
-  overflow: hidden;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 14px !important;
+  overflow: hidden !important;
 }
 
 #listaContinuar .conteudo-continuar h3,
 #listaContinuar .conteudo-continuar p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+#listaContinuar .barra-progresso {
+  width: 100% !important;
 }
 
 #listaContinuar .botao-livro {
-  width: 100%;
+  width: 100% !important;
+  min-height: 40px !important;
 }
 
-@media (max-width: 480px) {
-  #listaContinuar .cartao-continuar {
-    flex-basis: calc(100vw - 38px);
-    width: calc(100vw - 38px);
-    max-width: calc(100vw - 38px);
-    grid-template-columns: 100px minmax(0, 1fr);
+@media (min-width: 650px) {
+  #listaContinuar > .cartao-continuar {
+    flex-basis: 360px !important;
+    width: 360px !important;
+    min-width: 360px !important;
+    max-width: 360px !important;
   }
-
-  #listaContinuar .capa-continuar {
-    width: 100px;
-    min-height: 145px;
-  }
+}
 }
 
   </style>
