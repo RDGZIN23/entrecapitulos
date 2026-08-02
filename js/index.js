@@ -71,6 +71,7 @@ const capaPadrao =
   "images/depois-de-te-odiar.png";
 
 let todosOsLivros = [];
+let todosOsCapitulos = [];
 
 
 // ========================================
@@ -84,6 +85,18 @@ function escaparHTML(valor = "") {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+// ========================================
+// NORMALIZAR TEXTO PARA PESQUISA
+// ========================================
+
+function normalizarTexto(valor = "") {
+  return String(valor)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
 }
 
 
@@ -360,7 +373,7 @@ function mostrarDestaques(livros) {
 
 
 // ========================================
-// PESQUISAR LIVROS
+// PESQUISAR LIVROS E CAPÍTULOS
 // ========================================
 
 function configurarPesquisa() {
@@ -372,9 +385,9 @@ function configurarPesquisa() {
     "input",
     () => {
       const termo =
-        campoPesquisa.value
-          .trim()
-          .toLowerCase();
+        normalizarTexto(
+          campoPesquisa.value
+        );
 
       if (!termo) {
         mostrarBiblioteca(
@@ -384,28 +397,86 @@ function configurarPesquisa() {
         return;
       }
 
+      /*
+        Descobre quais livros possuem
+        capítulos que combinam com a busca.
+      */
+
+      const idsLivrosEncontradosNosCapitulos =
+        new Set();
+
+      todosOsCapitulos.forEach(
+        (capitulo) => {
+          const tituloCapitulo =
+            normalizarTexto(
+              capitulo.titulo
+            );
+
+          const resumoCapitulo =
+            normalizarTexto(
+              capitulo.resumo
+            );
+
+          const numeroCapitulo =
+            normalizarTexto(
+              `capítulo ${
+                capitulo.numero || ""
+              }`
+            );
+
+          const encontrouCapitulo =
+            tituloCapitulo.includes(
+              termo
+            ) ||
+            resumoCapitulo.includes(
+              termo
+            ) ||
+            numeroCapitulo.includes(
+              termo
+            );
+
+          if (
+            encontrouCapitulo &&
+            capitulo.livroId
+          ) {
+            idsLivrosEncontradosNosCapitulos
+              .add(
+                capitulo.livroId
+              );
+          }
+        }
+      );
+
       const resultados =
         todosOsLivros.filter(
           (livro) => {
             const titulo =
-              String(
-                livro.titulo || ""
-              ).toLowerCase();
+              normalizarTexto(
+                livro.titulo
+              );
 
             const autor =
-              String(
-                livro.autor || ""
-              ).toLowerCase();
+              normalizarTexto(
+                livro.autor
+              );
 
             const genero =
-              String(
-                livro.genero || ""
-              ).toLowerCase();
+              normalizarTexto(
+                livro.genero
+              );
+
+            const sinopse =
+              normalizarTexto(
+                livro.sinopse
+              );
 
             return (
               titulo.includes(termo) ||
               autor.includes(termo) ||
-              genero.includes(termo)
+              genero.includes(termo) ||
+              sinopse.includes(termo) ||
+              idsLivrosEncontradosNosCapitulos
+                .has(livro.id)
             );
           }
         );
@@ -532,6 +603,53 @@ function mostrarErro(mensagem) {
 
 
 // ========================================
+// CARREGAR CAPÍTULOS PARA A PESQUISA
+// ========================================
+
+async function carregarCapitulosPesquisa() {
+  try {
+    const resultado =
+      await getDocs(
+        collection(
+          db,
+          "capitulos"
+        )
+      );
+
+    todosOsCapitulos =
+      resultado.docs
+        .map(
+          (documento) => ({
+            id: documento.id,
+            ...documento.data()
+          })
+        )
+        .filter(
+          (capitulo) => {
+            const status =
+              normalizarTexto(
+                capitulo.status
+              );
+
+            return (
+              !status ||
+              status === "publicado"
+            );
+          }
+        );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao carregar capítulos para pesquisa:",
+      erro
+    );
+
+    todosOsCapitulos = [];
+  }
+}
+
+
+// ========================================
 // CARREGAR LIVROS DO FIREBASE
 // ========================================
 
@@ -607,4 +725,13 @@ async function carregarLivros() {
 
 configurarPesquisa();
 carregarContinueLendo();
-carregarLivros();
+
+Promise.all([
+  carregarLivros(),
+  carregarCapitulosPesquisa()
+]).catch((erro) => {
+  console.error(
+    "Erro ao iniciar a página:",
+    erro
+  );
+});
