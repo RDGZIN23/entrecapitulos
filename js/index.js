@@ -401,8 +401,15 @@ function configurarPesquisa() {
           campoPesquisa.value
         );
 
+      if (secaoContinueLendo) {
+  secaoContinueLendo.hidden =
+    Boolean(termo);
+}
+
       if (!termo) {
-        mostrarDestaques(
+       carregarContinueLendo();
+
+ mostrarDestaques(
           todosOsLivros
         );
 
