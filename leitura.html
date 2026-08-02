@@ -345,18 +345,22 @@
     }
 
     .avatar-comentario {
-      display: flex;
-      flex: 0 0 auto;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: rgba(139, 92, 246, 0.18);
-      color: #d6c8ff;
-      font-size: 14px;
-      font-weight: bold;
-    }
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.18);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #d6c8ff;
+  font-size: 14px;
+  font-weight: bold;
+}
 
     .nome-autor-comentario {
       display: block;
@@ -587,9 +591,9 @@
   ></script>
 
   <script
-    type="module"
-    src="js/comentarios.js?v=6"
-  ></script>
+  type="module"
+  src="js/leitura.js?v=7"
+></script>
 
 </body>
   </html>
