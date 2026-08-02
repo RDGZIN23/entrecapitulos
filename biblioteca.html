@@ -369,7 +369,56 @@
       .grade-livros {
         grid-template-columns: 1fr;
       }
-    }
+/* ========================================
+   CORREÇÃO DO CONTINUAR LENDO
+======================================== */
+
+#listaContinuar {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 3px 2px 12px;
+  scroll-snap-type: x mandatory;
+}
+
+#listaContinuar .cartao-continuar {
+  flex: 0 0 min(360px, 88vw);
+  width: min(360px, 88vw);
+  min-width: 0;
+  max-width: min(360px, 88vw);
+  scroll-snap-align: start;
+}
+
+#listaContinuar .conteudo-continuar {
+  min-width: 0;
+  overflow: hidden;
+}
+
+#listaContinuar .conteudo-continuar h3,
+#listaContinuar .conteudo-continuar p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#listaContinuar .botao-livro {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  #listaContinuar .cartao-continuar {
+    flex-basis: calc(100vw - 38px);
+    width: calc(100vw - 38px);
+    max-width: calc(100vw - 38px);
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+
+  #listaContinuar .capa-continuar {
+    width: 100px;
+    min-height: 145px;
+  }
+}
+}
   </style>
 </head>
 
