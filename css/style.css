@@ -1338,3 +1338,246 @@ pointer-events:none;
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+
+/* ========================================
+   NOVO BANNER COMPACTO DA PÁGINA INICIAL
+======================================== */
+
+.banner {
+  padding: 28px 20px 20px;
+  text-align: left;
+}
+
+.banner .banner-card.banner-compacto {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  align-items: center;
+  gap: 25px;
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.12),
+      rgba(21, 21, 32, 0.96)
+    );
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.28);
+}
+
+.area-capa-banner {
+  width: 170px;
+}
+
+.banner .banner-capa {
+  display: block;
+  width: 170px;
+  height: 245px;
+  max-width: none;
+  margin: 0;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.banner .banner-texto {
+  min-width: 0;
+}
+
+.banner .categoria {
+  display: inline-block;
+  margin-bottom: 9px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.13);
+  color: #c6a2ff;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.banner .banner-texto h1 {
+  margin: 0 0 9px;
+  color: #ffffff;
+  font-size: clamp(27px, 5vw, 40px);
+  line-height: 1.08;
+}
+
+.banner .banner-texto h3 {
+  margin: 0 0 13px;
+  color: #c084fc;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.banner .sinopse-resumida {
+  display: -webkit-box;
+  max-width: 580px;
+  margin: 0 0 7px;
+  overflow: hidden;
+  color: #c5c5cf;
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.link-ler-mais {
+  display: inline-block;
+  margin: 2px 0 18px;
+  color: #c6a2ff;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.link-ler-mais:hover {
+  text-decoration: underline;
+}
+
+.acoes-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.banner .botao-ler-banner,
+.botao-favoritar-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 43px;
+  padding: 10px 17px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.banner .botao-ler-banner {
+  border: 0;
+  background:
+    linear-gradient(
+      135deg,
+      #7c4dff,
+      #a85af5
+    );
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow:
+    0 10px 25px rgba(124, 77, 255, 0.25);
+}
+
+.botao-favoritar-banner {
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  background: rgba(168, 85, 247, 0.08);
+  color: #d6c2ff;
+  cursor: pointer;
+}
+
+.botao-favoritar-banner.favoritado {
+  border-color: rgba(255, 82, 121, 0.5);
+  background: rgba(255, 82, 121, 0.13);
+  color: #ff9eb5;
+}
+
+.botao-favoritar-banner:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+
+/* ========================================
+   BANNER COMPACTO NO CELULAR
+======================================== */
+
+@media (max-width: 620px) {
+  .banner {
+    padding: 18px 12px 12px;
+  }
+
+  .banner .banner-card.banner-compacto {
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: start;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 19px;
+  }
+
+  .area-capa-banner {
+    width: 112px;
+  }
+
+  .banner .banner-capa {
+    width: 112px;
+    height: 168px;
+    border-radius: 12px;
+  }
+
+  .banner .banner-texto h1 {
+    margin-bottom: 7px;
+    font-size: 24px;
+  }
+
+  .banner .banner-texto h3 {
+    margin-bottom: 9px;
+    font-size: 12px;
+  }
+
+  .banner .sinopse-resumida {
+    margin-bottom: 4px;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-line-clamp: 3;
+  }
+
+  .link-ler-mais {
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+
+  .acoes-banner {
+    grid-column: 1 / -1;
+  }
+
+  .banner .botao-ler-banner,
+  .botao-favoritar-banner {
+    flex: 1;
+    min-width: 105px;
+    min-height: 40px;
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 370px) {
+  .banner .banner-card.banner-compacto {
+    grid-template-columns: 95px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .area-capa-banner {
+    width: 95px;
+  }
+
+  .banner .banner-capa {
+    width: 95px;
+    height: 143px;
+  }
+
+  .banner .banner-texto h1 {
+    font-size: 20px;
+  }
+
+  .banner .sinopse-resumida {
+    -webkit-line-clamp: 2;
+  }
+}
