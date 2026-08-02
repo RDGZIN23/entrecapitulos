@@ -44,6 +44,16 @@ const bannerSinopse =
 const bannerBotao =
   document.getElementById("bannerBotao");
 
+const bannerLerMais =
+  document.getElementById(
+    "bannerLerMais"
+  );
+
+const bannerFavoritar =
+  document.getElementById(
+    "bannerFavoritar"
+  );
+
 const campoPesquisa =
   document.getElementById(
     "campoPesquisa"
@@ -100,7 +110,7 @@ const ADMIN_UID =
 
 let todosOsLivros = [];
 let todosOsCapitulos = [];
-
+let livroAtualDoBanner = null;
 
 // ========================================
 // PROTEGER TEXTOS NO HTML
@@ -155,7 +165,9 @@ function ordenarLivros(livros) {
 
 function mostrarLivroNoBanner(livro) {
   if (!livro) {
-    if (bannerGenero) {
+  livroAtualDoBanner =
+  livro; 
+ if (bannerGenero) {
       bannerGenero.textContent =
         "Entre Capítulos";
     }
@@ -235,6 +247,12 @@ function mostrarLivroNoBanner(livro) {
     bannerBotao.style.opacity =
       "1";
   }
+if (bannerLerMais) {
+  bannerLerMais.href =
+    `livro.html?id=${livro.id}`;
+}
+
+atualizarBotaoFavoritoBanner();
 }
 
 
@@ -764,6 +782,187 @@ async function carregarLivros() {
   }
 }
 
+
+// ========================================
+// FAVORITO DO LIVRO EM DESTAQUE
+// ========================================
+
+function obterIdFavorito(
+  usuarioId,
+  livroId
+) {
+  return `${usuarioId}_${livroId}`;
+}
+
+
+async function atualizarBotaoFavoritoBanner() {
+  if (
+    !bannerFavoritar ||
+    !livroAtualDoBanner
+  ) {
+    return;
+  }
+
+  const usuario =
+    auth.currentUser;
+
+  bannerFavoritar.classList.remove(
+    "favoritado"
+  );
+
+  bannerFavoritar.textContent =
+    "♡ Favoritar";
+
+  if (!usuario) {
+    return;
+  }
+
+  try {
+    const favoritoId =
+      obterIdFavorito(
+        usuario.uid,
+        livroAtualDoBanner.id
+      );
+
+    const resultado =
+      await getDoc(
+        doc(
+          db,
+          "favoritos",
+          favoritoId
+        )
+      );
+
+    if (resultado.exists()) {
+      bannerFavoritar.classList.add(
+        "favoritado"
+      );
+
+      bannerFavoritar.textContent =
+        "♥ Favoritado";
+    }
+
+  } catch (erro) {
+    console.error(
+      "Erro ao verificar favorito:",
+      erro
+    );
+  }
+}
+
+
+async function alternarFavoritoBanner() {
+  if (
+    !bannerFavoritar ||
+    !livroAtualDoBanner
+  ) {
+    return;
+  }
+
+  const usuario =
+    auth.currentUser;
+
+  if (!usuario) {
+    window.location.href =
+      "entrar.html";
+
+    return;
+  }
+
+  bannerFavoritar.disabled =
+    true;
+
+  try {
+    const favoritoId =
+      obterIdFavorito(
+        usuario.uid,
+        livroAtualDoBanner.id
+      );
+
+    const referencia =
+      doc(
+        db,
+        "favoritos",
+        favoritoId
+      );
+
+    const resultado =
+      await getDoc(
+        referencia
+      );
+
+    if (resultado.exists()) {
+      await deleteDoc(
+        referencia
+      );
+
+      bannerFavoritar.classList.remove(
+        "favoritado"
+      );
+
+      bannerFavoritar.textContent =
+        "♡ Favoritar";
+
+    } else {
+      await setDoc(
+        referencia,
+        {
+          usuarioId:
+            usuario.uid,
+
+          livroId:
+            livroAtualDoBanner.id,
+
+          titulo:
+            livroAtualDoBanner.titulo ||
+            "Livro",
+
+          autor:
+            livroAtualDoBanner.autor ||
+            "Autor não informado",
+
+          capa:
+            livroAtualDoBanner.capa ||
+            capaPadrao,
+
+          criadoEm:
+            serverTimestamp()
+        }
+      );
+
+      bannerFavoritar.classList.add(
+        "favoritado"
+      );
+
+      bannerFavoritar.textContent =
+        "♥ Favoritado";
+    }
+
+  } catch (erro) {
+    console.error(
+      "Erro ao alterar favorito:",
+      erro
+    );
+
+    window.alert(
+      "Não foi possível alterar o favorito."
+    );
+
+  } finally {
+    bannerFavoritar.disabled =
+      false;
+  }
+}
+
+
+if (bannerFavoritar) {
+  bannerFavoritar.addEventListener(
+    "click",
+    alternarFavoritoBanner
+  );
+}
+
+
 // ========================================
 // CONTROLAR ÁREA DO AUTOR
 // ========================================
@@ -787,6 +986,7 @@ function configurarAreaAutor() {
         botaoAreaAutor.href =
           "painel.html";
       }
+atualizarBotaoFavoritoBanner();
     },
     (erro) => {
       console.error(
