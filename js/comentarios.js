@@ -46,6 +46,9 @@ const capituloId =
 let usuarioAtual =
   null;
 
+const cachePerfis =
+  new Map();
+
 
 // ========================================
 // ELEMENTOS DA PÁGINA
@@ -211,18 +214,28 @@ function mostrarMensagemFormulario(
 
 
 // ========================================
-// OBTER NOME DO USUÁRIO
+// OBTER DADOS DO USUÁRIO
 // ========================================
 
-async function obterNomeUsuario(
-  usuario
+async function obterDadosUsuario(
+  usuarioOuId
 ) {
-  if (!usuario) {
-    return "Leitor";
+  const usuarioId =
+    typeof usuarioOuId === "string"
+      ? usuarioOuId
+      : usuarioOuId?.uid;
+
+  if (!usuarioId) {
+    return {
+      nomeUsuario: "Leitor",
+      fotoUsuario: ""
+    };
   }
 
-  if (usuario.displayName) {
-    return usuario.displayName;
+  if (cachePerfis.has(usuarioId)) {
+    return cachePerfis.get(
+      usuarioId
+    );
   }
 
   try {
@@ -230,7 +243,7 @@ async function obterNomeUsuario(
       doc(
         db,
         "usuarios",
-        usuario.uid
+        usuarioId
       );
 
     const resultadoUsuario =
@@ -238,32 +251,62 @@ async function obterNomeUsuario(
         referenciaUsuario
       );
 
-    if (resultadoUsuario.exists()) {
-      const dados =
-        resultadoUsuario.data();
+    const usuarioAuth =
+      typeof usuarioOuId === "object"
+        ? usuarioOuId
+        : null;
 
-      return (
+    const dados =
+      resultadoUsuario.exists()
+        ? resultadoUsuario.data()
+        : {};
+
+    const perfil = {
+      nomeUsuario:
         dados.nome ||
         dados.nomeCompleto ||
-        dados.usuario ||
-        usuario.email
+        usuarioAuth?.displayName ||
+        usuarioAuth?.email
           ?.split("@")[0] ||
-        "Leitor"
-      );
-    }
+        "Leitor",
+
+      fotoUsuario:
+        dados.fotoURL ||
+        dados.foto ||
+        usuarioAuth?.photoURL ||
+        ""
+    };
+
+    cachePerfis.set(
+      usuarioId,
+      perfil
+    );
+
+    return perfil;
 
   } catch (erro) {
     console.error(
-      "Erro ao carregar nome do usuário:",
+      "Erro ao carregar perfil do usuário:",
       erro
     );
-  }
 
-  return (
-    usuario.email
-      ?.split("@")[0] ||
-    "Leitor"
-  );
+    return {
+      nomeUsuario:
+        typeof usuarioOuId === "object"
+          ? (
+              usuarioOuId.displayName ||
+              usuarioOuId.email
+                ?.split("@")[0] ||
+              "Leitor"
+            )
+          : "Leitor",
+
+      fotoUsuario:
+        typeof usuarioOuId === "object"
+          ? usuarioOuId.photoURL || ""
+          : ""
+    };
+  }
 }
 
 
@@ -446,10 +489,10 @@ function configurarFormularioComentario() {
       }
 
       try {
-        const nomeUsuario =
-          await obterNomeUsuario(
-            usuarioAtual
-          );
+        const dadosUsuario =
+  await obterDadosUsuario(
+    usuarioAtual
+  );
 
         await addDoc(
           collection(
@@ -460,7 +503,11 @@ function configurarFormularioComentario() {
             usuarioId:
               usuarioAtual.uid,
 
-            nomeUsuario,
+            nomeUsuario:
+  dadosUsuario.nomeUsuario,
+
+fotoUsuario:
+  dadosUsuario.fotoUsuario,
 
             capituloId,
 
@@ -742,11 +789,43 @@ function criarCartaoComentario(
   avatar.className =
     "avatar-comentario";
 
+const nomeDoAutor =
+  comentario.nomeUsuario ||
+  "Leitor";
+
+const fotoDoAutor =
+  comentario.fotoUsuario ||
+  "";
+
+if (fotoDoAutor) {
+  avatar.textContent = "";
+
+  avatar.style.backgroundImage =
+    `url("${fotoDoAutor}")`;
+
+  avatar.style.backgroundSize =
+    "cover";
+
+  avatar.style.backgroundPosition =
+    "center";
+
+  avatar.style.backgroundRepeat =
+    "no-repeat";
+
+  avatar.setAttribute(
+    "aria-label",
+    `Foto de ${nomeDoAutor}`
+  );
+
+} else {
+  avatar.style.backgroundImage =
+    "none";
+
   avatar.textContent =
     obterIniciais(
-      comentario.nomeUsuario ||
-      "Leitor"
+      nomeDoAutor
     );
+}
 
   const informacoes =
     document.createElement(
@@ -918,6 +997,38 @@ function criarCartaoComentario(
 
 
 // ========================================
+// SINCRONIZAR PERFIL DO COMENTÁRIO
+// ========================================
+
+async function sincronizarPerfilComentario(
+  comentario
+) {
+  if (!comentario.usuarioId) {
+    return comentario;
+  }
+
+  const perfil =
+    await obterDadosUsuario(
+      comentario.usuarioId
+    );
+
+  return {
+    ...comentario,
+
+    nomeUsuario:
+      perfil.nomeUsuario ||
+      comentario.nomeUsuario ||
+      "Leitor",
+
+    fotoUsuario:
+      perfil.fotoUsuario ||
+      comentario.fotoUsuario ||
+      ""
+  };
+}
+
+
+// ========================================
 // CARREGAR COMENTÁRIOS
 // ========================================
 
@@ -969,15 +1080,22 @@ async function carregarComentarios() {
       return;
     }
 
-    const comentarios =
-      resultado.docs.map(
-        (documentoComentario) => ({
-          id:
-            documentoComentario.id,
+const comentariosOriginais =
+  resultado.docs.map(
+    (documentoComentario) => ({
+      id:
+        documentoComentario.id,
 
-          ...documentoComentario.data()
-        })
-      );
+      ...documentoComentario.data()
+    })
+  );
+
+const comentarios =
+  await Promise.all(
+    comentariosOriginais.map(
+      sincronizarPerfilComentario
+    )
+  );
 
     comentarios.sort(
       (a, b) =>
