@@ -401,46 +401,48 @@ function configurarPesquisa() {
           campoPesquisa.value
         );
 
-      console.log(
-        "Pesquisando por:",
-        termo
-      );
-
-      console.log(
-        "Livros disponíveis:",
-        todosOsLivros.length
-      );
-
       if (!termo) {
+        mostrarDestaques(
+          todosOsLivros
+        );
+
         mostrarBiblioteca(
           todosOsLivros
         );
 
+        if (quantidadeLivros) {
+          quantidadeLivros.textContent =
+            todosOsLivros.length === 1
+              ? "1 livro disponível"
+              : `${todosOsLivros.length} livros disponíveis`;
+        }
+
         return;
       }
 
-      const livrosEncontradosPorCapitulo =
+      const idsLivrosDosCapitulos =
         new Set();
 
       todosOsCapitulos.forEach(
         (capitulo) => {
-          const textoCapitulo =
+          const textoDoCapitulo =
             normalizarTexto(
               [
-                capitulo.titulo,
-                capitulo.resumo,
+                capitulo.titulo || "",
+                capitulo.resumo || "",
                 `capítulo ${capitulo.numero || ""}`,
-                `capitulo ${capitulo.numero || ""}`
+                `capitulo ${capitulo.numero || ""}`,
+                capitulo.livroTitulo || ""
               ].join(" ")
             );
 
           if (
-            textoCapitulo.includes(
+            textoDoCapitulo.includes(
               termo
             ) &&
             capitulo.livroId
           ) {
-            livrosEncontradosPorCapitulo.add(
+            idsLivrosDosCapitulos.add(
               capitulo.livroId
             );
           }
@@ -450,34 +452,56 @@ function configurarPesquisa() {
       const resultados =
         todosOsLivros.filter(
           (livro) => {
-            const textoLivro =
+            const textoDoLivro =
               normalizarTexto(
                 [
-                  livro.titulo,
-                  livro.autor,
-                  livro.genero,
-                  livro.sinopse
+                  livro.titulo || "",
+                  livro.autor || "",
+                  livro.genero || "",
+                  livro.sinopse || ""
                 ].join(" ")
               );
 
             return (
-              textoLivro.includes(
+              textoDoLivro.includes(
                 termo
               ) ||
-              livrosEncontradosPorCapitulo.has(
+              idsLivrosDosCapitulos.has(
                 livro.id
               )
             );
           }
         );
 
-      console.log(
-        "Resultados encontrados:",
-        resultados.length
+      /*
+        Mostra o resultado nas duas áreas,
+        deixando a resposta visível logo
+        abaixo do campo de pesquisa.
+      */
+
+      mostrarDestaques(
+        resultados
       );
 
       mostrarBiblioteca(
         resultados
+      );
+
+      if (quantidadeLivros) {
+        quantidadeLivros.textContent =
+          resultados.length === 1
+            ? "1 resultado encontrado"
+            : `${resultados.length} resultados encontrados`;
+      }
+
+      console.log(
+        "Termo pesquisado:",
+        termo
+      );
+
+      console.log(
+        "Resultados:",
+        resultados.length
       );
     }
   );
