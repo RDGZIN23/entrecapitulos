@@ -707,6 +707,145 @@
         font-size: 13px;
       }
     }
+
+/* ========================================
+   EDIÇÃO DO PERFIL
+======================================== */
+
+.biografia-perfil {
+  margin-top: 12px !important;
+  max-width: 650px;
+  color: #d0d0d8 !important;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.botao-editar-perfil {
+  margin-top: 15px;
+  padding: 10px 16px;
+  border: 1px solid rgba(124, 77, 255, 0.45);
+  border-radius: 11px;
+  background: rgba(124, 77, 255, 0.14);
+  color: #d7c7ff;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.area-edicao-perfil {
+  scroll-margin-top: 90px;
+  padding: 22px;
+  border: 1px solid rgba(124, 77, 255, 0.25);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.form-editar-perfil {
+  display: grid;
+  gap: 18px;
+}
+
+.campo-editar-perfil {
+  display: grid;
+  gap: 8px;
+}
+
+.campo-editar-perfil label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.campo-editar-perfil input,
+.campo-editar-perfil textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 12px;
+  outline: none;
+  background: #171720;
+  color: #ffffff;
+  font: inherit;
+}
+
+.campo-editar-perfil textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.campo-editar-perfil input:focus,
+.campo-editar-perfil textarea:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.campo-editar-perfil small {
+  color: #92929e;
+  font-size: 12px;
+}
+
+.acoes-edicao-perfil {
+  display: flex;
+  justify-content: flex-end;
+  gap: 11px;
+}
+
+.botao-cancelar-edicao,
+.botao-salvar-edicao {
+  min-height: 44px;
+  padding: 11px 17px;
+  border-radius: 11px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.botao-cancelar-edicao {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.botao-salvar-edicao {
+  border: 0;
+  background:
+    linear-gradient(
+      135deg,
+      #7c4dff,
+      #a45fff
+    );
+  color: #ffffff;
+}
+
+.botao-salvar-edicao:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.mensagem-edicao-perfil {
+  min-height: 20px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.mensagem-edicao-perfil.sucesso {
+  color: #83e6b3;
+}
+
+.mensagem-edicao-perfil.erro {
+  color: #ff9bad;
+}
+
+@media (max-width: 500px) {
+  .acoes-edicao-perfil {
+    flex-direction: column-reverse;
+  }
+
+  .botao-cancelar-edicao,
+  .botao-salvar-edicao {
+    width: 100%;
+  }
+}
+
   </style>
 </head>
 
@@ -761,6 +900,21 @@
             Carregando e-mail...
           </p>
 
+<p
+  class="biografia-perfil"
+  id="biografiaPerfil"
+>
+  Este leitor ainda não escreveu uma biografia.
+</p>
+
+<button
+  type="button"
+  class="botao-editar-perfil"
+  id="botaoEditarPerfil"
+>
+  ✏️ Editar perfil
+</button>
+
           <span class="etiqueta-leitor">
             📖 Leitor do Entre Capítulos
           </span>
@@ -768,6 +922,100 @@
         </div>
 
       </section>
+
+<section
+  class="secao-perfil area-edicao-perfil"
+  id="areaEdicaoPerfil"
+  hidden
+>
+
+  <h2>Editar perfil</h2>
+
+  <form
+    class="form-editar-perfil"
+    id="formEditarPerfil"
+  >
+
+    <div class="campo-editar-perfil">
+
+      <label for="campoNomePerfil">
+        Nome
+      </label>
+
+      <input
+        type="text"
+        id="campoNomePerfil"
+        maxlength="80"
+        placeholder="Seu nome"
+        required
+      >
+
+    </div>
+
+    <div class="campo-editar-perfil">
+
+      <label for="campoBiografiaPerfil">
+        Biografia
+      </label>
+
+      <textarea
+        id="campoBiografiaPerfil"
+        maxlength="300"
+        rows="5"
+        placeholder="Conte um pouco sobre você..."
+      ></textarea>
+
+      <small>
+        Máximo de 300 caracteres.
+      </small>
+
+    </div>
+
+    <div class="campo-editar-perfil">
+
+      <label for="campoFotoPerfil">
+        Foto do perfil
+      </label>
+
+      <input
+        type="file"
+        id="campoFotoPerfil"
+        accept="image/jpeg,image/png,image/webp"
+      >
+
+      <small>
+        JPG, PNG ou WEBP, com no máximo 5 MB.
+      </small>
+
+    </div>
+
+    <p
+      class="mensagem-edicao-perfil"
+      id="mensagemEdicaoPerfil"
+    ></p>
+
+    <div class="acoes-edicao-perfil">
+
+      <button
+        type="button"
+        class="botao-cancelar-edicao"
+        id="botaoCancelarEdicao"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="botao-salvar-edicao"
+      >
+        Salvar alterações
+      </button>
+
+    </div>
+
+  </form>
+
+</section>
 
       <section class="secao-perfil">
 
