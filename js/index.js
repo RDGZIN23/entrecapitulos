@@ -386,6 +386,10 @@ function mostrarDestaques(livros) {
 
 function configurarPesquisa() {
   if (!campoPesquisa) {
+    console.error(
+      "Campo de pesquisa não encontrado."
+    );
+
     return;
   }
 
@@ -397,6 +401,16 @@ function configurarPesquisa() {
           campoPesquisa.value
         );
 
+      console.log(
+        "Pesquisando por:",
+        termo
+      );
+
+      console.log(
+        "Livros disponíveis:",
+        todosOsLivros.length
+      );
+
       if (!termo) {
         mostrarBiblioteca(
           todosOsLivros
@@ -405,52 +419,30 @@ function configurarPesquisa() {
         return;
       }
 
-      /*
-        Descobre quais livros possuem
-        capítulos que combinam com a busca.
-      */
-
-      const idsLivrosEncontradosNosCapitulos =
+      const livrosEncontradosPorCapitulo =
         new Set();
 
       todosOsCapitulos.forEach(
         (capitulo) => {
-          const tituloCapitulo =
+          const textoCapitulo =
             normalizarTexto(
-              capitulo.titulo
-            );
-
-          const resumoCapitulo =
-            normalizarTexto(
-              capitulo.resumo
-            );
-
-          const numeroCapitulo =
-            normalizarTexto(
-              `capítulo ${
-                capitulo.numero || ""
-              }`
-            );
-
-          const encontrouCapitulo =
-            tituloCapitulo.includes(
-              termo
-            ) ||
-            resumoCapitulo.includes(
-              termo
-            ) ||
-            numeroCapitulo.includes(
-              termo
+              [
+                capitulo.titulo,
+                capitulo.resumo,
+                `capítulo ${capitulo.numero || ""}`,
+                `capitulo ${capitulo.numero || ""}`
+              ].join(" ")
             );
 
           if (
-            encontrouCapitulo &&
+            textoCapitulo.includes(
+              termo
+            ) &&
             capitulo.livroId
           ) {
-            idsLivrosEncontradosNosCapitulos
-              .add(
-                capitulo.livroId
-              );
+            livrosEncontradosPorCapitulo.add(
+              capitulo.livroId
+            );
           }
         }
       );
@@ -458,36 +450,31 @@ function configurarPesquisa() {
       const resultados =
         todosOsLivros.filter(
           (livro) => {
-            const titulo =
+            const textoLivro =
               normalizarTexto(
-                livro.titulo
-              );
-
-            const autor =
-              normalizarTexto(
-                livro.autor
-              );
-
-            const genero =
-              normalizarTexto(
-                livro.genero
-              );
-
-            const sinopse =
-              normalizarTexto(
-                livro.sinopse
+                [
+                  livro.titulo,
+                  livro.autor,
+                  livro.genero,
+                  livro.sinopse
+                ].join(" ")
               );
 
             return (
-              titulo.includes(termo) ||
-              autor.includes(termo) ||
-              genero.includes(termo) ||
-              sinopse.includes(termo) ||
-              idsLivrosEncontradosNosCapitulos
-                .has(livro.id)
+              textoLivro.includes(
+                termo
+              ) ||
+              livrosEncontradosPorCapitulo.has(
+                livro.id
+              )
             );
           }
         );
+
+      console.log(
+        "Resultados encontrados:",
+        resultados.length
+      );
 
       mostrarBiblioteca(
         resultados
