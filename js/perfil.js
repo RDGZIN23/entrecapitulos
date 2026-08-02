@@ -9,7 +9,8 @@ import {
 
 import {
   onAuthStateChanged,
-  signOut
+  signOut,
+  updateProfile
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
@@ -19,6 +20,8 @@ import {
   getDoc,
   getDocs,
   query,
+  serverTimestamp,
+  setDoc,
   where
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
@@ -87,6 +90,51 @@ const conquistaLeitorDedicado =
     "conquistaLeitorDedicado"
   );
 
+const biografiaPerfil =
+  document.getElementById(
+    "biografiaPerfil"
+  );
+
+const botaoEditarPerfil =
+  document.getElementById(
+    "botaoEditarPerfil"
+  );
+
+const areaEdicaoPerfil =
+  document.getElementById(
+    "areaEdicaoPerfil"
+  );
+
+const formEditarPerfil =
+  document.getElementById(
+    "formEditarPerfil"
+  );
+
+const campoNomePerfil =
+  document.getElementById(
+    "campoNomePerfil"
+  );
+
+const campoBiografiaPerfil =
+  document.getElementById(
+    "campoBiografiaPerfil"
+  );
+
+const campoFotoPerfil =
+  document.getElementById(
+    "campoFotoPerfil"
+  );
+
+const botaoCancelarEdicao =
+  document.getElementById(
+    "botaoCancelarEdicao"
+  );
+
+const mensagemEdicaoPerfil =
+  document.getElementById(
+    "mensagemEdicaoPerfil"
+  );
+
 
 // ========================================
 // CONFIGURAÇÕES
@@ -94,6 +142,18 @@ const conquistaLeitorDedicado =
 
 const capaPadrao =
   "images/depois-de-te-odiar.png";
+
+const CLOUDINARY_CLOUD_NAME =
+  "dzsf7cwf";
+
+const CLOUDINARY_UPLOAD_PRESET =
+  "entre_capitulos";
+
+const CLOUDINARY_UPLOAD_URL =
+  `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+let usuarioPerfilAtual = null;
+let fotoPerfilAtual = "";
 
 let quantidadeFavoritosAtual = 0;
 let progressosFirebase = [];
@@ -1247,12 +1307,420 @@ function carregarContinueLendo(
 
 
 // ========================================
+// MOSTRAR MENSAGEM DA EDIÇÃO
+// ========================================
+
+function mostrarMensagemEdicao(
+  texto,
+  tipo = ""
+) {
+  if (!mensagemEdicaoPerfil) {
+    return;
+  }
+
+  mensagemEdicaoPerfil.textContent =
+    texto;
+
+  mensagemEdicaoPerfil.className =
+    `mensagem-edicao-perfil ${tipo}`;
+}
+
+
+// ========================================
+// MOSTRAR FOTO OU INICIAIS
+// ========================================
+
+function atualizarAvatarPerfil(
+  nome,
+  fotoURL = ""
+) {
+  if (!avatarPerfil) {
+    return;
+  }
+
+  if (fotoURL) {
+    avatarPerfil.textContent = "";
+
+    avatarPerfil.style.backgroundImage =
+      `url("${fotoURL}")`;
+
+    avatarPerfil.style.backgroundSize =
+      "cover";
+
+    avatarPerfil.style.backgroundPosition =
+      "center";
+
+    avatarPerfil.style.backgroundRepeat =
+      "no-repeat";
+
+    avatarPerfil.setAttribute(
+      "aria-label",
+      `Foto de ${nome || "leitor"}`
+    );
+
+    return;
+  }
+
+  avatarPerfil.style.backgroundImage =
+    "none";
+
+  avatarPerfil.textContent =
+    obterIniciais(nome);
+}
+
+
+// ========================================
+// ENVIAR FOTO PARA O CLOUDINARY
+// ========================================
+
+async function enviarFotoPerfil(
+  arquivo
+) {
+  if (!arquivo) {
+    return fotoPerfilAtual;
+  }
+
+  const formatosPermitidos = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if (
+    !formatosPermitidos.includes(
+      arquivo.type
+    )
+  ) {
+    throw new Error(
+      "Escolha uma imagem JPG, PNG ou WEBP."
+    );
+  }
+
+  const tamanhoMaximo =
+    5 * 1024 * 1024;
+
+  if (
+    arquivo.size >
+    tamanhoMaximo
+  ) {
+    throw new Error(
+      "A imagem deve ter no máximo 5 MB."
+    );
+  }
+
+  const dados =
+    new FormData();
+
+  dados.append(
+    "file",
+    arquivo
+  );
+
+  dados.append(
+    "upload_preset",
+    CLOUDINARY_UPLOAD_PRESET
+  );
+
+  dados.append(
+    "folder",
+    "entre-capitulos/perfis"
+  );
+
+  const resposta =
+    await fetch(
+      CLOUDINARY_UPLOAD_URL,
+      {
+        method: "POST",
+        body: dados
+      }
+    );
+
+  const resultado =
+    await resposta.json();
+
+  if (
+    !resposta.ok ||
+    !resultado.secure_url
+  ) {
+    console.error(
+      "Erro retornado pelo Cloudinary:",
+      resultado
+    );
+
+    throw new Error(
+      resultado.error?.message ||
+      "Não foi possível enviar a foto."
+    );
+  }
+
+  return resultado.secure_url;
+}
+
+
+// ========================================
+// ABRIR EDIÇÃO DO PERFIL
+// ========================================
+
+function abrirEdicaoPerfil() {
+  if (!areaEdicaoPerfil) {
+    return;
+  }
+
+  if (campoNomePerfil) {
+    campoNomePerfil.value =
+      nomePerfil?.textContent
+        ?.trim() || "";
+  }
+
+  if (campoBiografiaPerfil) {
+    const biografiaAtual =
+      biografiaPerfil?.dataset
+        ?.biografia || "";
+
+    campoBiografiaPerfil.value =
+      biografiaAtual;
+  }
+
+  if (campoFotoPerfil) {
+    campoFotoPerfil.value = "";
+  }
+
+  mostrarMensagemEdicao("");
+
+  areaEdicaoPerfil.hidden =
+    false;
+
+  areaEdicaoPerfil.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+
+// ========================================
+// FECHAR EDIÇÃO DO PERFIL
+// ========================================
+
+function fecharEdicaoPerfil() {
+  if (!areaEdicaoPerfil) {
+    return;
+  }
+
+  areaEdicaoPerfil.hidden =
+    true;
+
+  formEditarPerfil?.reset();
+
+  mostrarMensagemEdicao("");
+}
+
+
+// ========================================
+// BOTÕES DA EDIÇÃO
+// ========================================
+
+if (botaoEditarPerfil) {
+  botaoEditarPerfil.addEventListener(
+    "click",
+    abrirEdicaoPerfil
+  );
+}
+
+if (botaoCancelarEdicao) {
+  botaoCancelarEdicao.addEventListener(
+    "click",
+    fecharEdicaoPerfil
+  );
+}
+
+
+// ========================================
+// SALVAR EDIÇÃO DO PERFIL
+// ========================================
+
+if (formEditarPerfil) {
+  formEditarPerfil.addEventListener(
+    "submit",
+    async (evento) => {
+      evento.preventDefault();
+
+      if (!usuarioPerfilAtual) {
+        mostrarMensagemEdicao(
+          "Sua sessão expirou. Entre novamente.",
+          "erro"
+        );
+
+        return;
+      }
+
+      const nome =
+        campoNomePerfil?.value
+          .trim() || "";
+
+      const biografia =
+        campoBiografiaPerfil?.value
+          .trim() || "";
+
+      const arquivoFoto =
+        campoFotoPerfil
+          ?.files?.[0] || null;
+
+      if (nome.length < 2) {
+        mostrarMensagemEdicao(
+          "Digite um nome com pelo menos 2 caracteres.",
+          "erro"
+        );
+
+        return;
+      }
+
+      if (nome.length > 80) {
+        mostrarMensagemEdicao(
+          "O nome deve ter no máximo 80 caracteres.",
+          "erro"
+        );
+
+        return;
+      }
+
+      if (biografia.length > 300) {
+        mostrarMensagemEdicao(
+          "A biografia deve ter no máximo 300 caracteres.",
+          "erro"
+        );
+
+        return;
+      }
+
+      const botaoSalvar =
+        formEditarPerfil.querySelector(
+          'button[type="submit"]'
+        );
+
+      if (botaoSalvar) {
+        botaoSalvar.disabled =
+          true;
+
+        botaoSalvar.textContent =
+          arquivoFoto
+            ? "Enviando foto..."
+            : "Salvando...";
+      }
+
+      try {
+        let fotoURL =
+          fotoPerfilAtual;
+
+        if (arquivoFoto) {
+          fotoURL =
+            await enviarFotoPerfil(
+              arquivoFoto
+            );
+
+          if (botaoSalvar) {
+            botaoSalvar.textContent =
+              "Salvando perfil...";
+          }
+        }
+
+        await setDoc(
+          doc(
+            db,
+            "usuarios",
+            usuarioPerfilAtual.uid
+          ),
+          {
+            nome,
+            biografia,
+            fotoURL:
+              fotoURL || "",
+            email:
+              usuarioPerfilAtual.email ||
+              "",
+            atualizadoEm:
+              serverTimestamp()
+          },
+          {
+            merge: true
+          }
+        );
+
+        await updateProfile(
+          usuarioPerfilAtual,
+          {
+            displayName: nome,
+            photoURL:
+              fotoURL || null
+          }
+        );
+
+        fotoPerfilAtual =
+          fotoURL || "";
+
+        if (nomePerfil) {
+          nomePerfil.textContent =
+            nome;
+        }
+
+        if (biografiaPerfil) {
+          biografiaPerfil.textContent =
+            biografia ||
+            "Este leitor ainda não escreveu uma biografia.";
+
+          biografiaPerfil.dataset.biografia =
+            biografia;
+        }
+
+        atualizarAvatarPerfil(
+          nome,
+          fotoPerfilAtual
+        );
+
+        mostrarMensagemEdicao(
+          "Perfil atualizado com sucesso!",
+          "sucesso"
+        );
+
+        setTimeout(
+          fecharEdicaoPerfil,
+          1200
+        );
+
+      } catch (erro) {
+        console.error(
+          "Erro ao atualizar perfil:",
+          erro
+        );
+
+        mostrarMensagemEdicao(
+          erro.message ||
+          "Não foi possível atualizar seu perfil.",
+          "erro"
+        );
+
+      } finally {
+        if (botaoSalvar) {
+          botaoSalvar.disabled =
+            false;
+
+          botaoSalvar.textContent =
+            "Salvar alterações";
+        }
+      }
+    }
+  );
+}
+
+
+// ========================================
 // CARREGAR PERFIL DO FIRESTORE
 // ========================================
 
 async function carregarPerfil(usuario) {
   try {
-    const referenciaUsuario =
+ usuarioPerfilAtual =
+  usuario;
+   const referenciaUsuario =
       doc(
         db,
         "usuarios",
@@ -1279,6 +1747,19 @@ async function carregarPerfil(usuario) {
       usuario.email ||
       "E-mail não informado";
 
+    const biografia =
+  dados.biografia ||
+  "";
+
+const fotoURL =
+  dados.fotoURL ||
+  dados.foto ||
+  usuario.photoURL ||
+  "";
+
+fotoPerfilAtual =
+  fotoURL;
+
     if (nomePerfil) {
       nomePerfil.textContent =
         nome;
@@ -1289,10 +1770,19 @@ async function carregarPerfil(usuario) {
         email;
     }
 
-    if (avatarPerfil) {
-      avatarPerfil.textContent =
-        obterIniciais(nome);
-    }
+    atualizarAvatarPerfil(
+  nome,
+  fotoURL
+);
+
+if (biografiaPerfil) {
+  biografiaPerfil.textContent =
+    biografia ||
+    "Este leitor ainda não escreveu uma biografia.";
+
+  biografiaPerfil.dataset.biografia =
+    biografia;
+}
 
     await carregarFavoritos(
   usuario.uid
