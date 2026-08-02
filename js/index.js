@@ -757,6 +757,10 @@ async function iniciarPagina() {
       "Erro ao iniciar a página:",
       erro
     );
+
+    mostrarErro(
+      "Não foi possível iniciar a página."
+    );
   }
 }
 
