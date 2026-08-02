@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Descubra livros e continue suas leituras no Entre Capítulos."
+  >
+
+  <title>Entre Capítulos — Nova experiência</title>
+
+  <link
+    rel="stylesheet"
+    href="css/index-teste.css?v=1"
+  >
+</head>
+
+<body>
+
+  <!-- CABEÇALHO -->
+
+  <header class="topo-teste">
+
+    <div class="marca-teste">
+
+      <span class="icone-marca">
+        💜
+      </span>
+
+      <div>
+        <strong>Entre Capítulos</strong>
+        <small>Onde cada página ganha vida</small>
+      </div>
+
+    </div>
+
+    <div class="acoes-topo">
+
+      <a
+        href="perfil.html"
+        class="botao-avatar-topo"
+        aria-label="Abrir perfil"
+      >
+        👤
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <main class="pagina-inicial-teste">
+
+    <!-- SAUDAÇÃO -->
+
+    <section class="saudacao-teste">
+
+      <span class="etiqueta-teste">
+        Sua próxima história começa aqui
+      </span>
+
+      <h1 id="saudacaoLeitor">
+        O que vamos ler hoje?
+      </h1>
+
+      <p>
+        Descubra romances, fantasias, dramas e histórias capazes de prender sua atenção.
+      </p>
+
+    </section>
+
+
+    <!-- PESQUISA -->
+
+    <section class="area-pesquisa-teste">
+
+      <div class="campo-pesquisa-teste">
+
+        <span>🔎</span>
+
+        <input
+          type="search"
+          id="campoPesquisaTeste"
+          placeholder="Buscar livros, autores, gêneros ou capítulos..."
+          autocomplete="off"
+        >
+
+        <button
+          type="button"
+          id="botaoLimparPesquisa"
+          aria-label="Limpar pesquisa"
+          hidden
+        >
+          ✕
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- RESULTADOS DA PESQUISA -->
+
+    <section
+      class="secao-teste"
+      id="secaoResultados"
+      hidden
+    >
+
+      <div class="cabecalho-secao-teste">
+
+        <div>
+          <span class="rotulo-secao">
+            Pesquisa
+          </span>
+
+          <h2>Resultados encontrados</h2>
+        </div>
+
+        <span
+          class="contador-resultados"
+          id="contadorResultados"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        class="grade-resultados"
+        id="listaResultados"
+      ></div>
+
+    </section>
+
+
+    <!-- DESTAQUE CINEMATOGRÁFICO -->
+
+    <section
+      class="destaque-cinema"
+      id="destaqueCinema"
+    >
+
+      <div
+        class="fundo-destaque"
+        id="fundoDestaque"
+      ></div>
+
+      <div class="sombra-destaque"></div>
+
+      <div class="conteudo-destaque">
+
+        <span
+          class="genero-destaque"
+          id="generoDestaque"
+        >
+          Carregando destaque...
+        </span>
+
+        <h2 id="tituloDestaque">
+          Entre Capítulos
+        </h2>
+
+        <p
+          class="autor-destaque"
+          id="autorDestaque"
+        >
+          Aguarde...
+        </p>
+
+        <p
+          class="sinopse-destaque"
+          id="sinopseDestaque"
+        >
+          Buscando uma história especial para você.
+        </p>
+
+        <div class="acoes-destaque">
+
+          <a
+            href="#"
+            id="botaoLerDestaque"
+            class="botao-destaque-principal"
+          >
+            ▶ Ler agora
+          </a>
+
+          <a
+            href="biblioteca.html"
+            class="botao-destaque-secundario"
+          >
+            ＋ Biblioteca
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTINUAR LENDO -->
+
+    <section
+      class="secao-teste"
+      id="secaoContinueTeste"
+      hidden
+    >
+
+      <div class="cabecalho-secao-teste">
+
+        <div>
+          <span class="rotulo-secao">
+            Sua leitura
+          </span>
+
+          <h2>Continue de onde parou</h2>
+        </div>
+
+      </div>
+
+      <article class="cartao-continuar-teste">
+
+        <img
+          src="images/depois-de-te-odiar.png"
+          alt="Capa do livro"
+          id="continueCapaTeste"
+        >
+
+        <div class="conteudo-continuar-teste">
+
+          <span class="etiqueta-continuar">
+            Continuar lendo
+          </span>
+
+          <h3 id="continueTituloTeste">
+            Livro
+          </h3>
+
+          <p id="continueCapituloTeste">
+            Capítulo
+          </p>
+
+          <div class="barra-continue-teste">
+            <div id="barraContinuePreenchida"></div>
+          </div>
+
+          <a
+            href="#"
+            id="continueBotaoTeste"
+            class="botao-continuar-teste"
+          >
+            📖 Continuar leitura
+          </a>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- EM DESTAQUE -->
+
+    <section class="secao-teste">
+
+      <div class="cabecalho-secao-teste">
+
+        <div>
+          <span class="rotulo-secao">
+            Selecionados
+          </span>
+
+          <h2>🔥 Em destaque</h2>
+        </div>
+
+        <a href="biblioteca.html">
+          Ver todos
+        </a>
+
+      </div>
+
+      <div
+        class="carrossel-livros"
+        id="listaDestaquesTeste"
+      >
+        <div class="mensagem-carregando">
+          Carregando destaques...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- LANÇAMENTOS -->
+
+    <section class="secao-teste">
+
+      <div class="cabecalho-secao-teste">
+
+        <div>
+          <span class="rotulo-secao">
+            Novidades
+          </span>
+
+          <h2>✨ Lançamentos</h2>
+        </div>
+
+      </div>
+
+      <div
+        class="carrossel-livros"
+        id="listaLancamentosTeste"
+      >
+        <div class="mensagem-carregando">
+          Carregando lançamentos...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- GÊNEROS -->
+
+    <section class="secao-teste">
+
+      <div class="cabecalho-secao-teste">
+
+        <div>
+          <span class="rotulo-secao">
+            Explore
+          </span>
+
+          <h2>Escolha um gênero</h2>
+        </div>
+
+      </div>
+
+      <div
+        class="lista-generos"
+        id="listaGenerosTeste"
+      >
+        <div class="mensagem-carregando">
+          Carregando gêneros...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- FILEIRAS CRIADAS AUTOMATICAMENTE -->
+
+    <div id="secoesGenerosTeste"></div>
+
+
+    <!-- TODOS OS LIVROS -->
+
+    <section class="secao-teste">
+
+      <div class="cabecalho-secao-teste">
+
+        <div>
+          <span class="rotulo-secao">
+            Catálogo
+          </span>
+
+          <h2>📚 Todos os livros</h2>
+        </div>
+
+        <span
+          class="contador-resultados"
+          id="quantidadeLivrosTeste"
+        >
+          0
+        </span>
+
+      </div>
+
+      <div
+        class="grade-catalogo"
+        id="gradeLivrosTeste"
+      >
+        <div class="mensagem-carregando">
+          Carregando biblioteca...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- CHAMADA FINAL -->
+
+    <section class="chamada-biblioteca">
+
+      <span>💜</span>
+
+      <div>
+        <h2>Sua biblioteca está esperando</h2>
+
+        <p>
+          Salve favoritos, acompanhe seu progresso e descubra novas histórias.
+        </p>
+      </div>
+
+      <a href="biblioteca.html">
+        Explorar
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- MENU INFERIOR -->
+
+  <nav class="menu-teste">
+
+    <a
+      href="index-teste.html"
+      class="ativo"
+    >
+      <span>🏠</span>
+      Início
+    </a>
+
+    <a href="biblioteca.html">
+      <span>📚</span>
+      Biblioteca
+    </a>
+
+    <a href="perfil.html#secaoFavoritos">
+      <span>❤️</span>
+      Favoritos
+    </a>
+
+    <a href="perfil.html">
+      <span>👤</span>
+      Perfil
+    </a>
+
+    <a
+      href="painel.html"
+      id="botaoAreaAutorTeste"
+      hidden
+    >
+      <span>✍️</span>
+      Autor
+    </a>
+
+  </nav>
+
+
+  <script
+    type="module"
+    src="js/index-teste.js?v=1"
+  ></script>
+
+</body>
+</html>
