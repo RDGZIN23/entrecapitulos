@@ -365,10 +365,12 @@
       }
     }
 
-    @media (max-width: 340px) {
-      .grade-livros {
-        grid-template-columns: 1fr;
-      }
+ @media (max-width: 340px) {
+  .grade-livros {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* ========================================
    CORREÇÃO DEFINITIVA — CONTINUAR LENDO
@@ -376,13 +378,13 @@
 
 #listaContinuar.lista-horizontal {
   display: flex !important;
-  grid-auto-flow: unset !important;
-  grid-auto-columns: unset !important;
   width: 100% !important;
   gap: 14px !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
   padding: 4px 2px 14px !important;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 #listaContinuar > .cartao-continuar {
@@ -402,7 +404,6 @@
   width: 92px !important;
   height: 100% !important;
   min-height: 145px !important;
-  max-height: 175px !important;
   object-fit: cover !important;
 }
 
@@ -441,7 +442,6 @@
     min-width: 360px !important;
     max-width: 360px !important;
   }
-}
 }
 
   </style>
