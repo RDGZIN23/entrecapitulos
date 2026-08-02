@@ -2,7 +2,14 @@
 // IMPORTAÇÕES DO FIREBASE
 // ========================================
 
-import { db } from "./firebase-config.js";
+import {
+  auth,
+  db
+} from "./firebase-config.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 import {
   collection,
@@ -70,6 +77,11 @@ const continueCapitulo =
 const continueBotao =
   document.getElementById("continueBotao");
 
+const botaoAreaAutor =
+  document.getElementById(
+    "botaoAreaAutor"
+  );
+
 
 // ========================================
 // CONFIGURAÇÕES
@@ -77,6 +89,9 @@ const continueBotao =
 
 const capaPadrao =
   "images/depois-de-te-odiar.png";
+
+const ADMIN_UID =
+  "VPjjYv2NOdXMTTTxynB1MHTrfx23";
 
 let todosOsLivros = [];
 let todosOsCapitulos = [];
@@ -744,12 +759,49 @@ async function carregarLivros() {
   }
 }
 
+// ========================================
+// CONTROLAR ÁREA DO AUTOR
+// ========================================
+
+function configurarAreaAutor() {
+  if (!botaoAreaAutor) {
+    return;
+  }
+
+  onAuthStateChanged(
+    auth,
+    (usuario) => {
+      const eAdministrador =
+        usuario &&
+        usuario.uid === ADMIN_UID;
+
+      botaoAreaAutor.hidden =
+        !eAdministrador;
+
+      if (eAdministrador) {
+        botaoAreaAutor.href =
+          "painel.html";
+      }
+    },
+    (erro) => {
+      console.error(
+        "Erro ao verificar administrador:",
+        erro
+      );
+
+      botaoAreaAutor.hidden = true;
+    }
+  );
+}
+
+
 
 // ========================================
 // INICIAR A PÁGINA
 // ========================================
 
 async function iniciarPagina() {
+  configurarAreaAutor();
   carregarContinueLendo();
 
   try {
