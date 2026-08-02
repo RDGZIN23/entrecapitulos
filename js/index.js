@@ -41,7 +41,8 @@ const campoPesquisa =
   ) ||
   document.querySelector(
     'input[type="search"]'
-  ););
+  );
+);
 
 const livrosDestaque =
   document.getElementById("livrosDestaque");
