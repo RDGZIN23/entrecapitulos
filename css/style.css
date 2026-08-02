@@ -1329,3 +1329,12 @@ pointer-events:none;
   font-size: 13px;
   text-align: center;
 }
+
+
+
+.avatar-comentario {
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
