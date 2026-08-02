@@ -33,7 +33,15 @@ const bannerBotao =
   document.getElementById("bannerBotao");
 
 const campoPesquisa =
-  document.getElementById("campoPesquisa");
+  document.getElementById(
+    "campoPesquisa"
+  ) ||
+  document.querySelector(
+    ".pesquisa input"
+  ) ||
+  document.querySelector(
+    'input[type="search"]'
+  ););
 
 const livrosDestaque =
   document.getElementById("livrosDestaque");
@@ -723,15 +731,31 @@ async function carregarLivros() {
 // INICIAR A PÁGINA
 // ========================================
 
-configurarPesquisa();
-carregarContinueLendo();
+async function iniciarPagina() {
+  carregarContinueLendo();
 
-Promise.all([
-  carregarLivros(),
-  carregarCapitulosPesquisa()
-]).catch((erro) => {
-  console.error(
-    "Erro ao iniciar a página:",
-    erro
-  );
-});
+  try {
+    await Promise.all([
+      carregarLivros(),
+      carregarCapitulosPesquisa()
+    ]);
+
+    configurarPesquisa();
+
+    console.log(
+      `${todosOsLivros.length} livros disponíveis para pesquisa.`
+    );
+
+    console.log(
+      `${todosOsCapitulos.length} capítulos disponíveis para pesquisa.`
+    );
+
+  } catch (erro) {
+    console.error(
+      "Erro ao iniciar a página:",
+      erro
+    );
+  }
+}
+
+iniciarPagina();
