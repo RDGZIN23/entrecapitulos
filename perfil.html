@@ -524,6 +524,152 @@
       }
     }
 
+
+/* ========================================
+   CORREÇÃO FINAL DO PERFIL NO CELULAR
+======================================== */
+
+.pagina-perfil {
+  display: block;
+  width: min(calc(100% - 24px), 950px);
+  max-width: 950px;
+  margin-inline: auto;
+}
+
+/* FAVORITOS */
+
+#secaoFavoritos,
+.lista-favoritos {
+  width: 100%;
+  max-width: 100%;
+}
+
+.lista-favoritos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.cartao-favorito {
+  display: grid;
+  grid-template-columns: 95px minmax(0, 1fr);
+  width: 100%;
+  max-width: 100%;
+  min-height: 145px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.capa-favorito {
+  display: block;
+  width: 95px;
+  height: 100%;
+  min-height: 145px;
+  max-height: 190px;
+  object-fit: cover;
+}
+
+.conteudo-favorito {
+  width: 100%;
+  min-width: 0;
+  padding: 14px;
+}
+
+.conteudo-favorito h3,
+.conteudo-favorito p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* CONTINUAR LENDO */
+
+#areaContinueLendo {
+  display: grid;
+  grid-template-columns: 95px minmax(0, 1fr);
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 100%;
+  min-height: 145px;
+  padding: 16px;
+  overflow: hidden;
+  text-align: left;
+}
+
+#areaContinueLendo img {
+  display: block;
+  grid-row: 1 / span 4;
+  width: 95px !important;
+  height: 140px !important;
+  max-width: 95px !important;
+  max-height: 140px !important;
+  margin: 0 !important;
+  border-radius: 11px;
+  object-fit: cover;
+}
+
+#areaContinueLendo h3,
+#areaContinueLendo p {
+  min-width: 0;
+  max-width: 100%;
+  margin-left: 0;
+  overflow-wrap: anywhere;
+}
+
+#areaContinueLendo .acao-perfil,
+#areaContinueLendo a {
+  width: fit-content;
+  min-height: 42px;
+  padding: 10px 15px;
+}
+
+/* Evita imagens globais gigantes */
+
+.pagina-perfil img {
+  max-width: 100%;
+}
+
+/* ========================================
+   AJUSTES PARA CELULAR
+======================================== */
+
+@media (max-width: 500px) {
+  .pagina-perfil {
+    width: calc(100% - 20px);
+    padding-top: 22px;
+  }
+
+  .cartao-favorito {
+    grid-template-columns: 82px minmax(0, 1fr);
+    min-height: 130px;
+  }
+
+  .capa-favorito {
+    width: 82px;
+    min-height: 130px;
+    max-height: 165px;
+  }
+
+  #areaContinueLendo {
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 12px;
+    min-height: 130px;
+    padding: 13px;
+  }
+
+  #areaContinueLendo img {
+    width: 82px !important;
+    height: 125px !important;
+    max-width: 82px !important;
+    max-height: 125px !important;
+  }
+
+  .conteudo-favorito {
+    padding: 12px;
+  }
+}
+
+
     @media (max-width: 400px) {
       .pagina-perfil {
         width: min(100% - 22px, 950px);
