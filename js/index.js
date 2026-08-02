@@ -743,11 +743,13 @@ async function iniciarPagina() {
     configurarPesquisa();
 
     console.log(
-      `${todosOsLivros.length} livros disponíveis para pesquisa.`
+      "Livros carregados:",
+      todosOsLivros.length
     );
 
     console.log(
-      `${todosOsCapitulos.length} capítulos disponíveis para pesquisa.`
+      "Capítulos carregados:",
+      todosOsCapitulos.length
     );
 
   } catch (erro) {
