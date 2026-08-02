@@ -219,9 +219,76 @@
   </nav>
 
 
+<script>
+  window.addEventListener("error", function (evento) {
+    const mensagem = document.createElement("div");
+
+    mensagem.style.cssText = `
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 80px;
+      z-index: 99999;
+      padding: 16px;
+      border: 1px solid #ef4444;
+      border-radius: 12px;
+      background: #2b1115;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    `;
+
+    mensagem.innerHTML = `
+      <strong>Erro no site:</strong><br>
+      ${evento.message || "Erro desconhecido"}<br><br>
+      <small>
+        Arquivo: ${evento.filename || "não informado"}<br>
+        Linha: ${evento.lineno || "não informada"}
+      </small>
+    `;
+
+    document.body.appendChild(mensagem);
+  });
+
+  window.addEventListener(
+    "unhandledrejection",
+    function (evento) {
+      const mensagem = document.createElement("div");
+
+      mensagem.style.cssText = `
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 80px;
+        z-index: 99999;
+        padding: 16px;
+        border: 1px solid #f59e0b;
+        border-radius: 12px;
+        background: #2b2111;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      `;
+
+      mensagem.innerHTML = `
+        <strong>Erro ao carregar dados:</strong><br>
+        ${
+          evento.reason?.message ||
+          evento.reason ||
+          "Erro desconhecido"
+        }
+      `;
+
+      document.body.appendChild(mensagem);
+    }
+  );
+</script>
+
 <script
   type="module"
-  src="js/index.js?v=3"
+  src="js/index.js?v=4"
 ></script>
 
 </body>
