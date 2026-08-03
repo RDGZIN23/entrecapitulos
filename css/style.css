@@ -2125,3 +2125,49 @@ text-align:center;
     padding-left: 0;
   }
 }
+
+
+/* ========================================
+   CORREÇÃO DA LEITURA NO CELULAR
+======================================== */
+
+.pagina-leitura,
+.leitor {
+  width: min(
+    calc(100% - 32px),
+    850px
+  );
+  margin-inline: auto;
+}
+
+.texto-capitulo {
+  width: 100%;
+  color: #eeeeee;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 20px;
+  line-height: 1.9;
+}
+
+.texto-capitulo p {
+  margin: 0 0 1.4em;
+}
+
+@media (max-width: 600px) {
+  .pagina-leitura,
+  .leitor {
+    width: calc(100% - 28px);
+    padding: 32px 0 70px;
+  }
+
+  .texto-capitulo {
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  .titulo-capitulo-leitura {
+    font-size: 31px;
+  }
+}
