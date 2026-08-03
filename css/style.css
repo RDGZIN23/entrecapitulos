@@ -1601,3 +1601,205 @@ pointer-events:none;
   color: #aaaab5;
   font-size: 14px;
 }
+
+
+/* ========================================
+   NOVA IDENTIDADE DO TOPO
+======================================== */
+
+.topo-principal {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 155px;
+  padding: 25px 18px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(124, 77, 255, 0.14),
+      transparent 56%
+    ),
+    linear-gradient(
+      180deg,
+      #0f172a,
+      #0c1424
+    );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  text-align: center;
+}
+
+.marca-principal {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.icone-livro-logo {
+  position: relative;
+  display: block;
+  width: 58px;
+  height: 43px;
+}
+
+.pagina-logo {
+  position: absolute;
+  top: 2px;
+  width: 28px;
+  height: 36px;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #dfe5ef
+    );
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.2);
+}
+
+.pagina-logo-esquerda {
+  left: 1px;
+  border-radius: 7px 2px 7px 3px;
+  transform: skewY(7deg);
+  transform-origin: right bottom;
+}
+
+.pagina-logo-direita {
+  right: 1px;
+  border-radius: 2px 7px 3px 7px;
+  transform: skewY(-7deg);
+  transform-origin: left bottom;
+}
+
+.icone-livro-logo::after {
+  position: absolute;
+  right: 5px;
+  bottom: 0;
+  left: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  content: "";
+}
+
+.marcador-logo {
+  position: absolute;
+  right: 9px;
+  bottom: 1px;
+  z-index: 2;
+  width: 7px;
+  height: 17px;
+  background:
+    linear-gradient(
+      180deg,
+      #a855f7,
+      #7c4dff
+    );
+  clip-path:
+    polygon(
+      0 0,
+      100% 0,
+      100% 100%,
+      50% 76%,
+      0 100%
+    );
+}
+
+.textos-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nome-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #ffffff;
+  font-size: clamp(23px, 5.8vw, 34px);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  line-height: 1.15;
+}
+
+.nome-logo-destaque {
+  color: #a970ff;
+}
+
+.slogan-logo {
+  display: block;
+  margin-top: 9px;
+  color: #aeb6c6;
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.01em;
+}
+
+
+/* Remove a aparência antiga somente no novo topo */
+
+.topo-principal .logo,
+.topo-principal .slogan {
+  text-shadow: none;
+}
+
+
+/* ========================================
+   NOVO TOPO NO CELULAR
+======================================== */
+
+@media (max-width: 520px) {
+  .topo-principal {
+    min-height: 135px;
+    padding: 20px 12px;
+  }
+
+  .marca-principal {
+    gap: 9px;
+  }
+
+  .icone-livro-logo {
+    width: 50px;
+    height: 38px;
+  }
+
+  .pagina-logo {
+    width: 24px;
+    height: 32px;
+  }
+
+  .marcador-logo {
+    right: 8px;
+    width: 6px;
+    height: 15px;
+  }
+
+  .nome-logo {
+    gap: 7px;
+    font-size: 23px;
+    letter-spacing: 0.11em;
+  }
+
+  .slogan-logo {
+    margin-top: 7px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 355px) {
+  .nome-logo {
+    gap: 5px;
+    font-size: 19px;
+    letter-spacing: 0.08em;
+  }
+
+  .slogan-logo {
+    font-size: 12px;
+  }
+}
