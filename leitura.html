@@ -17,7 +17,7 @@
 
   <link
   rel="stylesheet"
-  href="css/style.css?v=13"
+  href="css/style.css?v=14"
 >
 
   <style>
@@ -549,6 +549,24 @@ body {
   .numero-capitulo-leitura {
     font-size: 14px;
   }
+}
+
+/* ========================================
+   NÃO CORTAR PALAVRAS NO MEIO
+======================================== */
+
+.texto-capitulo,
+.texto-capitulo p,
+.texto-capitulo span,
+.texto-capitulo div {
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+.texto-capitulo p {
+  max-width: 100%;
 }
 
 </style>
