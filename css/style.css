@@ -969,12 +969,15 @@ header:not(.topo-principal) {
 @media(max-width:600px){
 
 #listaLivros{
-grid-template-columns:1fr;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.card-livro{
-max-width:340px;
-margin:auto;
+#listaLivros .card-livro{
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }
 
 #livrosDestaque .card-livro{
