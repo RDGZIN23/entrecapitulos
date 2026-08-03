@@ -1581,3 +1581,23 @@ pointer-events:none;
     -webkit-line-clamp: 2;
   }
 }
+
+
+#bannerPrincipal:has(
+  #bannerCapa[hidden]
+) {
+  min-height: 180px;
+}
+
+#bannerPrincipal:has(
+  #bannerCapa[hidden]
+)::after {
+  content: "Carregando destaque...";
+  display: flex;
+  width: 100%;
+  min-height: 150px;
+  align-items: center;
+  justify-content: center;
+  color: #aaaab5;
+  font-size: 14px;
+}
