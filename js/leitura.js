@@ -129,7 +129,9 @@ function mostrarTexto(texto = "") {
   textoCapitulo.innerHTML = "";
 
   const textoLimpo =
-    String(texto).trim();
+    String(texto)
+      .replace(/\u00a0/g, " ")
+      .trim();
 
   if (!textoLimpo) {
     const mensagem =
@@ -148,22 +150,110 @@ function mostrarTexto(texto = "") {
     return;
   }
 
-  /*
-    Os capítulos antigos foram salvos
-    como texto simples.
-
-    Os novos capítulos criados pelo
-    editor Quill são salvos como HTML.
-  */
-
   const possuiHTML =
     /<\/?[a-z][\s\S]*>/i.test(
       textoLimpo
     );
 
   if (possuiHTML) {
-    textoCapitulo.innerHTML =
-      textoLimpo;
+    const documentoTemporario =
+      new DOMParser().parseFromString(
+        textoLimpo,
+        "text/html"
+      );
+
+    const elementos =
+      documentoTemporario.body
+        .querySelectorAll("*");
+
+    elementos.forEach((elemento) => {
+      /*
+        Remove estilos do editor que podem
+        deixar o texto maior que a tela.
+      */
+
+      elemento.style.removeProperty(
+        "width"
+      );
+
+      elemento.style.removeProperty(
+        "min-width"
+      );
+
+      elemento.style.removeProperty(
+        "max-width"
+      );
+
+      elemento.style.removeProperty(
+        "white-space"
+      );
+
+      elemento.style.removeProperty(
+        "word-break"
+      );
+
+      elemento.style.removeProperty(
+        "overflow-wrap"
+      );
+
+      elemento.style.removeProperty(
+        "position"
+      );
+
+      elemento.style.removeProperty(
+        "left"
+      );
+
+      elemento.style.removeProperty(
+        "right"
+      );
+
+      elemento.style.removeProperty(
+        "transform"
+      );
+
+      elemento.style.removeProperty(
+        "margin-left"
+      );
+
+      elemento.style.removeProperty(
+        "margin-right"
+      );
+
+      elemento.removeAttribute("width");
+    });
+
+    /*
+      Troca espaços especiais do Quill
+      por espaços comuns.
+    */
+
+    const percorrerTextos =
+      document.createTreeWalker(
+        documentoTemporario.body,
+        NodeFilter.SHOW_TEXT
+      );
+
+    let noTexto;
+
+    while (
+      (
+        noTexto =
+          percorrerTextos.nextNode()
+      )
+    ) {
+      noTexto.nodeValue =
+        noTexto.nodeValue.replace(
+          /\u00a0/g,
+          " "
+        );
+    }
+
+    textoCapitulo.append(
+      ...documentoTemporario
+        .body
+        .childNodes
+    );
 
     return;
   }
@@ -181,6 +271,7 @@ function mostrarTexto(texto = "") {
       elemento.textContent =
         paragrafo
           .replace(/\n/g, " ")
+          .replace(/\s+/g, " ")
           .trim();
 
       textoCapitulo.appendChild(
