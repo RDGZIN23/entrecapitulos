@@ -15,7 +15,10 @@
 
   <title>Leitura | Entre Capítulos</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <link
+  rel="stylesheet"
+  href="css/style.css?v=13"
+>
 
   <style>
     body {
@@ -55,10 +58,14 @@
     }
 
     .pagina-leitura {
-      width: min(100% - 32px, 850px);
-      margin: 0 auto;
-      padding: 42px 0 80px;
-    }
+  width: min(
+    calc(100% - 32px),
+    850px
+  );
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 42px 0 80px;
+}
 
     .cabecalho-leitura {
       margin-bottom: 42px;
@@ -445,7 +452,106 @@
         flex-direction: column;
       }
     }
-  </style>
+  
+/* ========================================
+   CORREÇÃO DEFINITIVA DA LEITURA NO CELULAR
+======================================== */
+
+html {
+  width: 100%;
+  min-width: 0;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.topo-leitura {
+  width: 100%;
+}
+
+.pagina-leitura {
+  display: block;
+  width: min(
+    calc(100% - 32px),
+    850px
+  );
+  max-width: 850px;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.cabecalho-leitura,
+.texto-capitulo,
+.navegacao-capitulos,
+.secao-comentarios {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.texto-capitulo {
+  color: #eeeeee;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 20px !important;
+  line-height: 1.9 !important;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.texto-capitulo p {
+  margin: 0 0 1.4em;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.texto-capitulo img,
+.texto-capitulo video,
+.texto-capitulo iframe,
+.texto-capitulo table {
+  max-width: 100%;
+}
+
+.titulo-capitulo-leitura {
+  font-size: clamp(
+    30px,
+    7vw,
+    48px
+  ) !important;
+}
+
+@media (max-width: 600px) {
+  .pagina-leitura {
+    width: calc(100% - 28px);
+    padding: 30px 0 70px;
+  }
+
+  .texto-capitulo {
+    font-size: 18px !important;
+    line-height: 1.85 !important;
+  }
+
+  .titulo-capitulo-leitura {
+    font-size: 31px !important;
+  }
+
+  .nome-livro-leitura {
+    font-size: 13px;
+  }
+
+  .numero-capitulo-leitura {
+    font-size: 14px;
+  }
+}
+
+</style>
 </head>
 
 <body>
