@@ -17,7 +17,7 @@
 
   <link
   rel="stylesheet"
-  href="css/style.css?v=14"
+  href="css/style.css?v=15"
 >
 
   <style>
@@ -567,6 +567,75 @@ body {
 
 .texto-capitulo p {
   max-width: 100%;
+}
+
+/* ========================================
+   TEXTO SEM ULTRAPASSAR A TELA
+======================================== */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.pagina-leitura {
+  width: min(
+    calc(100% - 28px),
+    850px
+  ) !important;
+  max-width: 850px !important;
+  min-width: 0 !important;
+  margin-inline: auto !important;
+}
+
+.texto-capitulo {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden;
+}
+
+.texto-capitulo,
+.texto-capitulo * {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  hyphens: none !important;
+}
+
+.texto-capitulo p,
+.texto-capitulo div,
+.texto-capitulo blockquote,
+.texto-capitulo li {
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.texto-capitulo img,
+.texto-capitulo video,
+.texto-capitulo iframe,
+.texto-capitulo table {
+  width: auto;
+  height: auto;
+  max-width: 100% !important;
+}
+
+@media (max-width: 600px) {
+  .pagina-leitura {
+    padding-inline: 0 !important;
+  }
+
+  .texto-capitulo {
+    font-size: 18px !important;
+    line-height: 1.85 !important;
+  }
 }
 
 </style>
