@@ -29,6 +29,11 @@ import {
 const bannerCapa =
   document.getElementById("bannerCapa");
 
+const bannerTexto =
+  document.getElementById(
+    "bannerTexto"
+  );
+
 const bannerGenero =
   document.getElementById("bannerGenero");
 
@@ -197,6 +202,14 @@ function mostrarLivroNoBanner(livro) {
 
     return;
   }
+
+if (bannerCapa) {
+  bannerCapa.hidden = false;
+}
+
+if (bannerTexto) {
+  bannerTexto.hidden = false;
+}
 
   if (bannerCapa) {
     bannerCapa.src =
