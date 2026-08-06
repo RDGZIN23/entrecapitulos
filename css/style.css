@@ -2171,3 +2171,161 @@ text-align:center;
     font-size: 31px;
   }
 }
+
+
+/* ========================================
+   NOVO MENU INFERIOR PREMIUM
+======================================== */
+
+.menu,
+.menu-biblioteca,
+.menu-perfil {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 4px;
+
+  min-height: 72px;
+  padding:
+    8px 10px
+    max(8px, env(safe-area-inset-bottom));
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 13, 24, 0.94);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 -12px 35px rgba(0, 0, 0, 0.28);
+}
+
+.menu a,
+.menu-biblioteca a,
+.menu-perfil a {
+  position: relative;
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  min-width: 0;
+  max-width: 135px;
+  min-height: 56px;
+  padding: 7px 6px;
+
+  border-radius: 15px;
+
+  color: #aeb5c3;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.menu a:hover,
+.menu-biblioteca a:hover,
+.menu-perfil a:hover {
+  color: #d8ccff;
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.menu a.ativo,
+.menu-biblioteca a.ativo,
+.menu-perfil a.ativo {
+  color: #c7a7ff;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(139, 92, 246, 0.18),
+      rgba(139, 92, 246, 0.07)
+    );
+}
+
+.menu a.ativo::after,
+.menu-biblioteca a.ativo::after,
+.menu-perfil a.ativo::after {
+  position: absolute;
+  right: 26%;
+  bottom: -8px;
+  left: 26%;
+
+  height: 3px;
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7c4dff,
+      #b05cff
+    );
+
+  box-shadow:
+    0 0 12px rgba(139, 92, 246, 0.7);
+
+  content: "";
+}
+
+.icone-menu {
+  display: block;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.texto-menu {
+  display: block;
+  font-size: 13px;
+  line-height: 1.15;
+}
+
+.menu .botao-autor {
+  display: none;
+}
+
+
+/* Área do autor somente quando estiver visível */
+
+.menu .botao-autor:not([hidden]) {
+  display: flex;
+}
+
+
+/* ========================================
+   MENU NO CELULAR PEQUENO
+======================================== */
+
+@media (max-width: 380px) {
+  .menu,
+  .menu-biblioteca,
+  .menu-perfil {
+    min-height: 68px;
+    padding-inline: 5px;
+  }
+
+  .menu a,
+  .menu-biblioteca a,
+  .menu-perfil a {
+    min-height: 52px;
+    padding-inline: 3px;
+  }
+
+  .icone-menu {
+    font-size: 22px;
+  }
+
+  .texto-menu {
+    font-size: 11px;
+  }
+}
