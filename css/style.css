@@ -2573,6 +2573,182 @@ main,
   }
 }
 
+/* ========================================
+   NOVA ÁREA PRINCIPAL DO LIVRO
+======================================== */
+
+.avaliacao-livro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+
+  margin: 20px 0 0;
+}
+
+
+/* BOTÕES ABAIXO DA AVALIAÇÃO */
+
+.botoes-livro-superiores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+.botoes-livro-superiores .botao-principal,
+.botoes-livro-superiores .botao-secundario {
+  min-height: 48px;
+  padding: 12px 20px;
+}
+
+
+/* ========================================
+   SINOPSE
+======================================== */
+
+.area-sinopse-livro {
+  margin-top: 34px;
+  padding-top: 27px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.08);
+}
+
+.titulo-sinopse-livro {
+  margin-bottom: 16px;
+}
+
+.titulo-sinopse-livro h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.sinopse-livro {
+  margin: 0;
+
+  color: #c4cad5;
+
+  font-size: 16px;
+  line-height: 1.85;
+
+  white-space: pre-line;
+}
+
+
+/* ========================================
+   CAPA
+======================================== */
+
+.capa-livro-container {
+  overflow: hidden;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(139, 92, 246, 0.08),
+      rgba(255, 255, 255, 0.025)
+    );
+}
+
+.capa-livro {
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 2 / 3;
+
+  border-radius: 22px;
+
+  object-fit: cover;
+
+  background: #151c2e;
+
+  box-shadow:
+    0 24px 55px rgba(0, 0, 0, 0.38);
+}
+
+
+/* ========================================
+   CELULAR
+======================================== */
+
+@media (max-width: 760px) {
+
+  .informacoes-livro {
+    text-align: center;
+  }
+
+  .avaliacao-livro {
+    justify-content: center;
+
+    margin-top: 18px;
+  }
+
+  .botoes-livro-superiores {
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    width: 100%;
+    gap: 10px;
+
+    margin-top: 20px;
+  }
+
+  .botoes-livro-superiores .botao-principal,
+  .botoes-livro-superiores .botao-secundario {
+    width: 100%;
+    min-width: 0;
+
+    padding: 11px 10px;
+
+    font-size: 13px;
+  }
+
+  .area-sinopse-livro {
+    margin-top: 28px;
+    padding-top: 24px;
+
+    text-align: left;
+  }
+
+  .titulo-sinopse-livro {
+    margin-bottom: 14px;
+  }
+
+  .titulo-sinopse-livro h2 {
+    font-size: 23px;
+  }
+
+  .sinopse-livro {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .painel-progresso {
+    margin-top: 27px;
+  }
+
+}
+
+
+/* CELULARES MUITO PEQUENOS */
+
+@media (max-width: 370px) {
+
+  .botoes-livro-superiores {
+    grid-template-columns: 1fr;
+  }
+
+}
+
 
 /* ========================================
    FIM DO STYLE.CSS
