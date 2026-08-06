@@ -13,349 +13,446 @@
     content="Leia romances e histórias no Entre Capítulos."
   >
 
+  <meta
+    name="theme-color"
+    content="#0f172a"
+  >
+
   <title>Entre Capítulos</title>
 
- <link
-  rel="stylesheet"
-  href="css/style.css?v=12"
->
+  <link
+    rel="stylesheet"
+    href="css/style.css?v=18"
+  >
 </head>
 
 <body>
 
-<header class="topo-principal">
+  <!-- =====================================
+       CABEÇALHO
+  ====================================== -->
 
-  <a
-    href="index.html"
-    class="marca-principal"
-    aria-label="Entre Capítulos — Página inicial"
-  >
+  <header class="topo-principal">
 
-    <span
-      class="icone-livro-logo"
-      aria-hidden="true"
+    <a
+      href="index.html"
+      class="marca-principal"
+      aria-label="Entre Capítulos — Página inicial"
     >
-      <span class="pagina-logo pagina-logo-esquerda"></span>
-      <span class="pagina-logo pagina-logo-direita"></span>
-      <span class="marcador-logo"></span>
-    </span>
-
-    <span class="textos-logo">
-
-      <strong class="nome-logo">
-        <span>ENTRE</span>
-        <span class="nome-logo-destaque">
-          CAPÍTULOS
-        </span>
-      </strong>
-
-      <small class="slogan-logo">
-        Onde cada página ganha vida.
-      </small>
-
-    </span>
-
-  </a>
-
-</header>
-
-
-<!-- LIVRO PRINCIPAL -->
-
-<section class="banner">
-
-  <div
-    class="banner-card banner-compacto"
-    id="bannerPrincipal"
-  >
-
-    <div class="area-capa-banner">
-
-      <img
-  src=""
-  alt="Capa do livro em destaque"
-  class="banner-capa"
-  id="bannerCapa"
-  hidden
->
-
-    </div>
-
-    <div
-  class="banner-texto"
-  id="bannerTexto"
-  hidden
->
 
       <span
-        class="categoria"
-        id="bannerGenero"
+        class="icone-livro-logo"
+        aria-hidden="true"
       >
-        Carregando...
+        <span
+          class="pagina-logo pagina-logo-esquerda"
+        ></span>
+
+        <span
+          class="pagina-logo pagina-logo-direita"
+        ></span>
+
+        <span class="marcador-logo"></span>
       </span>
 
-      <h1 id="bannerTitulo">
-        Carregando livro...
-      </h1>
+      <span class="textos-logo">
 
-      <h3 id="bannerAutor">
-        Aguarde...
-      </h3>
+        <strong class="nome-logo">
+          <span>ENTRE</span>
 
-      <p
-        class="sinopse-resumida"
-        id="bannerSinopse"
+          <span class="nome-logo-destaque">
+            CAPÍTULOS
+          </span>
+        </strong>
+
+        <small class="slogan-logo">
+          Onde cada página ganha vida.
+        </small>
+
+      </span>
+
+    </a>
+
+  </header>
+
+
+  <main>
+
+    <!-- ===================================
+         LIVRO PRINCIPAL
+    ==================================== -->
+
+    <section class="banner">
+
+      <div
+        class="banner-card banner-compacto"
+        id="bannerPrincipal"
       >
-        Buscando os livros publicados no Entre Capítulos.
-      </p>
 
-      <a
-        href="#"
-        class="link-ler-mais"
-        id="bannerLerMais"
-      >
-        Ler sinopse completa →
-      </a>
+        <div class="area-capa-banner">
 
-      <div class="acoes-banner">
+          <img
+            src=""
+            alt="Capa do livro em destaque"
+            class="banner-capa"
+            id="bannerCapa"
+            hidden
+          >
 
-        <a
-          href="#"
-          class="btn botao-ler-banner"
-          id="bannerBotao"
+        </div>
+
+        <div
+          class="banner-texto"
+          id="bannerTexto"
+          hidden
         >
-          📖 Ler agora
-        </a>
 
-        <button
-          type="button"
-          class="botao-favoritar-banner"
-          id="bannerFavoritar"
-        >
-          ♡ Favoritar
-        </button>
+          <span
+            class="categoria"
+            id="bannerGenero"
+          >
+            Carregando...
+          </span>
+
+          <h1 id="bannerTitulo">
+            Carregando livro...
+          </h1>
+
+          <h3 id="bannerAutor">
+            Aguarde...
+          </h3>
+
+          <p
+            class="sinopse-resumida"
+            id="bannerSinopse"
+          >
+            Buscando os livros publicados no Entre Capítulos.
+          </p>
+
+          <a
+            href="#"
+            class="link-ler-mais"
+            id="bannerLerMais"
+          >
+            Ler sinopse completa →
+          </a>
+
+          <div class="acoes-banner">
+
+            <a
+              href="#"
+              class="btn botao-ler-banner"
+              id="bannerBotao"
+            >
+              📖 Ler agora
+            </a>
+
+            <button
+              type="button"
+              class="botao-favoritar-banner"
+              id="bannerFavoritar"
+            >
+              ♡ Favoritar
+            </button>
+
+          </div>
+
+        </div>
 
       </div>
 
-    </div>
-
-  </div>
-
-</section>
+    </section>
 
 
-  <!-- PESQUISA -->
+    <!-- ===================================
+         PESQUISA
+    ==================================== -->
 
-  <section class="pesquisa">
-
-    <input
-      type="search"
-      id="campoPesquisa"
-      placeholder="🔍 Buscar por título, autor ou gênero..."
-      autocomplete="off"
+    <section
+      class="pesquisa"
+      aria-label="Pesquisar livros"
     >
 
-  </section>
-
-
-  <!-- CONTINUAR LENDO -->
-
-  <section
-    class="continue"
-    id="secaoContinueLendo"
-    hidden
-  >
-
-    <h2>Continue lendo</h2>
-
-    <div class="livro-horizontal">
-
-      <img
-        src="images/depois-de-te-odiar.png"
-        alt="Capa do último livro lido"
-        id="continueCapa"
+      <input
+        type="search"
+        id="campoPesquisa"
+        placeholder="🔍 Buscar por título, autor ou gênero..."
+        autocomplete="off"
+        aria-label="Pesquisar por título, autor ou gênero"
       >
 
-      <div>
-
-        <h3 id="continueTitulo">
-          Livro
-        </h3>
-
-        <p id="continueCapitulo">
-          Continue de onde parou
-        </p>
-
-        <a
-          href="#"
-          class="btn"
-          id="continueBotao"
-        >
-          Continuar
-        </a>
-
-      </div>
-
-    </div>
-
-  </section>
+    </section>
 
 
-  <!-- DESTAQUE -->
+    <!-- ===================================
+         CONTINUAR LENDO
+    ==================================== -->
 
-  <section class="destaque">
-
-    <h2>🔥 Em destaque</h2>
-
-    <div
-      class="cards"
-      id="livrosDestaque"
-    >
-      <p>Carregando destaques...</p>
-    </div>
-
-  </section>
-
-
-  <!-- BIBLIOTECA -->
-
-  <section
-    class="biblioteca"
-    id="biblioteca"
-  >
-
-    <h2>📚 Biblioteca</h2>
-
-    <p
-      id="quantidadeLivros"
-      class="quantidade-livros"
-    >
-      Carregando livros...
-    </p>
-
-    <div
-      class="cards"
-      id="listaLivros"
-    >
-      <p>Buscando livros no Firebase...</p>
-    </div>
-
-    <p
-      id="mensagemSemLivros"
+    <section
+      class="continue"
+      id="secaoContinueLendo"
       hidden
     >
-      Nenhum livro encontrado.
-    </p>
 
-  </section>
+      <h2>Continue lendo</h2>
+
+      <article class="livro-horizontal">
+
+        <img
+          src=""
+          alt="Capa do último livro lido"
+          id="continueCapa"
+        >
+
+        <div class="conteudo-continue">
+
+          <h3 id="continueTitulo">
+            Livro
+          </h3>
+
+          <p id="continueCapitulo">
+            Continue de onde parou
+          </p>
+
+          <a
+            href="#"
+            class="btn"
+            id="continueBotao"
+          >
+            Continuar
+          </a>
+
+        </div>
+
+      </article>
+
+    </section>
 
 
-  <!-- MENU INFERIOR -->
+    <!-- ===================================
+         LIVROS EM DESTAQUE
+    ==================================== -->
 
-  <nav class="menu">
+    <section class="destaque">
 
-  <a
-    href="index.html"
-    class="ativo"
+      <div class="cabecalho-secao-inicial">
+
+        <h2>🔥 Em destaque</h2>
+
+        <a
+          href="biblioteca.html"
+          class="link-ver-todos"
+        >
+          Ver todos
+        </a>
+
+      </div>
+
+      <div
+        class="cards"
+        id="livrosDestaque"
+      >
+        <p>Carregando destaques...</p>
+      </div>
+
+    </section>
+
+
+    <!-- ===================================
+         BIBLIOTECA
+    ==================================== -->
+
+    <section
+      class="biblioteca"
+      id="biblioteca"
+    >
+
+      <div class="cabecalho-secao-inicial">
+
+        <div>
+
+          <h2>📚 Biblioteca</h2>
+
+          <p
+            id="quantidadeLivros"
+            class="quantidade-livros"
+          >
+            Carregando livros...
+          </p>
+
+        </div>
+
+        <a
+          href="biblioteca.html"
+          class="link-ver-todos"
+        >
+          Explorar
+        </a>
+
+      </div>
+
+      <div
+        class="cards"
+        id="listaLivros"
+      >
+        <p>Buscando livros no Firebase...</p>
+      </div>
+
+      <p
+        id="mensagemSemLivros"
+        class="mensagem-vazia"
+        hidden
+      >
+        Nenhum livro encontrado.
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================
+       MENU INFERIOR
+  ====================================== -->
+
+  <nav
+    class="menu"
+    aria-label="Navegação principal"
   >
-    <span class="icone-menu">🏠</span>
-    <span class="texto-menu">Início</span>
-  </a>
 
-  <a href="biblioteca.html">
-    <span class="icone-menu">📚</span>
-    <span class="texto-menu">Biblioteca</span>
-  </a>
+    <a
+      href="index.html"
+      class="ativo"
+      aria-current="page"
+    >
+      <span class="icone-menu">🏠</span>
+      <span class="texto-menu">Início</span>
+    </a>
 
-  <a href="perfil.html">
-    <span class="icone-menu">👤</span>
-    <span class="texto-menu">Perfil</span>
-  </a>
+    <a href="biblioteca.html">
+      <span class="icone-menu">📚</span>
+      <span class="texto-menu">Biblioteca</span>
+    </a>
 
-  <a
-    href="login.html"
-    class="botao-autor"
-    id="botaoAreaAutor"
-    hidden
-  >
-    <span class="icone-menu">✍️</span>
-    <span class="texto-menu">Autor</span>
-  </a>
+    <a href="perfil.html">
+      <span class="icone-menu">👤</span>
+      <span class="texto-menu">Perfil</span>
+    </a>
 
-</nav>
+    <a
+      href="login.html"
+      class="botao-autor"
+      id="botaoAreaAutor"
+      hidden
+    >
+      <span class="icone-menu">✍️</span>
+      <span class="texto-menu">Autor</span>
+    </a>
+
+  </nav>
 
 
-<script>
-  window.addEventListener("error", function (evento) {
-    const mensagem = document.createElement("div");
+  <!-- =====================================
+       AVISOS DE ERRO PARA DESENVOLVIMENTO
+  ====================================== -->
 
-    mensagem.style.cssText = `
-      position: fixed;
-      left: 12px;
-      right: 12px;
-      bottom: 80px;
-      z-index: 99999;
-      padding: 16px;
-      border: 1px solid #ef4444;
-      border-radius: 12px;
-      background: #2b1115;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    `;
+  <script>
+    function mostrarErroNaPagina({
+      titulo,
+      mensagem,
+      detalhes,
+      corBorda,
+      corFundo
+    }) {
+      const aviso =
+        document.createElement("div");
 
-    mensagem.innerHTML = `
-      <strong>Erro no site:</strong><br>
-      ${evento.message || "Erro desconhecido"}<br><br>
-      <small>
-        Arquivo: ${evento.filename || "não informado"}<br>
-        Linha: ${evento.lineno || "não informada"}
-      </small>
-    `;
-
-    document.body.appendChild(mensagem);
-  });
-
-  window.addEventListener(
-    "unhandledrejection",
-    function (evento) {
-      const mensagem = document.createElement("div");
-
-      mensagem.style.cssText = `
+      aviso.style.cssText = `
         position: fixed;
         left: 12px;
         right: 12px;
-        bottom: 80px;
+        bottom: 92px;
         z-index: 99999;
         padding: 16px;
-        border: 1px solid #f59e0b;
+        border: 1px solid ${corBorda};
         border-radius: 12px;
-        background: #2b2111;
+        background: ${corFundo};
         color: #ffffff;
         font-family: Arial, sans-serif;
         font-size: 14px;
+        line-height: 1.5;
         overflow-wrap: anywhere;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
       `;
 
-      mensagem.innerHTML = `
-        <strong>Erro ao carregar dados:</strong><br>
+      aviso.innerHTML = `
+        <strong>${titulo}</strong><br>
+        ${mensagem}
         ${
-          evento.reason?.message ||
-          evento.reason ||
-          "Erro desconhecido"
+          detalhes
+            ? `<br><br><small>${detalhes}</small>`
+            : ""
         }
       `;
 
-      document.body.appendChild(mensagem);
-    }
-  );
-</script>
+      document.body.appendChild(aviso);
 
-<script
-  type="module"
-  src="js/index.js?v=9"
-></script>
+      window.setTimeout(
+        () => aviso.remove(),
+        12000
+      );
+    }
+
+
+    window.addEventListener(
+      "error",
+      (evento) => {
+        mostrarErroNaPagina({
+          titulo: "Erro no site:",
+          mensagem:
+            evento.message ||
+            "Erro desconhecido.",
+          detalhes:
+            `Arquivo: ${
+              evento.filename ||
+              "não informado"
+            } — Linha: ${
+              evento.lineno ||
+              "não informada"
+            }`,
+          corBorda: "#ef4444",
+          corFundo: "#2b1115"
+        });
+      }
+    );
+
+
+    window.addEventListener(
+      "unhandledrejection",
+      (evento) => {
+        mostrarErroNaPagina({
+          titulo: "Erro ao carregar dados:",
+          mensagem:
+            evento.reason?.message ||
+            evento.reason ||
+            "Erro desconhecido.",
+          detalhes: "",
+          corBorda: "#f59e0b",
+          corFundo: "#2b2111"
+        });
+      }
+    );
+  </script>
+
+
+  <!-- =====================================
+       JAVASCRIPT DA PÁGINA
+  ====================================== -->
+
+  <script
+    type="module"
+    src="js/index.js?v=18"
+  ></script>
 
 </body>
 </html>
