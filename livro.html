@@ -616,175 +616,185 @@
          DETALHES DO LIVRO
     ==================================== -->
 
-    <section class="detalhes-livro">
+<section class="detalhes-livro">
 
-      <div class="capa-livro-container">
+  <!-- CAPA -->
+  <div class="capa-livro-container">
 
-        <img
-          src=""
-          alt="Capa do livro"
-          class="capa-livro"
-          id="capaLivro"
-          hidden
-        >
+    <img
+      src="images/depois-de-te-odiar.png"
+      alt="Capa do livro"
+      class="capa-livro"
+      id="capaLivro"
+    >
 
-      </div>
-
-
-      <div class="informacoes-livro">
-
-        <div class="linha-selos">
-
-          <span
-            class="selo-livro selo-destaque"
-            id="seloStatusLivro"
-          >
-            ✨ Em destaque
-          </span>
-
-          <span
-            class="selo-livro"
-            id="seloGeneroLivro"
-          >
-            📚 Carregando
-          </span>
-
-          <span
-            class="selo-livro"
-            id="seloQuantidadeLivro"
-          >
-            📖 0 capítulos
-          </span>
-
-        </div>
+  </div>
 
 
-        <span
-          class="categoria-livro"
-          id="generoLivro"
-        >
-          Carregando gênero...
+  <!-- INFORMAÇÕES -->
+  <div class="informacoes-livro">
+
+    <!-- SELOS -->
+    <div class="linha-selos">
+
+      <span
+        class="selo-livro selo-destaque"
+        id="seloStatusLivro"
+      >
+        ✨ Em destaque
+      </span>
+
+      <span
+        class="selo-livro"
+        id="seloGeneroLivro"
+      >
+        📚 Carregando
+      </span>
+
+      <span
+        class="selo-livro"
+        id="seloQuantidadeLivro"
+      >
+        📖 0 capítulos
+      </span>
+
+    </div>
+
+
+    <!-- GÊNERO -->
+    <span
+      class="categoria-livro"
+      id="generoLivro"
+    >
+      Carregando gênero...
+    </span>
+
+
+    <!-- TÍTULO -->
+    <h1 id="tituloLivro">
+      Carregando livro...
+    </h1>
+
+
+    <!-- AUTOR -->
+    <p class="autor-livro">
+
+      Escrito por
+
+      <strong id="autorLivro">
+        Carregando...
+      </strong>
+
+    </p>
+
+
+    <!-- AVALIAÇÃO -->
+    <div class="avaliacao-livro">
+
+      <span
+        class="estrelas-avaliacao"
+        id="estrelasLivro"
+        aria-label="Avaliação do livro"
+      >
+        ☆☆☆☆☆
+      </span>
+
+      <span
+        class="texto-avaliacao"
+        id="textoAvaliacaoLivro"
+      >
+        Ainda sem avaliações
+      </span>
+
+    </div>
+
+
+    <!-- BOTÕES PRINCIPAIS -->
+    <div class="botoes-livro botoes-livro-superiores">
+
+      <a
+        href="#"
+        class="botao-principal"
+        id="botaoComecarLeitura"
+      >
+        Carregando capítulos...
+      </a>
+
+      <button
+        type="button"
+        class="botao-secundario"
+        id="botaoFavorito"
+      >
+        ♡ Adicionar aos favoritos
+      </button>
+
+    </div>
+
+
+    <!-- SINOPSE -->
+    <div class="area-sinopse-livro">
+
+      <div class="titulo-sinopse-livro">
+
+        <span class="titulo-pequeno">
+          Sobre a história
         </span>
 
-
-        <h1 id="tituloLivro">
-          Carregando livro...
-        </h1>
-
-
-        <p class="autor-livro">
-
-          Escrito por
-
-          <strong id="autorLivro">
-            Carregando...
-          </strong>
-
-        </p>
-
-
-        <div class="avaliacao-livro">
-
-          <span
-            class="estrelas-avaliacao"
-            id="estrelasLivro"
-            aria-label="Avaliação do livro"
-          >
-            ☆☆☆☆☆
-          </span>
-
-          <span
-            class="texto-avaliacao"
-            id="textoAvaliacaoLivro"
-          >
-            Ainda sem avaliações
-          </span>
-
-        </div>
-
-
-        <p class="frase-livro">
-          Onde cada página ganha vida.
-        </p>
-
-
-        <p
-          id="sinopseLivro"
-          class="sinopse-livro"
-        >
-          Carregando sinopse...
-        </p>
-
-
-        <!-- ===============================
-             PROGRESSO DE LEITURA
-        ================================ -->
-
-        <div
-          class="painel-progresso"
-          id="painelProgresso"
-        >
-
-          <div class="cabecalho-progresso">
-
-            <strong>
-              Seu progresso de leitura
-            </strong>
-
-            <span id="porcentagemProgresso">
-              0%
-            </span>
-
-          </div>
-
-
-          <div class="barra-progresso-livro">
-
-            <div
-              class="progresso-livro-preenchido"
-              id="barraProgressoLivro"
-            ></div>
-
-          </div>
-
-
-          <p
-            class="descricao-progresso"
-            id="descricaoProgresso"
-          >
-            Você ainda não começou este livro.
-          </p>
-
-        </div>
-
-
-        <!-- ===============================
-             AÇÕES
-        ================================ -->
-
-        <div class="botoes-livro">
-
-          <a
-            href="#"
-            class="botao-principal"
-            id="botaoComecarLeitura"
-          >
-            Carregando capítulos...
-          </a>
-
-          <button
-            type="button"
-            class="botao-secundario"
-            id="botaoFavorito"
-          >
-            ♡ Adicionar aos favoritos
-          </button>
-
-        </div>
+        <h2>Sinopse</h2>
 
       </div>
 
-    </section>
+      <p
+        id="sinopseLivro"
+        class="sinopse-livro"
+      >
+        Carregando sinopse...
+      </p>
+
+    </div>
+
+
+    <!-- PROGRESSO DE LEITURA -->
+    <div
+      class="painel-progresso"
+      id="painelProgresso"
+    >
+
+      <div class="cabecalho-progresso">
+
+        <strong>
+          Seu progresso de leitura
+        </strong>
+
+        <span id="porcentagemProgresso">
+          0%
+        </span>
+
+      </div>
+
+
+      <div class="barra-progresso-livro">
+
+        <div
+          class="progresso-livro-preenchido"
+          id="barraProgressoLivro"
+        ></div>
+
+      </div>
+
+
+      <p
+        class="descricao-progresso"
+        id="descricaoProgresso"
+      >
+        Você ainda não começou este livro.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
 
 
     <!-- ===================================
