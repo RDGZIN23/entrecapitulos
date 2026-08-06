@@ -13,174 +13,545 @@
     content="Perfil do leitor no Entre Capítulos."
   >
 
+  <meta
+    name="theme-color"
+    content="#0f172a"
+  >
+
   <title>Meu perfil | Entre Capítulos</title>
 
-  <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="css/style.css?v=18"
+  >
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    /* ========================================
+       PERFIL — ESTILOS ESPECÍFICOS
+    ======================================== */
 
     body {
-      margin: 0;
       min-height: 100vh;
+      padding-bottom: 92px;
       background:
         radial-gradient(
           circle at top,
-          rgba(124, 77, 255, 0.2),
-          transparent 35%
+          rgba(124, 77, 255, 0.15),
+          transparent 34%
         ),
-        #0c0c12;
+        #0b1120;
       color: #ffffff;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
     }
+
+
+    /* ========================================
+       TOPO
+    ======================================== */
 
     .topo-perfil {
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 40;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
-      padding: 16px 18px;
-      background: rgba(12, 12, 18, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
+
+      min-height: 66px;
+      padding: 13px 18px;
+
+      border-bottom:
+        1px solid rgba(255, 255, 255, 0.07);
+
+      background:
+        rgba(11, 17, 32, 0.94);
+
+      backdrop-filter: blur(16px);
     }
 
     .logo-perfil {
-      color: #c7a7ff;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+
+      color: #ffffff;
       font-weight: bold;
       text-decoration: none;
     }
 
+    .icone-logo-perfil {
+      display: grid;
+      place-items: center;
+
+      width: 35px;
+      height: 35px;
+
+      border:
+        1px solid rgba(139, 92, 246, 0.35);
+
+      border-radius: 11px;
+
+      background:
+        rgba(139, 92, 246, 0.12);
+
+      font-size: 18px;
+    }
+
+    .texto-logo-perfil strong {
+      color: #aa78ff;
+    }
+
     .botao-sair {
-      padding: 10px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.05);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 40px;
+      padding: 9px 14px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.13);
+
+      border-radius: 11px;
+
+      background:
+        rgba(255, 255, 255, 0.045);
+
       color: #ffffff;
+      font-family: inherit;
+      font-size: 13px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .botao-sair:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    .botao-sair:hover {
+      border-color:
+        rgba(255, 255, 255, 0.24);
+
+      background:
+        rgba(255, 255, 255, 0.075);
     }
 
-    .pagina-perfil {
-      width: min(100% - 30px, 950px);
-      margin: 0 auto;
-      padding: 35px 0 110px;
+    .botao-sair:disabled {
+      cursor: wait;
+      opacity: 0.6;
     }
+
+
+    /* ========================================
+       CONTEÚDO PRINCIPAL
+    ======================================== */
+
+    .pagina-perfil {
+      display: block;
+
+      width: min(
+        calc(100% - 30px),
+        950px
+      );
+
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 32px 0 40px;
+    }
+
+    .mensagem-perfil {
+      padding: 30px 20px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.09);
+
+      border-radius: 17px;
+
+      background:
+        rgba(255, 255, 255, 0.035);
+
+      color: #c5cbd6;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .secao-perfil {
+      margin-top: 34px;
+    }
+
+    .secao-perfil h2 {
+      margin: 0 0 16px;
+
+      color: #ffffff;
+      font-size:
+        clamp(21px, 5vw, 24px);
+
+      line-height: 1.2;
+    }
+
+
+    /* ========================================
+       CARTÃO PRINCIPAL DO PERFIL
+    ======================================== */
 
     .cartao-perfil {
       display: grid;
-      grid-template-columns: auto 1fr;
+
+      grid-template-columns:
+        auto minmax(0, 1fr);
+
       align-items: center;
       gap: 22px;
+
       padding: 26px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.09);
+
       border-radius: 22px;
-      background: rgba(23, 23, 34, 0.95);
-      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(139, 92, 246, 0.1),
+          rgba(21, 28, 46, 0.97)
+        );
+
+      box-shadow:
+        0 18px 55px
+        rgba(0, 0, 0, 0.28);
     }
 
     .avatar-perfil {
-      width: 92px;
-      height: 92px;
       display: grid;
       place-items: center;
+
+      width: 96px;
+      height: 96px;
+      overflow: hidden;
+
+      border:
+        2px solid rgba(255, 255, 255, 0.1);
+
       border-radius: 50%;
+
       background:
         linear-gradient(
           135deg,
           #7c4dff,
           #b56cff
         );
+
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
       color: #ffffff;
       font-size: 34px;
       font-weight: bold;
+
+      box-shadow:
+        0 12px 30px
+        rgba(124, 77, 255, 0.22);
+    }
+
+    .informacoes-perfil {
+      min-width: 0;
     }
 
     .informacoes-perfil h1 {
-      margin: 0 0 8px;
-      font-size: 30px;
+      margin: 0 0 7px;
+
+      color: #ffffff;
+      font-size:
+        clamp(26px, 6vw, 32px);
+
+      line-height: 1.15;
+      overflow-wrap: anywhere;
     }
 
     .informacoes-perfil p {
       margin: 0;
-      color: #b9b9c4;
+
+      color: #aeb5c3;
       line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .biografia-perfil {
+      max-width: 650px;
+      margin-top: 11px !important;
+
+      color: #d0d5df !important;
+      white-space: pre-line;
     }
 
     .etiqueta-leitor {
       display: inline-block;
-      margin-top: 12px;
+
+      margin-top: 13px;
       padding: 7px 11px;
+
+      border:
+        1px solid rgba(139, 92, 246, 0.2);
+
       border-radius: 999px;
-      background: rgba(124, 77, 255, 0.16);
-      color: #cbb4ff;
-      font-size: 13px;
+
+      background:
+        rgba(139, 92, 246, 0.13);
+
+      color: #cbb8ff;
+      font-size: 12px;
       font-weight: bold;
     }
 
-    .secao-perfil {
-      margin-top: 32px;
+    .botao-editar-perfil {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 41px;
+      margin-top: 14px;
+      padding: 9px 15px;
+
+      border:
+        1px solid rgba(139, 92, 246, 0.42);
+
+      border-radius: 11px;
+
+      background:
+        rgba(139, 92, 246, 0.12);
+
+      color: #d7c7ff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .secao-perfil h2 {
-      margin: 0 0 16px;
-      font-size: 23px;
+    .botao-editar-perfil:hover {
+      background:
+        rgba(139, 92, 246, 0.21);
     }
+
+
+    /* ========================================
+       EDIÇÃO DO PERFIL
+    ======================================== */
+
+    .area-edicao-perfil {
+      scroll-margin-top: 85px;
+
+      padding: 22px;
+
+      border:
+        1px solid rgba(139, 92, 246, 0.24);
+
+      border-radius: 18px;
+
+      background:
+        rgba(255, 255, 255, 0.03);
+    }
+
+    .form-editar-perfil {
+      display: grid;
+      gap: 18px;
+    }
+
+    .campo-editar-perfil {
+      display: grid;
+      gap: 8px;
+    }
+
+    .campo-editar-perfil label {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .campo-editar-perfil input,
+    .campo-editar-perfil textarea {
+      width: 100%;
+      padding: 13px 14px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+      border-radius: 12px;
+      outline: none;
+
+      background: #111827;
+      color: #ffffff;
+      font: inherit;
+    }
+
+    .campo-editar-perfil input::file-selector-button {
+      margin-right: 10px;
+      padding: 8px 10px;
+
+      border: 0;
+      border-radius: 8px;
+
+      background:
+        rgba(139, 92, 246, 0.16);
+
+      color: #d7c7ff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .campo-editar-perfil textarea {
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .campo-editar-perfil input:focus,
+    .campo-editar-perfil textarea:focus {
+      border-color:
+        rgba(139, 92, 246, 0.75);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(139, 92, 246, 0.11);
+    }
+
+    .campo-editar-perfil small {
+      color: #8f97a6;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .acoes-edicao-perfil {
+      display: flex;
+      justify-content: flex-end;
+      gap: 11px;
+    }
+
+    .botao-cancelar-edicao,
+    .botao-salvar-edicao {
+      min-height: 44px;
+      padding: 11px 17px;
+
+      border-radius: 11px;
+
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .botao-cancelar-edicao {
+      border:
+        1px solid rgba(255, 255, 255, 0.13);
+
+      background:
+        rgba(255, 255, 255, 0.05);
+
+      color: #ffffff;
+    }
+
+    .botao-salvar-edicao {
+      border: 0;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7c4dff,
+          #a45fff
+        );
+
+      color: #ffffff;
+    }
+
+    .botao-salvar-edicao:disabled {
+      cursor: wait;
+      opacity: 0.6;
+    }
+
+    .mensagem-edicao-perfil {
+      min-height: 20px;
+      margin: 0;
+
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .mensagem-edicao-perfil.sucesso {
+      color: #83e6b3;
+    }
+
+    .mensagem-edicao-perfil.erro {
+      color: #ff9bad;
+    }
+
+
+    /* ========================================
+       ESTATÍSTICAS
+    ======================================== */
 
     .grade-estatisticas {
       display: grid;
+
       grid-template-columns:
         repeat(4, minmax(0, 1fr));
+
       gap: 14px;
     }
 
     .cartao-estatistica {
-      padding: 20px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 20px 14px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.08);
+
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
+
+      background:
+        rgba(255, 255, 255, 0.035);
+
       text-align: center;
     }
 
     .icone-estatistica {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 9px;
       font-size: 27px;
     }
 
     .numero-estatistica {
       display: block;
-      margin-bottom: 7px;
+      margin-bottom: 6px;
+
       color: #c7a7ff;
       font-size: 28px;
       font-weight: bold;
     }
 
     .rotulo-estatistica {
-      color: #b8b8c2;
-      font-size: 14px;
+      color: #aeb5c3;
+      font-size: 13px;
       line-height: 1.4;
     }
 
+
+    /* ========================================
+       PROGRESSO E NÍVEL
+    ======================================== */
+
     .painel-progresso {
       padding: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.09);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.08);
+
       border-radius: 18px;
+
       background:
         linear-gradient(
           135deg,
-          rgba(124, 77, 255, 0.1),
-          rgba(255, 255, 255, 0.035)
+          rgba(139, 92, 246, 0.1),
+          rgba(255, 255, 255, 0.025)
         );
     }
 
@@ -189,6 +560,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 15px;
+
       margin-bottom: 14px;
     }
 
@@ -198,10 +570,17 @@
 
     .nivel-leitor {
       padding: 7px 11px;
+
+      border:
+        1px solid rgba(139, 92, 246, 0.2);
+
       border-radius: 999px;
-      background: rgba(124, 77, 255, 0.18);
+
+      background:
+        rgba(139, 92, 246, 0.15);
+
       color: #d2c1ff;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
     }
 
@@ -209,46 +588,68 @@
       width: 100%;
       height: 11px;
       overflow: hidden;
+
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
+
+      background:
+        rgba(255, 255, 255, 0.08);
     }
 
     .barra-nivel-preenchida {
       width: 0%;
       height: 100%;
+
       border-radius: inherit;
+
       background:
         linear-gradient(
           90deg,
           #7c4dff,
           #b56cff
         );
+
       transition: width 0.6s ease;
     }
 
     .texto-nivel {
       margin: 14px 0 0;
-      color: #b9b9c4;
+
+      color: #aeb5c3;
       font-size: 14px;
       line-height: 1.6;
     }
 
+
+    /* ========================================
+       CONQUISTAS
+    ======================================== */
+
     .grade-conquistas {
       display: grid;
+
       grid-template-columns:
         repeat(3, minmax(0, 1fr));
+
       gap: 14px;
     }
 
     .cartao-conquista {
       position: relative;
+
       padding: 22px 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.075);
+
       border-radius: 17px;
-      background: rgba(255, 255, 255, 0.035);
+
+      background:
+        rgba(255, 255, 255, 0.03);
+
       text-align: center;
       opacity: 0.45;
       filter: grayscale(0.7);
+
       transition:
         opacity 0.25s ease,
         filter 0.25s ease,
@@ -257,15 +658,18 @@
     }
 
     .cartao-conquista.desbloqueada {
-      opacity: 1;
-      filter: none;
-      border-color: rgba(124, 77, 255, 0.38);
+      border-color:
+        rgba(139, 92, 246, 0.36);
+
       background:
         linear-gradient(
           145deg,
-          rgba(124, 77, 255, 0.14),
-          rgba(255, 255, 255, 0.04)
+          rgba(139, 92, 246, 0.13),
+          rgba(255, 255, 255, 0.035)
         );
+
+      opacity: 1;
+      filter: none;
     }
 
     .cartao-conquista.desbloqueada:hover {
@@ -285,91 +689,223 @@
 
     .cartao-conquista p {
       margin: 0;
-      color: #aaaab5;
+
+      color: #aeb5c3;
       font-size: 13px;
       line-height: 1.5;
     }
 
     .estado-conquista {
       display: inline-block;
+
       margin-top: 12px;
       padding: 5px 9px;
+
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.07);
-      color: #aaaab5;
+
+      background:
+        rgba(255, 255, 255, 0.065);
+
+      color: #aeb5c3;
       font-size: 11px;
       font-weight: bold;
     }
 
     .cartao-conquista.desbloqueada
     .estado-conquista {
-      background: rgba(104, 220, 161, 0.13);
+      background:
+        rgba(104, 220, 161, 0.13);
+
       color: #8ce6b7;
     }
 
+
+    /* ========================================
+       MENSAGENS VAZIAS
+    ======================================== */
+
     .cartao-vazio {
+      width: 100%;
       padding: 24px;
-      border: 1px dashed rgba(255, 255, 255, 0.14);
+
+      border:
+        1px dashed rgba(255, 255, 255, 0.13);
+
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      color: #b9b9c4;
-      text-align: center;
+
+      background:
+        rgba(255, 255, 255, 0.025);
+
+      color: #aeb5c3;
       line-height: 1.6;
+      text-align: center;
+    }
+
+
+    /* ========================================
+       CONTINUAR LENDO
+    ======================================== */
+
+    #areaContinueLendo {
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .cartao-continuar-perfil {
+      display: grid;
+
+      grid-template-columns:
+        100px minmax(0, 1fr);
+
+      align-items: center;
+      gap: 16px;
+
+      width: 100%;
+      min-height: 150px;
+      overflow: hidden;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+      border-radius: 18px;
+
+      background:
+        rgba(255, 255, 255, 0.035);
+    }
+
+    .capa-continuar-perfil {
+      display: block;
+
+      width: 100px;
+      height: 150px;
+
+      object-fit: cover;
+
+      background: #151c2e;
+    }
+
+    .conteudo-continuar-perfil {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      min-width: 0;
+      padding: 15px 16px 15px 0;
+    }
+
+    .conteudo-continuar-perfil h3 {
+      margin: 0 0 7px;
+
+      color: #ffffff;
+      font-size: 18px;
+
+      overflow-wrap: anywhere;
+    }
+
+    .conteudo-continuar-perfil p {
+      margin: 0 0 13px;
+
+      color: #aeb5c3;
+      font-size: 14px;
+      line-height: 1.4;
+
+      overflow-wrap: anywhere;
+    }
+
+    .conteudo-continuar-perfil
+    .acao-perfil {
+      width: fit-content;
+      min-height: 41px;
+      padding: 9px 14px;
+    }
+
+
+    /* ========================================
+       FAVORITOS
+    ======================================== */
+
+    #secaoFavoritos,
+    .lista-favoritos {
+      width: 100%;
+      max-width: 100%;
     }
 
     .lista-favoritos {
       display: grid;
+      grid-template-columns: 1fr;
       gap: 14px;
     }
 
     .cartao-favorito {
       display: grid;
-      grid-template-columns: 105px 1fr;
-      min-height: 158px;
+
+      grid-template-columns:
+        100px minmax(0, 1fr);
+
+      width: 100%;
+      min-height: 150px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.09);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.08);
+
       border-radius: 17px;
-      background: rgba(255, 255, 255, 0.04);
+
+      background:
+        rgba(255, 255, 255, 0.035);
+
       transition:
         transform 0.2s ease,
         border-color 0.2s ease;
     }
 
     .cartao-favorito:hover {
-      transform: translateY(-3px);
-      border-color: rgba(124, 77, 255, 0.5);
+      transform: translateY(-2px);
+
+      border-color:
+        rgba(139, 92, 246, 0.45);
     }
 
     .capa-favorito {
-      width: 105px;
-      height: 100%;
-      min-height: 158px;
       display: block;
+
+      width: 100px;
+      height: 100%;
+      min-height: 150px;
+
       object-fit: cover;
-      background: #181821;
+
+      background: #151c2e;
     }
 
     .conteudo-favorito {
       display: flex;
       flex-direction: column;
       justify-content: center;
+
       min-width: 0;
-      padding: 16px;
+      padding: 15px;
     }
 
     .conteudo-favorito h3 {
       margin: 0 0 7px;
-      overflow: hidden;
+
+      color: #ffffff;
       font-size: 17px;
       line-height: 1.35;
-      text-overflow: ellipsis;
+
+      overflow-wrap: anywhere;
     }
 
     .conteudo-favorito p {
-      margin: 0 0 14px;
-      color: #b9b9c4;
-      font-size: 14px;
+      margin: 0 0 13px;
+
+      color: #aeb5c3;
+      font-size: 13px;
       line-height: 1.4;
+
+      overflow-wrap: anywhere;
     }
 
     .botoes-favorito {
@@ -383,116 +919,115 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 14px;
+
+      min-height: 39px;
+      padding: 9px 13px;
+
       border-radius: 10px;
+
       font-family: inherit;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
+
       transition:
         background 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        border-color 0.2s ease;
     }
 
     .botao-abrir-favorito {
-      background: rgba(124, 77, 255, 0.18);
+      background:
+        rgba(139, 92, 246, 0.17);
+
       color: #cebaff;
       text-align: center;
       text-decoration: none;
     }
 
     .botao-abrir-favorito:hover {
-      background: rgba(124, 77, 255, 0.28);
       transform: translateY(-1px);
+
+      background:
+        rgba(139, 92, 246, 0.27);
     }
 
     .botao-remover-favorito {
-      border: 1px solid rgba(255, 91, 123, 0.35);
-      background: rgba(255, 70, 110, 0.1);
+      border:
+        1px solid rgba(255, 91, 123, 0.33);
+
+      background:
+        rgba(255, 70, 110, 0.09);
+
       color: #ff91aa;
       cursor: pointer;
     }
 
     .botao-remover-favorito:hover {
-      background: rgba(255, 70, 110, 0.18);
-      border-color: rgba(255, 91, 123, 0.55);
       transform: translateY(-1px);
+
+      border-color:
+        rgba(255, 91, 123, 0.52);
+
+      background:
+        rgba(255, 70, 110, 0.17);
     }
 
     .botao-remover-favorito:disabled {
+      cursor: wait;
       opacity: 0.6;
-      cursor: not-allowed;
       transform: none;
     }
 
+
+    /* ========================================
+       ACESSO RÁPIDO
+    ======================================== */
+
     .acoes-perfil {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
       gap: 14px;
     }
 
     .acao-perfil {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+
       min-height: 52px;
       padding: 12px 16px;
+
       border-radius: 13px;
+
       background:
         linear-gradient(
           135deg,
           #7c4dff,
           #9b6cff
         );
+
       color: #ffffff;
-      text-decoration: none;
-      text-align: center;
+      font-size: 14px;
       font-weight: bold;
+      text-align: center;
+      text-decoration: none;
     }
 
     .acao-secundaria {
-      border: 1px solid rgba(124, 77, 255, 0.45);
-      background: rgba(124, 77, 255, 0.11);
+      border:
+        1px solid rgba(139, 92, 246, 0.42);
+
+      background:
+        rgba(139, 92, 246, 0.1);
     }
 
-    .mensagem-perfil {
-      padding: 30px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      color: #c5c5ce;
-      text-align: center;
-    }
 
-    .menu-perfil {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 30;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 10px 8px;
-      background: rgba(12, 12, 18, 0.97);
-      border-top: 1px solid rgba(255, 255, 255, 0.09);
-      backdrop-filter: blur(12px);
-    }
-
-    .menu-perfil a {
-      padding: 8px 4px;
-      color: #b7b7c1;
-      text-align: center;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    .menu-perfil a.ativo {
-      color: #c7a7ff;
-      font-weight: bold;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
+    /* ========================================
+       RESPONSIVIDADE
+    ======================================== */
 
     @media (max-width: 760px) {
       .grade-estatisticas {
@@ -515,166 +1050,107 @@
         margin: 0 auto;
       }
 
+      .biografia-perfil {
+        margin-inline: auto;
+      }
+
+      .etiqueta-leitor {
+        margin-inline: auto;
+      }
+
       .acoes-perfil {
         grid-template-columns: 1fr;
       }
+    }
 
-      .informacoes-perfil h1 {
-        font-size: 26px;
+    @media (max-width: 500px) {
+      .pagina-perfil {
+        width: calc(100% - 20px);
+        padding-top: 22px;
+      }
+
+      .topo-perfil {
+        padding-inline: 13px;
+      }
+
+      .texto-logo-perfil {
+        font-size: 14px;
+      }
+
+      .cartao-perfil {
+        padding: 21px 17px;
+      }
+
+      .avatar-perfil {
+        width: 86px;
+        height: 86px;
+        font-size: 30px;
+      }
+
+      .area-edicao-perfil {
+        padding: 17px;
+      }
+
+      .acoes-edicao-perfil {
+        flex-direction: column-reverse;
+      }
+
+      .botao-cancelar-edicao,
+      .botao-salvar-edicao {
+        width: 100%;
+      }
+
+      .cartao-continuar-perfil {
+        grid-template-columns:
+          82px minmax(0, 1fr);
+
+        min-height: 130px;
+      }
+
+      .capa-continuar-perfil {
+        width: 82px;
+        height: 130px;
+      }
+
+      .conteudo-continuar-perfil {
+        padding:
+          12px 12px 12px 0;
+      }
+
+      .conteudo-continuar-perfil h3 {
+        font-size: 16px;
+      }
+
+      .conteudo-continuar-perfil p {
+        font-size: 12px;
+      }
+
+      .cartao-favorito {
+        grid-template-columns:
+          82px minmax(0, 1fr);
+
+        min-height: 130px;
+      }
+
+      .capa-favorito {
+        width: 82px;
+        min-height: 130px;
+      }
+
+      .conteudo-favorito {
+        padding: 12px;
+      }
+
+      .conteudo-favorito h3 {
+        font-size: 15px;
+      }
+
+      .conteudo-favorito p {
+        font-size: 12px;
       }
     }
 
-
-/* ========================================
-   CORREÇÃO FINAL DO PERFIL NO CELULAR
-======================================== */
-
-.pagina-perfil {
-  display: block;
-  width: min(calc(100% - 24px), 950px);
-  max-width: 950px;
-  margin-inline: auto;
-}
-
-/* FAVORITOS */
-
-#secaoFavoritos,
-.lista-favoritos {
-  width: 100%;
-  max-width: 100%;
-}
-
-.lista-favoritos {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-.cartao-favorito {
-  display: grid;
-  grid-template-columns: 95px minmax(0, 1fr);
-  width: 100%;
-  max-width: 100%;
-  min-height: 145px;
-  margin: 0;
-  overflow: hidden;
-}
-
-.capa-favorito {
-  display: block;
-  width: 95px;
-  height: 100%;
-  min-height: 145px;
-  max-height: 190px;
-  object-fit: cover;
-}
-
-.conteudo-favorito {
-  width: 100%;
-  min-width: 0;
-  padding: 14px;
-}
-
-.conteudo-favorito h3,
-.conteudo-favorito p {
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
-/* CONTINUAR LENDO */
-
-#areaContinueLendo {
-  display: grid;
-  grid-template-columns: 95px minmax(0, 1fr);
-  align-items: center;
-  gap: 15px;
-  width: 100%;
-  max-width: 100%;
-  min-height: 145px;
-  padding: 16px;
-  overflow: hidden;
-  text-align: left;
-}
-
-#areaContinueLendo img {
-  display: block;
-  grid-row: 1 / span 4;
-  width: 95px !important;
-  height: 140px !important;
-  max-width: 95px !important;
-  max-height: 140px !important;
-  margin: 0 !important;
-  border-radius: 11px;
-  object-fit: cover;
-}
-
-#areaContinueLendo h3,
-#areaContinueLendo p {
-  min-width: 0;
-  max-width: 100%;
-  margin-left: 0;
-  overflow-wrap: anywhere;
-}
-
-#areaContinueLendo .acao-perfil,
-#areaContinueLendo a {
-  width: fit-content;
-  min-height: 42px;
-  padding: 10px 15px;
-}
-
-/* Evita imagens globais gigantes */
-
-.pagina-perfil img {
-  max-width: 100%;
-}
-
-/* ========================================
-   AJUSTES PARA CELULAR
-======================================== */
-
-@media (max-width: 500px) {
-  .pagina-perfil {
-    width: calc(100% - 20px);
-    padding-top: 22px;
-  }
-
-  .cartao-favorito {
-    grid-template-columns: 82px minmax(0, 1fr);
-    min-height: 130px;
-  }
-
-  .capa-favorito {
-    width: 82px;
-    min-height: 130px;
-    max-height: 165px;
-  }
-
-  #areaContinueLendo {
-    grid-template-columns: 82px minmax(0, 1fr);
-    gap: 12px;
-    min-height: 130px;
-    padding: 13px;
-  }
-
-  #areaContinueLendo img {
-    width: 82px !important;
-    height: 125px !important;
-    max-width: 82px !important;
-    max-height: 125px !important;
-  }
-
-  .conteudo-favorito {
-    padding: 12px;
-  }
-}
-
-
-    @media (max-width: 400px) {
-      .pagina-perfil {
-        width: min(100% - 22px, 950px);
-      }
-
+    @media (max-width: 390px) {
       .grade-estatisticas {
         grid-template-columns: 1fr;
       }
@@ -684,18 +1160,6 @@
         flex-direction: column;
       }
 
-      .cartao-favorito {
-        grid-template-columns: 90px 1fr;
-      }
-
-      .capa-favorito {
-        width: 90px;
-      }
-
-      .conteudo-favorito {
-        padding: 13px;
-      }
-
       .botoes-favorito {
         flex-direction: column;
       }
@@ -703,161 +1167,43 @@
       .botao-abrir-favorito,
       .botao-remover-favorito {
         width: 100%;
-        padding: 9px 10px;
-        font-size: 13px;
+      }
+
+      .conteudo-continuar-perfil
+      .acao-perfil {
+        width: 100%;
+        padding-inline: 8px;
+        font-size: 12px;
       }
     }
-
-/* ========================================
-   EDIÇÃO DO PERFIL
-======================================== */
-
-.biografia-perfil {
-  margin-top: 12px !important;
-  max-width: 650px;
-  color: #d0d0d8 !important;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-}
-
-.botao-editar-perfil {
-  margin-top: 15px;
-  padding: 10px 16px;
-  border: 1px solid rgba(124, 77, 255, 0.45);
-  border-radius: 11px;
-  background: rgba(124, 77, 255, 0.14);
-  color: #d7c7ff;
-  font-family: inherit;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.area-edicao-perfil {
-  scroll-margin-top: 90px;
-  padding: 22px;
-  border: 1px solid rgba(124, 77, 255, 0.25);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.035);
-}
-
-.form-editar-perfil {
-  display: grid;
-  gap: 18px;
-}
-
-.campo-editar-perfil {
-  display: grid;
-  gap: 8px;
-}
-
-.campo-editar-perfil label {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.campo-editar-perfil input,
-.campo-editar-perfil textarea {
-  width: 100%;
-  padding: 13px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 12px;
-  outline: none;
-  background: #171720;
-  color: #ffffff;
-  font: inherit;
-}
-
-.campo-editar-perfil textarea {
-  resize: vertical;
-  line-height: 1.6;
-}
-
-.campo-editar-perfil input:focus,
-.campo-editar-perfil textarea:focus {
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
-}
-
-.campo-editar-perfil small {
-  color: #92929e;
-  font-size: 12px;
-}
-
-.acoes-edicao-perfil {
-  display: flex;
-  justify-content: flex-end;
-  gap: 11px;
-}
-
-.botao-cancelar-edicao,
-.botao-salvar-edicao {
-  min-height: 44px;
-  padding: 11px 17px;
-  border-radius: 11px;
-  font-family: inherit;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.botao-cancelar-edicao {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-}
-
-.botao-salvar-edicao {
-  border: 0;
-  background:
-    linear-gradient(
-      135deg,
-      #7c4dff,
-      #a45fff
-    );
-  color: #ffffff;
-}
-
-.botao-salvar-edicao:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
-.mensagem-edicao-perfil {
-  min-height: 20px;
-  margin: 0;
-  font-size: 14px;
-}
-
-.mensagem-edicao-perfil.sucesso {
-  color: #83e6b3;
-}
-
-.mensagem-edicao-perfil.erro {
-  color: #ff9bad;
-}
-
-@media (max-width: 500px) {
-  .acoes-edicao-perfil {
-    flex-direction: column-reverse;
-  }
-
-  .botao-cancelar-edicao,
-  .botao-salvar-edicao {
-    width: 100%;
-  }
-}
-
   </style>
 </head>
 
 <body>
+
+  <!-- =====================================
+       TOPO
+  ====================================== -->
 
   <header class="topo-perfil">
 
     <a
       href="index.html"
       class="logo-perfil"
+      aria-label="Entre Capítulos — Página inicial"
     >
-      💜 Entre Capítulos
+
+      <span
+        class="icone-logo-perfil"
+        aria-hidden="true"
+      >
+        📖
+      </span>
+
+      <span class="texto-logo-perfil">
+        ENTRE <strong>CAPÍTULOS</strong>
+      </span>
+
     </a>
 
     <button
@@ -870,6 +1216,11 @@
 
   </header>
 
+
+  <!-- =====================================
+       CONTEÚDO PRINCIPAL
+  ====================================== -->
+
   <main class="pagina-perfil">
 
     <div
@@ -879,7 +1230,15 @@
       Carregando seu perfil...
     </div>
 
-    <div id="conteudoPerfil" hidden>
+
+    <div
+      id="conteudoPerfil"
+      hidden
+    >
+
+      <!-- =================================
+           PERFIL
+      ================================== -->
 
       <section class="cartao-perfil">
 
@@ -900,20 +1259,22 @@
             Carregando e-mail...
           </p>
 
-<p
-  class="biografia-perfil"
-  id="biografiaPerfil"
->
-  Este leitor ainda não escreveu uma biografia.
-</p>
+          <p
+            class="biografia-perfil"
+            id="biografiaPerfil"
+          >
+            Este leitor ainda não escreveu uma biografia.
+          </p>
 
-<button
-  type="button"
-  class="botao-editar-perfil"
-  id="botaoEditarPerfil"
->
-  ✏️ Editar perfil
-</button>
+          <button
+            type="button"
+            class="botao-editar-perfil"
+            id="botaoEditarPerfil"
+          >
+            ✏️ Editar perfil
+          </button>
+
+          <br>
 
           <span class="etiqueta-leitor">
             📖 Leitor do Entre Capítulos
@@ -923,99 +1284,109 @@
 
       </section>
 
-<section
-  class="secao-perfil area-edicao-perfil"
-  id="areaEdicaoPerfil"
-  hidden
->
 
-  <h2>Editar perfil</h2>
+      <!-- =================================
+           EDITAR PERFIL
+      ================================== -->
 
-  <form
-    class="form-editar-perfil"
-    id="formEditarPerfil"
-  >
-
-    <div class="campo-editar-perfil">
-
-      <label for="campoNomePerfil">
-        Nome
-      </label>
-
-      <input
-        type="text"
-        id="campoNomePerfil"
-        maxlength="80"
-        placeholder="Seu nome"
-        required
+      <section
+        class="secao-perfil area-edicao-perfil"
+        id="areaEdicaoPerfil"
+        hidden
       >
 
-    </div>
+        <h2>Editar perfil</h2>
 
-    <div class="campo-editar-perfil">
+        <form
+          class="form-editar-perfil"
+          id="formEditarPerfil"
+        >
 
-      <label for="campoBiografiaPerfil">
-        Biografia
-      </label>
+          <div class="campo-editar-perfil">
 
-      <textarea
-        id="campoBiografiaPerfil"
-        maxlength="300"
-        rows="5"
-        placeholder="Conte um pouco sobre você..."
-      ></textarea>
+            <label for="campoNomePerfil">
+              Nome
+            </label>
 
-      <small>
-        Máximo de 300 caracteres.
-      </small>
+            <input
+              type="text"
+              id="campoNomePerfil"
+              maxlength="80"
+              placeholder="Seu nome"
+              required
+            >
 
-    </div>
+          </div>
 
-    <div class="campo-editar-perfil">
+          <div class="campo-editar-perfil">
 
-      <label for="campoFotoPerfil">
-        Foto do perfil
-      </label>
+            <label for="campoBiografiaPerfil">
+              Biografia
+            </label>
 
-      <input
-        type="file"
-        id="campoFotoPerfil"
-        accept="image/jpeg,image/png,image/webp"
-      >
+            <textarea
+              id="campoBiografiaPerfil"
+              maxlength="300"
+              rows="5"
+              placeholder="Conte um pouco sobre você..."
+            ></textarea>
 
-      <small>
-        JPG, PNG ou WEBP, com no máximo 5 MB.
-      </small>
+            <small>
+              Máximo de 300 caracteres.
+            </small>
 
-    </div>
+          </div>
 
-    <p
-      class="mensagem-edicao-perfil"
-      id="mensagemEdicaoPerfil"
-    ></p>
+          <div class="campo-editar-perfil">
 
-    <div class="acoes-edicao-perfil">
+            <label for="campoFotoPerfil">
+              Foto do perfil
+            </label>
 
-      <button
-        type="button"
-        class="botao-cancelar-edicao"
-        id="botaoCancelarEdicao"
-      >
-        Cancelar
-      </button>
+            <input
+              type="file"
+              id="campoFotoPerfil"
+              accept="image/jpeg,image/png,image/webp"
+            >
 
-      <button
-        type="submit"
-        class="botao-salvar-edicao"
-      >
-        Salvar alterações
-      </button>
+            <small>
+              JPG, PNG ou WEBP, com no máximo 5 MB.
+            </small>
 
-    </div>
+          </div>
 
-  </form>
+          <p
+            class="mensagem-edicao-perfil"
+            id="mensagemEdicaoPerfil"
+          ></p>
 
-</section>
+          <div class="acoes-edicao-perfil">
+
+            <button
+              type="button"
+              class="botao-cancelar-edicao"
+              id="botaoCancelarEdicao"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              class="botao-salvar-edicao"
+            >
+              Salvar alterações
+            </button>
+
+          </div>
+
+        </form>
+
+      </section>
+
+
+      <!-- =================================
+           ESTATÍSTICAS
+      ================================== -->
 
       <section class="secao-perfil">
 
@@ -1023,7 +1394,7 @@
 
         <div class="grade-estatisticas">
 
-          <div class="cartao-estatistica">
+          <article class="cartao-estatistica">
 
             <span class="icone-estatistica">
               ❤️
@@ -1040,9 +1411,9 @@
               Livros favoritos
             </span>
 
-          </div>
+          </article>
 
-          <div class="cartao-estatistica">
+          <article class="cartao-estatistica">
 
             <span class="icone-estatistica">
               📖
@@ -1059,9 +1430,9 @@
               Capítulos lidos
             </span>
 
-          </div>
+          </article>
 
-          <div class="cartao-estatistica">
+          <article class="cartao-estatistica">
 
             <span class="icone-estatistica">
               📚
@@ -1078,9 +1449,9 @@
               Livros iniciados
             </span>
 
-          </div>
+          </article>
 
-          <div class="cartao-estatistica">
+          <article class="cartao-estatistica">
 
             <span class="icone-estatistica">
               🏆
@@ -1097,11 +1468,16 @@
               Livros concluídos
             </span>
 
-          </div>
+          </article>
 
         </div>
 
       </section>
+
+
+      <!-- =================================
+           PROGRESSO
+      ================================== -->
 
       <section class="secao-perfil">
 
@@ -1141,6 +1517,11 @@
         </div>
 
       </section>
+
+
+      <!-- =================================
+           CONQUISTAS
+      ================================== -->
 
       <section class="secao-perfil">
 
@@ -1215,6 +1596,11 @@
 
       </section>
 
+
+      <!-- =================================
+           CONTINUAR LENDO
+      ================================== -->
+
       <section class="secao-perfil">
 
         <h2>Continuar lendo</h2>
@@ -1228,6 +1614,11 @@
 
       </section>
 
+
+      <!-- =================================
+           FAVORITOS
+      ================================== -->
+
       <section
         class="secao-perfil"
         id="secaoFavoritos"
@@ -1239,12 +1630,19 @@
           id="listaFavoritos"
           class="lista-favoritos"
         >
+
           <div class="cartao-vazio">
             Carregando seus livros favoritos...
           </div>
+
         </div>
 
       </section>
+
+
+      <!-- =================================
+           ACESSO RÁPIDO
+      ================================== -->
 
       <section class="secao-perfil">
 
@@ -1274,31 +1672,45 @@
 
   </main>
 
-  <nav class="menu-perfil">
 
-  <a href="index.html">
-    <span class="icone-menu">🏠</span>
-    <span class="texto-menu">Início</span>
-  </a>
+  <!-- =====================================
+       MENU INFERIOR
+  ====================================== -->
 
-  <a href="biblioteca.html">
-    <span class="icone-menu">📚</span>
-    <span class="texto-menu">Biblioteca</span>
-  </a>
-
-  <a
-    href="perfil.html"
-    class="ativo"
+  <nav
+    class="menu-perfil"
+    aria-label="Navegação principal"
   >
-    <span class="icone-menu">👤</span>
-    <span class="texto-menu">Perfil</span>
-  </a>
 
-</nav>
+    <a href="index.html">
+      <span class="icone-menu">🏠</span>
+      <span class="texto-menu">Início</span>
+    </a>
+
+    <a href="biblioteca.html">
+      <span class="icone-menu">📚</span>
+      <span class="texto-menu">Biblioteca</span>
+    </a>
+
+    <a
+      href="perfil.html"
+      class="ativo"
+      aria-current="page"
+    >
+      <span class="icone-menu">👤</span>
+      <span class="texto-menu">Perfil</span>
+    </a>
+
+  </nav>
+
+
+  <!-- =====================================
+       JAVASCRIPT
+  ====================================== -->
 
   <script
     type="module"
-    src="js/perfil.js?v=5""
+    src="js/perfil.js?v=6"
   ></script>
 
 </body>
