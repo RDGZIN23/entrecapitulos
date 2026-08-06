@@ -13,143 +13,392 @@
     content="Leia capítulos no Entre Capítulos."
   >
 
+  <meta
+    name="theme-color"
+    content="#0f172a"
+  >
+
   <title>Leitura | Entre Capítulos</title>
 
   <link
-  rel="stylesheet"
-  href="css/style.css?v=15"
->
+    rel="stylesheet"
+    href="css/style.css?v=18"
+  >
 
   <style>
-    body {
-      margin: 0;
-      background: #0d0d12;
-      color: #f5f5f5;
-      font-family: Arial, Helvetica, sans-serif;
+    /* ========================================
+       LEITURA — ESTILOS ESPECÍFICOS
+    ======================================== */
+
+    html {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
+
+    body {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(124, 77, 255, 0.12),
+          transparent 28%
+        ),
+        #0b1120;
+
+      color: #f5f5f5;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    /* ========================================
+       TOPO DA LEITURA
+    ======================================== */
 
     .topo-leitura {
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 40;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
-      padding: 14px 18px;
-      background: rgba(13, 13, 18, 0.96);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+
+      width: 100%;
+      min-height: 62px;
+      padding: 12px 18px;
+
+      border-bottom:
+        1px solid rgba(255, 255, 255, 0.07);
+
+      background:
+        rgba(11, 17, 32, 0.94);
+
+      backdrop-filter: blur(16px);
     }
 
     .voltar-leitura {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+
+      min-height: 40px;
+      padding: 8px 11px;
+
+      border-radius: 10px;
+
       color: #ffffff;
-      text-decoration: none;
+      font-size: 14px;
       font-weight: bold;
+      text-decoration: none;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease;
+    }
+
+    .voltar-leitura:hover {
+      background:
+        rgba(139, 92, 246, 0.1);
+
+      color: #d6c8ff;
     }
 
     .logo-leitura {
-      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
       color: #c7a7ff;
+      font-size: 13px;
+      font-weight: bold;
       white-space: nowrap;
     }
 
+
+    /* ========================================
+       CONTEÚDO PRINCIPAL
+    ======================================== */
+
     .pagina-leitura {
-  width: min(
-    calc(100% - 32px),
-    850px
-  );
-  max-width: 850px;
-  margin: 0 auto;
-  padding: 42px 0 80px;
-}
+      display: block;
+
+      width: min(
+        calc(100% - 32px),
+        850px
+      );
+
+      max-width: 850px;
+      min-width: 0;
+
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+
+    /* ========================================
+       CABEÇALHO DO CAPÍTULO
+    ======================================== */
 
     .cabecalho-leitura {
-      margin-bottom: 42px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
+      margin-bottom: 40px;
       text-align: center;
     }
 
     .nome-livro-leitura {
       display: block;
-      margin-bottom: 14px;
+
+      max-width: 100%;
+      margin-bottom: 13px;
+
       color: #b58cff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      line-height: 1.4;
       text-transform: uppercase;
+
+      overflow-wrap: break-word;
     }
 
     .numero-capitulo-leitura {
-      margin: 0 0 12px;
-      color: #bdbdbd;
-      font-size: 15px;
+      margin: 0 0 11px;
+
+      color: #aeb5c3;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
     .titulo-capitulo-leitura {
+      max-width: 100%;
       margin: 0;
-      font-size: clamp(30px, 7vw, 48px);
+
+      color: #ffffff;
+
+      font-size:
+        clamp(30px, 7vw, 48px);
+
       line-height: 1.15;
+
+      overflow-wrap: break-word;
+      word-break: normal;
     }
 
     .linha-leitura {
       width: 70px;
       height: 3px;
-      margin: 28px auto 0;
+
+      margin: 27px auto 0;
+
       border-radius: 999px;
-      background: #8b5cf6;
+
+      background:
+        linear-gradient(
+          90deg,
+          #7c4dff,
+          #b05cff
+        );
     }
 
+    .visualizacoes-capitulo {
+      margin: 15px 0 0;
+
+      color: #8f97a6;
+      font-size: 13px;
+      text-align: center;
+    }
+
+
+    /* ========================================
+       TEXTO DO CAPÍTULO
+    ======================================== */
+
     .texto-capitulo {
+      display: block;
+
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
+      overflow: hidden;
+
       color: #eeeeee;
-      font-family: Georgia, "Times New Roman", serif;
+
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
       font-size: 20px;
       line-height: 1.9;
+
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
+    }
+
+    .texto-capitulo,
+    .texto-capitulo * {
+      box-sizing: border-box;
+
+      max-width: 100%;
+      min-width: 0;
+
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
     }
 
     .texto-capitulo p {
-      margin: 0 0 1.4em;
+      width: 100%;
+      max-width: 100%;
+
+      margin: 0 0 1.45em;
+
+      font-size: inherit;
+      line-height: inherit;
     }
 
     .texto-capitulo h1,
     .texto-capitulo h2,
     .texto-capitulo h3 {
+      max-width: 100%;
+      margin: 1.4em 0 0.7em;
+
       color: #ffffff;
       line-height: 1.3;
+
+      overflow-wrap: break-word;
     }
 
     .texto-capitulo blockquote {
+      width: 100%;
+      max-width: 100%;
+
       margin: 1.5em 0;
-      padding: 12px 18px;
-      border-left: 4px solid #8b5cf6;
-      background: rgba(139, 92, 246, 0.08);
+      padding: 13px 18px;
+
+      border-left:
+        4px solid #8b5cf6;
+
+      border-radius:
+        0 12px 12px 0;
+
+      background:
+        rgba(139, 92, 246, 0.08);
+
       color: #d9d0ea;
       font-style: italic;
     }
 
     .texto-capitulo ul,
     .texto-capitulo ol {
-      padding-left: 30px;
+      width: 100%;
+      max-width: 100%;
+
+      margin: 0 0 1.4em;
+      padding-left: 28px;
     }
 
+    .texto-capitulo li {
+      margin-bottom: 0.5em;
+    }
+
+    .texto-capitulo img,
+    .texto-capitulo video,
+    .texto-capitulo iframe {
+      display: block;
+
+      width: auto;
+      height: auto;
+      max-width: 100%;
+
+      margin-inline: auto;
+    }
+
+    .texto-capitulo table {
+      display: block;
+
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .texto-capitulo pre,
+    .texto-capitulo code {
+      max-width: 100%;
+      overflow-x: auto;
+
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+
+    /* ========================================
+       MENSAGEM DE LEITURA
+    ======================================== */
+
     .mensagem-leitura {
-      padding: 30px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+      padding: 28px 20px;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.09);
+
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      color: #cfcfcf;
+
+      background:
+        rgba(255, 255, 255, 0.035);
+
+      color: #c5cbd6;
+      line-height: 1.6;
       text-align: center;
     }
+
+
+    /* ========================================
+       NAVEGAÇÃO ENTRE CAPÍTULOS
+    ======================================== */
 
     .navegacao-capitulos {
       display: flex;
       justify-content: space-between;
       gap: 14px;
-      margin-top: 55px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
+      margin-top: 54px;
+      padding-top: 28px;
+
+      border-top:
+        1px solid rgba(255, 255, 255, 0.08);
     }
 
     .botao-navegacao {
@@ -157,19 +406,40 @@
       flex: 1;
       align-items: center;
       justify-content: center;
+
+      min-width: 0;
       min-height: 50px;
-      padding: 12px 16px;
-      border: 1px solid rgba(139, 92, 246, 0.55);
+      padding: 12px 15px;
+
+      border:
+        1px solid rgba(139, 92, 246, 0.42);
+
       border-radius: 12px;
-      background: rgba(139, 92, 246, 0.12);
+
+      background:
+        rgba(139, 92, 246, 0.1);
+
       color: #ffffff;
+      font-size: 14px;
       font-weight: bold;
+      line-height: 1.3;
       text-align: center;
       text-decoration: none;
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
     }
 
     .botao-navegacao:hover {
-      background: rgba(139, 92, 246, 0.24);
+      transform: translateY(-1px);
+
+      border-color:
+        rgba(139, 92, 246, 0.62);
+
+      background:
+        rgba(139, 92, 246, 0.19);
     }
 
     .botao-desativado {
@@ -177,14 +447,21 @@
       opacity: 0.35;
     }
 
-    /* =====================================
+
+    /* ========================================
        COMENTÁRIOS
-    ===================================== */
+    ======================================== */
 
     .secao-comentarios {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
       margin-top: 55px;
-      padding-top: 38px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 37px;
+
+      border-top:
+        1px solid rgba(255, 255, 255, 0.08);
     }
 
     .cabecalho-comentarios {
@@ -193,7 +470,9 @@
 
     .etiqueta-comentarios {
       display: block;
+
       margin-bottom: 8px;
+
       color: #b58cff;
       font-size: 12px;
       font-weight: bold;
@@ -203,42 +482,73 @@
 
     .cabecalho-comentarios h2 {
       margin: 0;
+
       color: #ffffff;
-      font-size: 28px;
+
+      font-size:
+        clamp(24px, 6vw, 29px);
+
+      line-height: 1.2;
     }
 
     .cabecalho-comentarios p {
       margin: 8px 0 0;
-      color: #a9a9b4;
+
+      color: #aeb5c3;
+      font-size: 14px;
       line-height: 1.6;
     }
+
+
+    /* ========================================
+       FORMULÁRIO DE COMENTÁRIO
+    ======================================== */
 
     .formulario-comentario {
       margin-bottom: 30px;
       padding: 20px;
-      border: 1px solid rgba(139, 92, 246, 0.22);
+
+      border:
+        1px solid rgba(139, 92, 246, 0.22);
+
       border-radius: 17px;
-      background: rgba(139, 92, 246, 0.055);
+
+      background:
+        rgba(139, 92, 246, 0.05);
     }
 
     .campo-comentario {
       width: 100%;
       min-height: 120px;
       resize: vertical;
+
       padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      border:
+        1px solid rgba(255, 255, 255, 0.1);
+
       border-radius: 12px;
       outline: none;
-      background: #111119;
+
+      background: #111827;
       color: #ffffff;
+
       font-family: inherit;
       font-size: 15px;
       line-height: 1.6;
     }
 
+    .campo-comentario::placeholder {
+      color: #7f8796;
+    }
+
     .campo-comentario:focus {
-      border-color: rgba(139, 92, 246, 0.7);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.11);
+      border-color:
+        rgba(139, 92, 246, 0.72);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(139, 92, 246, 0.11);
     }
 
     .rodape-formulario-comentario {
@@ -246,24 +556,29 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+
       margin-top: 12px;
     }
 
     .contador-comentario {
-      color: #8f8f9b;
+      color: #8f97a6;
       font-size: 12px;
     }
 
     .botao-publicar-comentario {
       min-height: 44px;
-      padding: 11px 19px;
-      border: none;
+      padding: 11px 18px;
+
+      border: 0;
       border-radius: 11px;
-      background: linear-gradient(
-        135deg,
-        #7045ff,
-        #9e4fff
-      );
+
+      background:
+        linear-gradient(
+          135deg,
+          #7045ff,
+          #9e4fff
+        );
+
       color: #ffffff;
       font-family: inherit;
       font-size: 14px;
@@ -273,12 +588,13 @@
 
     .botao-publicar-comentario:disabled {
       cursor: wait;
-      opacity: 0.55;
+      opacity: 0.58;
     }
 
     .mensagem-comentario {
       min-height: 18px;
       margin: 11px 0 0;
+
       font-size: 13px;
     }
 
@@ -293,10 +609,16 @@
     .aviso-login-comentario {
       margin-bottom: 28px;
       padding: 19px;
-      border: 1px dashed rgba(139, 92, 246, 0.35);
+
+      border:
+        1px dashed rgba(139, 92, 246, 0.34);
+
       border-radius: 15px;
-      background: rgba(139, 92, 246, 0.055);
-      color: #bcbcc7;
+
+      background:
+        rgba(139, 92, 246, 0.05);
+
+      color: #b9c0cd;
       line-height: 1.6;
       text-align: center;
     }
@@ -306,11 +628,17 @@
       font-weight: bold;
     }
 
+
+    /* ========================================
+       LISTA DE COMENTÁRIOS
+    ======================================== */
+
     .titulo-lista-comentarios {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
+
       margin-bottom: 17px;
     }
 
@@ -320,7 +648,7 @@
     }
 
     .quantidade-comentarios {
-      color: #aaaab5;
+      color: #aeb5c3;
       font-size: 13px;
     }
 
@@ -330,100 +658,214 @@
     }
 
     .cartao-comentario {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+
       padding: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.075);
+      overflow: hidden;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.075);
+
       border-radius: 15px;
-      background: rgba(255, 255, 255, 0.03);
+
+      background:
+        rgba(255, 255, 255, 0.03);
     }
 
     .cabecalho-cartao-comentario {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 12px;
+      gap: 13px;
+
+      width: 100%;
+      min-width: 0;
+
+      margin-bottom: 13px;
     }
 
     .dados-autor-comentario {
       display: flex;
+      flex: 1;
       align-items: center;
       gap: 11px;
+
       min-width: 0;
     }
 
     .avatar-comentario {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  overflow: hidden;
-  border-radius: 50%;
-  background: rgba(139, 92, 246, 0.18);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #d6c8ff;
-  font-size: 14px;
-  font-weight: bold;
-}
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+
+      width: 43px;
+      height: 43px;
+      overflow: hidden;
+
+      border-radius: 50%;
+
+      background:
+        rgba(139, 92, 246, 0.18);
+
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      color: #d6c8ff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .informacoes-autor-comentario {
+      flex: 1;
+      min-width: 0;
+    }
 
     .nome-autor-comentario {
       display: block;
+
       color: #ffffff;
       font-size: 14px;
+      font-weight: bold;
+      line-height: 1.35;
+
       overflow-wrap: anywhere;
     }
 
     .data-comentario {
       display: block;
+
       margin-top: 4px;
-      color: #868691;
+
+      color: #868e9d;
       font-size: 11px;
     }
 
+    .acoes-comentario {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 6px;
+    }
+
+    .botao-editar-comentario,
+    .botao-excluir-comentario {
+      min-height: 34px;
+      padding: 7px 10px;
+
+      border-radius: 9px;
+
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .botao-editar-comentario {
+      border:
+        1px solid rgba(139, 92, 246, 0.38);
+
+      background:
+        rgba(139, 92, 246, 0.11);
+
+      color: #d0bfff;
+    }
+
+    .botao-excluir-comentario {
+      border:
+        1px solid rgba(239, 68, 68, 0.32);
+
+      background:
+        rgba(239, 68, 68, 0.08);
+
+      color: #ff9ca9;
+    }
+
+    .botao-editar-comentario:disabled,
+    .botao-excluir-comentario:disabled {
+      cursor: wait;
+      opacity: 0.6;
+    }
+
     .texto-comentario {
+      max-width: 100%;
       margin: 0;
-      color: #c2c2cc;
+      padding-left: 54px;
+
+      color: #c2c7d1;
       font-size: 14px;
       line-height: 1.7;
+
       white-space: pre-line;
       overflow-wrap: anywhere;
     }
 
-    .botao-excluir-comentario {
-      flex: 0 0 auto;
-      padding: 7px 10px;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 9px;
-      background: rgba(239, 68, 68, 0.08);
-      color: #ff9ca9;
-      font-family: inherit;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
     .sem-comentarios {
+      width: 100%;
       padding: 20px;
-      border: 1px dashed rgba(255, 255, 255, 0.11);
+
+      border:
+        1px dashed rgba(255, 255, 255, 0.11);
+
       border-radius: 14px;
-      color: #9696a2;
+
+      color: #969eac;
       line-height: 1.6;
       text-align: center;
     }
 
+
+    /* ========================================
+       RODAPÉ
+    ======================================== */
+
     .rodape-leitura {
-      padding: 25px 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      color: #999999;
+      margin-top: 55px;
+      padding: 28px 20px;
+
+      border-top:
+        1px solid rgba(255, 255, 255, 0.07);
+
+      background: #0f172a;
+
+      color: #8f97a6;
       text-align: center;
     }
 
+    .rodape-leitura p {
+      margin: 0 0 5px;
+
+      color: #c7a7ff;
+      font-weight: bold;
+    }
+
+
+    /* ========================================
+       RESPONSIVIDADE
+    ======================================== */
+
     @media (max-width: 600px) {
+      .topo-leitura {
+        padding-inline: 13px;
+      }
+
+      .logo-leitura {
+        font-size: 12px;
+      }
+
       .pagina-leitura {
-        width: min(100% - 28px, 850px);
-        padding-top: 32px;
+        width: calc(100% - 28px);
+        padding: 30px 0 70px;
+      }
+
+      .cabecalho-leitura {
+        margin-bottom: 34px;
+      }
+
+      .titulo-capitulo-leitura {
+        font-size: 31px;
       }
 
       .texto-capitulo {
@@ -433,10 +875,6 @@
 
       .navegacao-capitulos {
         flex-direction: column;
-      }
-
-      .logo-leitura {
-        font-size: 12px;
       }
 
       .rodape-formulario-comentario {
@@ -449,199 +887,89 @@
       }
 
       .cabecalho-cartao-comentario {
-        flex-direction: column;
+        gap: 8px;
+      }
+
+      .texto-comentario {
+        padding-left: 54px;
       }
     }
-  
-/* ========================================
-   CORREÇÃO DEFINITIVA DA LEITURA NO CELULAR
-======================================== */
 
-html {
-  width: 100%;
-  min-width: 0;
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
+    @media (max-width: 420px) {
+      .voltar-leitura {
+        padding-inline: 7px;
+        font-size: 13px;
+      }
 
-body {
-  width: 100%;
-  min-width: 0;
-  overflow-x: hidden;
-}
+      .logo-leitura {
+        font-size: 11px;
+      }
 
-.topo-leitura {
-  width: 100%;
-}
+      .formulario-comentario {
+        padding: 15px;
+      }
 
-.pagina-leitura {
-  display: block;
-  width: min(
-    calc(100% - 32px),
-    850px
-  );
-  max-width: 850px;
-  min-width: 0;
-  margin-inline: auto;
-}
+      .cartao-comentario {
+        padding: 15px;
+      }
 
-.cabecalho-leitura,
-.texto-capitulo,
-.navegacao-capitulos,
-.secao-comentarios {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
+      .avatar-comentario {
+        width: 39px;
+        height: 39px;
+        font-size: 12px;
+      }
 
-.texto-capitulo {
-  color: #eeeeee;
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-  font-size: 20px !important;
-  line-height: 1.9 !important;
-  overflow-wrap: break-word;
-  word-break: normal;
-}
+      .dados-autor-comentario {
+        gap: 9px;
+      }
 
-.texto-capitulo p {
-  margin: 0 0 1.4em;
-  font-size: inherit !important;
-  line-height: inherit !important;
-}
+      .nome-autor-comentario {
+        font-size: 13px;
+      }
 
-.texto-capitulo img,
-.texto-capitulo video,
-.texto-capitulo iframe,
-.texto-capitulo table {
-  max-width: 100%;
-}
+      .data-comentario {
+        font-size: 10px;
+      }
 
-.titulo-capitulo-leitura {
-  font-size: clamp(
-    30px,
-    7vw,
-    48px
-  ) !important;
-}
+      .botao-editar-comentario,
+      .botao-excluir-comentario {
+        padding: 6px 8px;
+        font-size: 10px;
+      }
 
-@media (max-width: 600px) {
-  .pagina-leitura {
-    width: calc(100% - 28px);
-    padding: 30px 0 70px;
-  }
+      .texto-comentario {
+        padding-left: 48px;
+      }
 
-  .texto-capitulo {
-    font-size: 18px !important;
-    line-height: 1.85 !important;
-  }
+      .titulo-lista-comentarios {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
 
-  .titulo-capitulo-leitura {
-    font-size: 31px !important;
-  }
+    @media (max-width: 350px) {
+      .cabecalho-cartao-comentario {
+        flex-direction: column;
+      }
 
-  .nome-livro-leitura {
-    font-size: 13px;
-  }
+      .acoes-comentario {
+        width: 100%;
+        justify-content: flex-start;
+      }
 
-  .numero-capitulo-leitura {
-    font-size: 14px;
-  }
-}
-
-/* ========================================
-   NÃO CORTAR PALAVRAS NO MEIO
-======================================== */
-
-.texto-capitulo,
-.texto-capitulo p,
-.texto-capitulo span,
-.texto-capitulo div {
-  white-space: normal !important;
-  word-break: normal !important;
-  overflow-wrap: normal !important;
-  hyphens: none !important;
-}
-
-.texto-capitulo p {
-  max-width: 100%;
-}
-
-/* ========================================
-   TEXTO SEM ULTRAPASSAR A TELA
-======================================== */
-
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: clip;
-}
-
-.pagina-leitura {
-  width: min(
-    calc(100% - 28px),
-    850px
-  ) !important;
-  max-width: 850px !important;
-  min-width: 0 !important;
-  margin-inline: auto !important;
-}
-
-.texto-capitulo {
-  display: block;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  overflow: hidden;
-}
-
-.texto-capitulo,
-.texto-capitulo * {
-  box-sizing: border-box !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  white-space: normal !important;
-  word-break: normal !important;
-  overflow-wrap: break-word !important;
-  hyphens: none !important;
-}
-
-.texto-capitulo p,
-.texto-capitulo div,
-.texto-capitulo blockquote,
-.texto-capitulo li {
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-.texto-capitulo img,
-.texto-capitulo video,
-.texto-capitulo iframe,
-.texto-capitulo table {
-  width: auto;
-  height: auto;
-  max-width: 100% !important;
-}
-
-@media (max-width: 600px) {
-  .pagina-leitura {
-    padding-inline: 0 !important;
-  }
-
-  .texto-capitulo {
-    font-size: 18px !important;
-    line-height: 1.85 !important;
-  }
-}
-
-</style>
+      .texto-comentario {
+        padding-left: 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
+
+  <!-- =====================================
+       TOPO
+  ====================================== -->
 
   <header class="topo-leitura">
 
@@ -653,12 +981,21 @@ body {
     </a>
 
     <span class="logo-leitura">
-      ❤️📖 Entre Capítulos
+      📖 ENTRE CAPÍTULOS
     </span>
 
   </header>
 
+
+  <!-- =====================================
+       CONTEÚDO PRINCIPAL
+  ====================================== -->
+
   <main class="pagina-leitura">
+
+    <!-- ===================================
+         CABEÇALHO DO CAPÍTULO
+    ==================================== -->
 
     <section class="cabecalho-leitura">
 
@@ -687,16 +1024,31 @@ body {
 
     </section>
 
+
+    <!-- ===================================
+         TEXTO
+    ==================================== -->
+
     <article
       id="textoCapitulo"
       class="texto-capitulo"
     >
+
       <div class="mensagem-leitura">
         Carregando texto do capítulo...
       </div>
+
     </article>
 
-    <nav class="navegacao-capitulos">
+
+    <!-- ===================================
+         NAVEGAÇÃO
+    ==================================== -->
+
+    <nav
+      class="navegacao-capitulos"
+      aria-label="Navegação entre capítulos"
+    >
 
       <a
         href="#"
@@ -716,7 +1068,11 @@ body {
 
     </nav>
 
-    <!-- COMENTÁRIOS -->
+
+    <!-- ===================================
+         COMENTÁRIOS
+    ==================================== -->
+
     <section
       class="secao-comentarios"
       id="secaoComentarios"
@@ -737,6 +1093,7 @@ body {
 
       </div>
 
+
       <div id="areaFormularioComentario">
 
         <div class="aviso-login-comentario">
@@ -744,6 +1101,7 @@ body {
         </div>
 
       </div>
+
 
       <div class="titulo-lista-comentarios">
 
@@ -757,6 +1115,7 @@ body {
         </span>
 
       </div>
+
 
       <div
         class="lista-comentarios"
@@ -773,20 +1132,35 @@ body {
 
   </main>
 
+
+  <!-- =====================================
+       RODAPÉ
+  ====================================== -->
+
   <footer class="rodape-leitura">
-    <p>❤️📖 Entre Capítulos</p>
-    <small>Onde cada página ganha vida.</small>
+
+    <p>📖 Entre Capítulos</p>
+
+    <small>
+      Onde cada página ganha vida.
+    </small>
+
   </footer>
+
+
+  <!-- =====================================
+       JAVASCRIPT
+  ====================================== -->
 
   <script
     type="module"
-    src="js/leitura.js"
+    src="js/leitura.js?v=3"
   ></script>
 
-<script
-  type="module"
-  src="js/comentarios.js?v=7"
-></script>
+  <script
+    type="module"
+    src="js/comentarios.js?v=8"
+  ></script>
 
 </body>
-  </html>
+</html>
