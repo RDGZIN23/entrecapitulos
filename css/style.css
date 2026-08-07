@@ -2750,19 +2750,25 @@ main,
 }
 
 /* ========================================
-   TÍTULO SOBRE A HISTÓRIA
+   SOBRE A HISTÓRIA — AJUSTE FINAL
 ======================================== */
 
-.area-sinopse-livro {
+.secao-sinopse-livro {
+  width: 100%;
+
+  /* distância dos botões */
   margin-top: 42px;
+
   padding-top: 28px;
 
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top:
+    1px solid rgba(255, 255, 255, 0.08);
 }
 
 .titulo-sinopse-livro {
   width: 100%;
-  margin-bottom: 28px;
+
+  margin: 0 0 26px;
 
   text-align: center;
 }
@@ -2772,35 +2778,55 @@ main,
 
   color: #b99cff;
 
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 800;
   line-height: 1.2;
 
-  letter-spacing: 0.12em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 
+.secao-sinopse-livro .sinopse-livro {
+  margin: 0;
 
-/* ========================================
-   CELULAR
-======================================== */
+  color: #b8beca;
 
-@media (max-width: 600px) {
+  font-size: 16px;
+  line-height: 1.9;
 
-  .area-sinopse-livro {
-    margin-top: 44px;
-    padding-top: 28px;
+  text-align: left;
+}
+
+
+/* CELULAR */
+
+@media (max-width: 760px) {
+
+  .secao-sinopse-livro {
+    /*
+      Aqui está a mudança principal.
+      Cria espaço real abaixo dos botões.
+    */
+    margin-top: 52px;
+
+    padding-top: 30px;
   }
 
   .titulo-sinopse-livro {
-    margin-bottom: 26px;
+    margin-bottom: 28px;
   }
 
   .titulo-sinopse-livro .titulo-sobre-historia {
-    font-size: 18px;
-    letter-spacing: 0.1em;
+    font-size: 19px;
+
+    letter-spacing: 0.12em;
   }
 
+  .secao-sinopse-livro .sinopse-livro {
+    font-size: 16px;
+
+    line-height: 1.9;
+  }
 }
 
 /* ========================================
