@@ -1968,8 +1968,7 @@ async function clicarBotaoFavorito() {
           "Autor não informado",
 
         capa:
-          livroAtual.capa ||
-          "images/depois-de-te-odiar.png"
+  livroAtual.capa || ""
       });
 
     if (
