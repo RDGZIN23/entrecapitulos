@@ -429,21 +429,88 @@ function configurarCapa(
     return;
   }
 
-  capaLivro.src =
-    capa ||
-    "images/depois-de-te-odiar.png";
+  const container =
+    document.getElementById(
+      "capaLivroContainer"
+    );
+
+  const skeleton =
+    document.getElementById(
+      "skeletonCapa"
+    );
+
+  // Estado inicial
+  capaLivro.hidden = true;
+
+  capaLivro.classList.remove(
+    "capa-carregada"
+  );
+
+  container?.classList.remove(
+    "capa-pronta",
+    "capa-sem-imagem"
+  );
+
+  skeleton?.classList.remove(
+    "skeleton-capa-erro"
+  );
 
   capaLivro.alt =
-    `Capa do livro ${titulo}`;
+    titulo
+      ? `Capa do livro ${titulo}`
+      : "Capa do livro";
 
-  capaLivro.addEventListener(
-    "error",
-    () => {
-      capaLivro.src =
-        "images/depois-de-te-odiar.png";
-    },
-    { once: true }
-  );
+  const urlCapa =
+    String(capa || "").trim();
+
+  // Livro sem capa
+  if (!urlCapa) {
+    container?.classList.add(
+      "capa-sem-imagem"
+    );
+
+    skeleton?.classList.add(
+      "skeleton-capa-erro"
+    );
+
+    return;
+  }
+
+  // Quando a capa carregar
+  capaLivro.onload = () => {
+    capaLivro.hidden = false;
+
+    requestAnimationFrame(() => {
+      capaLivro.classList.add(
+        "capa-carregada"
+      );
+    });
+
+    container?.classList.add(
+      "capa-pronta"
+    );
+  };
+
+  // Se a capa falhar
+  capaLivro.onerror = () => {
+    console.warn(
+      "Erro ao carregar a capa:",
+      urlCapa
+    );
+
+    capaLivro.hidden = true;
+
+    container?.classList.add(
+      "capa-sem-imagem"
+    );
+
+    skeleton?.classList.add(
+      "skeleton-capa-erro"
+    );
+  };
+
+  // Só coloca o src no final
+  capaLivro.src = urlCapa;
 }
 
 
