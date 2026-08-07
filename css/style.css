@@ -2829,6 +2829,74 @@ main,
   }
 }
 
+
+/* ========================================
+   SKELETON DA CAPA
+======================================== */
+
+.capa-livro-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #151c2e;
+}
+
+.skeleton-capa {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      100deg,
+      #151c2e 20%,
+      #202a40 40%,
+      #151c2e 60%
+    );
+
+  background-size: 200% 100%;
+
+  animation:
+    skeletonCapa 1.4s ease-in-out infinite;
+}
+
+@keyframes skeletonCapa {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.capa-livro {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 22px;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.35s ease;
+}
+
+.capa-livro.capa-carregada {
+  opacity: 1;
+}
+
+.capa-livro-container.capa-pronta
+.skeleton-capa {
+  display: none;
+}
+
+.capa-livro-container.capa-pronta
+.capa-livro {
+  display: block !important;
+}
+
+
 /* ========================================
    FIM DO STYLE.CSS
 ======================================== */
