@@ -2896,6 +2896,38 @@ main,
   display: block !important;
 }
 
+/* ========================================
+   CAPA INDISPONÍVEL
+======================================== */
+
+.capa-livro-container.capa-sem-imagem
+.skeleton-capa {
+  display: grid;
+  place-items: center;
+
+  animation: none;
+
+  background:
+    linear-gradient(
+      145deg,
+      #151c2e,
+      #1b2539
+    );
+}
+
+.capa-livro-container.capa-sem-imagem
+.skeleton-capa::after {
+  content: "📖";
+
+  color: rgba(255, 255, 255, 0.28);
+
+  font-size: 48px;
+}
+
+.skeleton-capa-erro {
+  animation: none !important;
+}
+
 
 /* ========================================
    FIM DO STYLE.CSS
