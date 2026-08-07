@@ -2750,6 +2750,38 @@ main,
 }
 
 
+/* TÍTULO SOBRE A HISTÓRIA */
+
+.titulo-sinopse-livro {
+  width: 100%;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.titulo-sinopse-livro .titulo-sobre-historia {
+  margin: 0;
+
+  color: #b99cff;
+
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.2;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .titulo-sinopse-livro {
+    margin-bottom: 22px;
+  }
+
+  .titulo-sinopse-livro .titulo-sobre-historia {
+    font-size: 18px;
+    letter-spacing: 0.1em;
+  }
+}
+
 /* ========================================
    FIM DO STYLE.CSS
 ======================================== */
