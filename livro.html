@@ -619,16 +619,26 @@
 <section class="detalhes-livro">
 
   <!-- CAPA -->
-  <div class="capa-livro-container">
+<div
+  class="capa-livro-container carregando-capa"
+  id="capaLivroContainer"
+>
 
-    <img
-      src="images/depois-de-te-odiar.png"
-      alt="Capa do livro"
-      class="capa-livro"
-      id="capaLivro"
-    >
+  <div
+    class="skeleton-capa"
+    id="skeletonCapa"
+    aria-hidden="true"
+  ></div>
 
-  </div>
+  <img
+    src=""
+    alt="Capa do livro"
+    class="capa-livro"
+    id="capaLivro"
+    hidden
+  >
+
+</div>
 
 
   <!-- INFORMAÇÕES -->
