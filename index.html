@@ -456,5 +456,21 @@
     src="js/index.js?v=18"
   ></script>
 
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(() => {
+          console.log("Entre Capítulos: Service Worker ativo.");
+        })
+        .catch((erro) => {
+          console.error("Erro ao registrar Service Worker:", erro);
+        });
+    });
+  }
+</script>
+  
 </body>
 </html>
