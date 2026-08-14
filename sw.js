@@ -1,19 +1,15 @@
 const CACHE_NAME = "entre-capitulos-v1";
 
-const APP_SHELL = [
+const APP_FILES = [
   "/",
   "/index.html",
-  "/biblioteca.html",
-  "/livro.html",
-  "/leitura.html",
-  "/css/style.css",
-  "/manifest.json"
+  "/css/style.css"
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(APP_SHELL);
+      return cache.addAll(APP_FILES);
     })
   );
 
@@ -25,8 +21,8 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((cacheName) => cacheName !== CACHE_NAME)
-          .map((cacheName) => caches.delete(cacheName))
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
       );
     })
   );
