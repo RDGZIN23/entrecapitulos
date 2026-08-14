@@ -9,5 +9,13 @@
   "orientation": "any",
   "lang": "pt-BR",
   "background_color": "#0F172A",
-  "theme_color": "#0F172A"
+  "theme_color": "#0F172A",
+  "icons": [
+    {
+      "src": "/images/file_00000000934c820eab1505177aa6dcdc.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
